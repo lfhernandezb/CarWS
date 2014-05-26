@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -169,6 +170,32 @@ public class CarResource {
 		}
     	
     	return carData;
+	}
+	
+	@PUT
+	@Path("/receive")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String putTodo(JAXBElement<CarData> todo) {
+	    //CarData c = todo.getValue();
+		System.out.println(todo);
+	    return "ok"; //putAndGetResponse(null);
+	}
+	
+	private Response putAndGetResponse(CarData todo) {
+	    Response res;
+	    /*
+	    if(TodoDao.instance.getModel().containsKey(todo.getId())) {
+	      res = Response.noContent().build();
+	    } else {
+	      res = Response.created(uriInfo.getAbsolutePath()).build();
+	    }
+	    TodoDao.instance.getModel().put(todo.getId(), todo);
+	    */
+	    res = Response.ok(uriInfo.getAbsolutePath()).build();
+	    
+	    return res;
+	    
 	}
 	
 }
