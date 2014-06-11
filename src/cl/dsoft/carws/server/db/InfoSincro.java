@@ -16,38 +16,44 @@ import org.w3c.dom.Node;
  * @author petete-ntbk
  *
  */
-public class MantencionUsuarioHecha {
+public class InfoSincro {
+    protected Integer _id;
     protected String _fecha;
-    protected Long _idMantencionUsuarioHecha;
-    protected Boolean _borrado;
-    protected Long _idMantencionUsuario;
-    protected Integer _costo;
-    protected Integer _km;
-    protected String _fechaModificacion;
-    protected Long _idUsuario;
+    protected String _fechaFinProcesamiento;
+    protected Byte _sentido;
+    protected String _fechaLectura;
+    protected String _archivoNombre;
+    protected String _archivoMd5;
+    protected Long _archivoTamano;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    DATE_FORMAT(ma.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
-        "    ma.id_mantencion_usuario_hecha AS id_mantencion_usuario_hecha," +
-        "    0+ma.borrado AS borrado," +
-        "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
-        "    ma.costo AS costo," +
-        "    ma.km AS km," +
-        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_usuario AS id_usuario" +
-        "    FROM mantencion_usuario_hecha ma";
+        "    in.id_info_sincro AS id," +
+        "    DATE_FORMAT(in.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
+        "    DATE_FORMAT(in.fecha_fin_procesamiento, '%Y-%m-%d %H:%i:%s') AS fecha_fin_procesamiento," +
+        "    in.sentido AS sentido," +
+        "    DATE_FORMAT(in.fecha_lectura, '%Y-%m-%d %H:%i:%s') AS fecha_lectura," +
+        "    in.archivo_nombre AS archivo_nombre," +
+        "    in.archivo_md5 AS archivo_md5," +
+        "    in.archivo_tamano AS archivo_tamano" +
+        "    FROM info_sincro in";
 
-    public MantencionUsuarioHecha() {
+    public InfoSincro() {
+        _id = null;
         _fecha = null;
-        _idMantencionUsuarioHecha = null;
-        _borrado = null;
-        _idMantencionUsuario = null;
-        _costo = null;
-        _km = null;
-        _fechaModificacion = null;
-        _idUsuario = null;
+        _fechaFinProcesamiento = null;
+        _sentido = null;
+        _fechaLectura = null;
+        _archivoNombre = null;
+        _archivoMd5 = null;
+        _archivoTamano = null;
 
+    }
+    /**
+     * @return the _id
+     */
+    public Integer getId() {
+        return _id;
     }
     /**
      * @return the _fecha
@@ -56,46 +62,46 @@ public class MantencionUsuarioHecha {
         return _fecha;
     }
     /**
-     * @return the _idMantencionUsuarioHecha
+     * @return the _fechaFinProcesamiento
      */
-    public Long getIdMantencionUsuarioHecha() {
-        return _idMantencionUsuarioHecha;
+    public String getFechaFinProcesamiento() {
+        return _fechaFinProcesamiento;
     }
     /**
-     * @return the _borrado
+     * @return the _sentido
      */
-    public Boolean getBorrado() {
-        return _borrado;
+    public Byte getSentido() {
+        return _sentido;
     }
     /**
-     * @return the _idMantencionUsuario
+     * @return the _fechaLectura
      */
-    public Long getIdMantencionUsuario() {
-        return _idMantencionUsuario;
+    public String getFechaLectura() {
+        return _fechaLectura;
     }
     /**
-     * @return the _costo
+     * @return the _archivoNombre
      */
-    public Integer getCosto() {
-        return _costo;
+    public String getArchivoNombre() {
+        return _archivoNombre;
     }
     /**
-     * @return the _km
+     * @return the _archivoMd5
      */
-    public Integer getKm() {
-        return _km;
+    public String getArchivoMd5() {
+        return _archivoMd5;
     }
     /**
-     * @return the _fechaModificacion
+     * @return the _archivoTamano
      */
-    public String getFechaModificacion() {
-        return _fechaModificacion;
+    public Long getArchivoTamano() {
+        return _archivoTamano;
     }
     /**
-     * @return the _idUsuario
+     * @param _id the _id to set
      */
-    public Long getIdUsuario() {
-        return _idUsuario;
+    public void setId(Integer _id) {
+        this._id = _id;
     }
     /**
      * @param _fecha the _fecha to set
@@ -104,68 +110,62 @@ public class MantencionUsuarioHecha {
         this._fecha = _fecha;
     }
     /**
-     * @param _idMantencionUsuarioHecha the _idMantencionUsuarioHecha to set
+     * @param _fechaFinProcesamiento the _fechaFinProcesamiento to set
      */
-    public void setIdMantencionUsuarioHecha(Long _idMantencionUsuarioHecha) {
-        this._idMantencionUsuarioHecha = _idMantencionUsuarioHecha;
+    public void setFechaFinProcesamiento(String _fechaFinProcesamiento) {
+        this._fechaFinProcesamiento = _fechaFinProcesamiento;
     }
     /**
-     * @param _borrado the _borrado to set
+     * @param _sentido the _sentido to set
      */
-    public void setBorrado(Boolean _borrado) {
-        this._borrado = _borrado;
+    public void setSentido(Byte _sentido) {
+        this._sentido = _sentido;
     }
     /**
-     * @param _idMantencionUsuario the _idMantencionUsuario to set
+     * @param _fechaLectura the _fechaLectura to set
      */
-    public void setIdMantencionUsuario(Long _idMantencionUsuario) {
-        this._idMantencionUsuario = _idMantencionUsuario;
+    public void setFechaLectura(String _fechaLectura) {
+        this._fechaLectura = _fechaLectura;
     }
     /**
-     * @param _costo the _costo to set
+     * @param _archivoNombre the _archivoNombre to set
      */
-    public void setCosto(Integer _costo) {
-        this._costo = _costo;
+    public void setArchivoNombre(String _archivoNombre) {
+        this._archivoNombre = _archivoNombre;
     }
     /**
-     * @param _km the _km to set
+     * @param _archivoMd5 the _archivoMd5 to set
      */
-    public void setKm(Integer _km) {
-        this._km = _km;
+    public void setArchivoMd5(String _archivoMd5) {
+        this._archivoMd5 = _archivoMd5;
     }
     /**
-     * @param _fechaModificacion the _fechaModificacion to set
+     * @param _archivoTamano the _archivoTamano to set
      */
-    public void setFechaModificacion(String _fechaModificacion) {
-        this._fechaModificacion = _fechaModificacion;
-    }
-    /**
-     * @param _idUsuario the _idUsuario to set
-     */
-    public void setIdUsuario(Long _idUsuario) {
-        this._idUsuario = _idUsuario;
+    public void setArchivoTamano(Long _archivoTamano) {
+        this._archivoTamano = _archivoTamano;
     }
 
-    public static MantencionUsuarioHecha fromRS(ResultSet p_rs) throws SQLException {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static InfoSincro fromRS(ResultSet p_rs) throws SQLException {
+        InfoSincro ret = new InfoSincro();
 
+        ret.setId(p_rs.getInt("id"));
         ret.setFecha(p_rs.getString("fecha"));
-        ret.setIdMantencionUsuarioHecha(p_rs.getLong("id_mantencion_usuario_hecha"));
-        ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
-        ret.setCosto(p_rs.getInt("costo"));
-        ret.setKm(p_rs.getInt("km"));
-        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
-        ret.setIdUsuario(p_rs.getLong("id_usuario"));
+        ret.setFechaFinProcesamiento(p_rs.getString("fecha_fin_procesamiento"));
+        ret.setSentido(p_rs.getByte("sentido"));
+        ret.setFechaLectura(p_rs.getString("fecha_lectura"));
+        ret.setArchivoNombre(p_rs.getString("archivo_nombre"));
+        ret.setArchivoMd5(p_rs.getString("archivo_md5"));
+        ret.setArchivoTamano(p_rs.getLong("archivo_tamano"));
 
         return ret;
     }
 
-    public static MantencionUsuarioHecha getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
-        MantencionUsuarioHecha ret = null;
+    public static InfoSincro getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
+        InfoSincro ret = null;
         
         String str_sql = _str_sql +
-            "  WHERE ma." + p_key + " = " + p_value +
+            "  WHERE in." + p_key + " = " + p_value +
             "  LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -222,43 +222,28 @@ public class MantencionUsuarioHecha {
         return ret;        
     }
 
+    public static InfoSincro getById(Connection p_conn, String p_id) throws Exception {
+        return getByParameter(p_conn, "id_info_sincro", p_id);
+    }
     
-    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<InfoSincro> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
-        ArrayList<MantencionUsuarioHecha> ret;
+        ArrayList<InfoSincro> ret;
         
         str_sql = "";
         
         try {
             ArrayList<String> array_clauses = new ArrayList<String>();
             
-            ret = new ArrayList<MantencionUsuarioHecha>();
+            ret = new ArrayList<InfoSincro>();
             
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario_hecha")) {
-                    array_clauses.add("ma.id_mantencion_usuario_hecha = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario")) {
-                    array_clauses.add("ma.id_mantencion_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
-                }
-                else if (p.getKey().equals("no borrado")) {
-                    array_clauses.add("ma.borrado = 0");
-                }
-                else if (p.getKey().equals("borrado")) {
-                    array_clauses.add("ma.borrado = 1");
+                if (p.getKey().equals("id_info_sincro")) {
+                    array_clauses.add("in.id_info_sincro = " + p.getValue());
                 }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
@@ -344,16 +329,17 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    UPDATE mantencion_usuario_hecha" +
+            "    UPDATE info_sincro" +
             "    SET" +
             "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-            "    costo = " + (_costo != null ? _costo : "null") + "," +
-            "    km = " + (_km != null ? _km : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_fin_procesamiento = " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    sentido = " + (_sentido != null ? _sentido : "null") + "," +
+            "    fecha_lectura = " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    archivo_nombre = " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
+            "    archivo_md5 = " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
+            "    archivo_tamano = " + (_archivoTamano != null ? _archivoTamano : "null") +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_info_sincro = " + Integer.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -399,22 +385,26 @@ public class MantencionUsuarioHecha {
         ResultSet rs = null;
 
         String str_sql =
-            "    INSERT INTO mantencion_usuario_hecha" +
+            "    INSERT INTO info_sincro" +
             "    (" +
+            "    id_info_sincro, " +
             "    fecha, " +
-            "    id_mantencion_usuario_hecha, " +
-            "    id_mantencion_usuario, " +
-            "    costo, " +
-            "    km, " +
-            "    id_usuario)" +
+            "    fecha_fin_procesamiento, " +
+            "    sentido, " +
+            "    fecha_lectura, " +
+            "    archivo_nombre, " +
+            "    archivo_md5, " +
+            "    archivo_tamano)" +
             "    VALUES" +
             "    (" +
+            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
             "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_idMantencionUsuarioHecha != null ? "'" + _idMantencionUsuarioHecha + "'" : "null") + "," +
-            "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
-            "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
-            "    " + (_km != null ? "'" + _km + "'" : "null") + "," +
-            "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") +
+            "    " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_sentido != null ? "'" + _sentido + "'" : "null") + "," +
+            "    " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
+            "    " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
+            "    " + (_archivoTamano != null ? "'" + _archivoTamano + "'" : "null") +
             "    )";
         
         try {
@@ -465,10 +455,9 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    DELETE FROM mantencion_usuario_hecha" +
+            "    DELETE FROM info_sincro" +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_info_sincro = " + Integer.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -502,12 +491,11 @@ public class MantencionUsuarioHecha {
     }
 
     public void load(Connection p_conn) throws SQLException {
-        MantencionUsuarioHecha obj = null;
+        InfoSincro obj = null;
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_info_sincro = " + Integer.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -530,11 +518,12 @@ public class MantencionUsuarioHecha {
                 //System.out.println("fromRS(rs) ok");
 
                 _fecha = obj.getFecha();
-                _borrado = obj.getBorrado();
-                _idMantencionUsuario = obj.getIdMantencionUsuario();
-                _costo = obj.getCosto();
-                _km = obj.getKm();
-                _fechaModificacion = obj.getFechaModificacion();
+                _fechaFinProcesamiento = obj.getFechaFinProcesamiento();
+                _sentido = obj.getSentido();
+                _fechaLectura = obj.getFechaLectura();
+                _archivoNombre = obj.getArchivoNombre();
+                _archivoMd5 = obj.getArchivoMd5();
+                _archivoTamano = obj.getArchivoTamano();
             }
         }
         catch (SQLException ex){
@@ -574,8 +563,7 @@ public class MantencionUsuarioHecha {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_info_sincro = " + Integer.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -645,60 +633,60 @@ public class MantencionUsuarioHecha {
 
     @Override
     public String toString() {
-        return "MantencionUsuarioHecha [" +
+        return "InfoSincro [" +
+	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idMantencionUsuarioHecha = " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
-	           "    _km = " + (_km != null ? _km : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") +
+	           "    _fecha_fin_procesamiento = " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _sentido = " + (_sentido != null ? _sentido : "null") + "," +
+	           "    _fecha_lectura = " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _archivo_nombre = " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
+	           "    _archivo_md5 = " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
+	           "    _archivoTamano = " + (_archivoTamano != null ? _archivoTamano : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
-        return "MantencionUsuarioHecha : {" +
+        return "InfoSincro : {" +
+	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
-	           "    \"_idMantencionUsuarioHecha\" : " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
-	           "    \"_km\" : " + (_km != null ? _km : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") +
+	           "    \"_fecha_fin_procesamiento\" : " + (_fechaFinProcesamiento != null ? "\"" + _fechaFinProcesamiento + "\"" : "null") + "," +
+	           "    \"_sentido\" : " + (_sentido != null ? _sentido : "null") + "," +
+	           "    \"_fecha_lectura\" : " + (_fechaLectura != null ? "\"" + _fechaLectura + "\"" : "null") + "," +
+	           "    \"_archivo_nombre\" : " + (_archivoNombre != null ? "\"" + _archivoNombre + "\"" : "null") + "," +
+	           "    \"_archivo_md5\" : " + (_archivoMd5 != null ? "\"" + _archivoMd5 + "\"" : "null") + "," +
+	           "    \"_archivoTamano\" : " + (_archivoTamano != null ? _archivoTamano : "null") +
 			   "}";
     }
 
 
     public String toXML() {
-        return "<MantencionUsuarioHecha>" +
+        return "<InfoSincro>" +
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuarioHecha" + (_idMantencionUsuarioHecha != null ? ">" + _idMantencionUsuarioHecha + "</idMantencionUsuarioHecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <km" + (_km != null ? ">" + _km + "</km>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-			   "</MantencionUsuarioHecha>";
+	           "    <fechaFinProcesamiento" + (_fechaFinProcesamiento != null ? ">" + _fechaFinProcesamiento + "</fechaFinProcesamiento>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <sentido" + (_sentido != null ? ">" + _sentido + "</sentido>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <fechaLectura" + (_fechaLectura != null ? ">" + _fechaLectura + "</fechaLectura>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <archivoNombre" + (_archivoNombre != null ? ">" + _archivoNombre + "</archivoNombre>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <archivoMd5" + (_archivoMd5 != null ? ">" + _archivoMd5 + "</archivoMd5>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <archivoTamano" + (_archivoTamano != null ? ">" + _archivoTamano + "</archivoTamano>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+			   "</InfoSincro>";
     }
 
 
-    public static MantencionUsuarioHecha fromXMLNode(Node xmlNode) {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static InfoSincro fromXMLNode(Node xmlNode) {
+        InfoSincro ret = new InfoSincro();
 
         Element element = (Element) xmlNode;
 
+        ret.setId(Integer.decode(element.getElementsByTagName("id_info_sincro").item(0).getTextContent()));
         ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
-        ret.setIdMantencionUsuarioHecha(Long.decode(element.getElementsByTagName("id_mantencion_usuario_hecha").item(0).getTextContent()));
-        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
-        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
-        ret.setKm(Integer.decode(element.getElementsByTagName("km").item(0).getTextContent()));
-        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
-        ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
+        ret.setFechaFinProcesamiento(element.getElementsByTagName("fecha_fin_procesamiento").item(0).getTextContent());
+        ret.setSentido(Byte.decode(element.getElementsByTagName("sentido").item(0).getTextContent()));
+        ret.setFechaLectura(element.getElementsByTagName("fecha_lectura").item(0).getTextContent());
+        ret.setArchivoNombre(element.getElementsByTagName("archivo_nombre").item(0).getTextContent());
+        ret.setArchivoMd5(element.getElementsByTagName("archivo_md5").item(0).getTextContent());
+        ret.setArchivoTamano(Long.decode(element.getElementsByTagName("archivo_tamano").item(0).getTextContent()));
 
         return ret;
     }

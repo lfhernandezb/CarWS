@@ -570,7 +570,6 @@ public class Reparacion {
         
     }
 
-
     public void save(Connection p_conn) throws SQLException {
         
         String str_sql = _str_sql +
@@ -644,8 +643,7 @@ public class Reparacion {
         
     }
 
-
-@Override
+    @Override
     public String toString() {
         return "Reparacion [" +
 	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +

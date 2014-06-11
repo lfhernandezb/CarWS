@@ -690,7 +690,6 @@ public class MantencionUsuario {
         
     }
 
-
     public void save(Connection p_conn) throws SQLException {
         
         String str_sql = _str_sql +
@@ -764,8 +763,7 @@ public class MantencionUsuario {
         
     }
 
-
-@Override
+    @Override
     public String toString() {
         return "MantencionUsuario [" +
 	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +

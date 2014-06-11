@@ -16,37 +16,28 @@ import org.w3c.dom.Node;
  * @author petete-ntbk
  *
  */
-public class MantencionUsuarioHecha {
+public class Autenticacion {
     protected String _fecha;
-    protected Long _idMantencionUsuarioHecha;
-    protected Boolean _borrado;
-    protected Long _idMantencionUsuario;
-    protected Integer _costo;
-    protected Integer _km;
-    protected String _fechaModificacion;
+    protected Long _idRedSocial;
+    protected String _token;
     protected Long _idUsuario;
+    protected Long _id;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    DATE_FORMAT(ma.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
-        "    ma.id_mantencion_usuario_hecha AS id_mantencion_usuario_hecha," +
-        "    0+ma.borrado AS borrado," +
-        "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
-        "    ma.costo AS costo," +
-        "    ma.km AS km," +
-        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_usuario AS id_usuario" +
-        "    FROM mantencion_usuario_hecha ma";
+        "    DATE_FORMAT(au.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
+        "    au.id_red_social AS id_red_social," +
+        "    au.token AS token," +
+        "    au.id_usuario AS id_usuario," +
+        "    au.id_autenticacion AS id" +
+        "    FROM autenticacion au";
 
-    public MantencionUsuarioHecha() {
+    public Autenticacion() {
         _fecha = null;
-        _idMantencionUsuarioHecha = null;
-        _borrado = null;
-        _idMantencionUsuario = null;
-        _costo = null;
-        _km = null;
-        _fechaModificacion = null;
+        _idRedSocial = null;
+        _token = null;
         _idUsuario = null;
+        _id = null;
 
     }
     /**
@@ -56,40 +47,16 @@ public class MantencionUsuarioHecha {
         return _fecha;
     }
     /**
-     * @return the _idMantencionUsuarioHecha
+     * @return the _idRedSocial
      */
-    public Long getIdMantencionUsuarioHecha() {
-        return _idMantencionUsuarioHecha;
+    public Long getIdRedSocial() {
+        return _idRedSocial;
     }
     /**
-     * @return the _borrado
+     * @return the _token
      */
-    public Boolean getBorrado() {
-        return _borrado;
-    }
-    /**
-     * @return the _idMantencionUsuario
-     */
-    public Long getIdMantencionUsuario() {
-        return _idMantencionUsuario;
-    }
-    /**
-     * @return the _costo
-     */
-    public Integer getCosto() {
-        return _costo;
-    }
-    /**
-     * @return the _km
-     */
-    public Integer getKm() {
-        return _km;
-    }
-    /**
-     * @return the _fechaModificacion
-     */
-    public String getFechaModificacion() {
-        return _fechaModificacion;
+    public String getToken() {
+        return _token;
     }
     /**
      * @return the _idUsuario
@@ -98,46 +65,28 @@ public class MantencionUsuarioHecha {
         return _idUsuario;
     }
     /**
+     * @return the _id
+     */
+    public Long getId() {
+        return _id;
+    }
+    /**
      * @param _fecha the _fecha to set
      */
     public void setFecha(String _fecha) {
         this._fecha = _fecha;
     }
     /**
-     * @param _idMantencionUsuarioHecha the _idMantencionUsuarioHecha to set
+     * @param _idRedSocial the _idRedSocial to set
      */
-    public void setIdMantencionUsuarioHecha(Long _idMantencionUsuarioHecha) {
-        this._idMantencionUsuarioHecha = _idMantencionUsuarioHecha;
+    public void setIdRedSocial(Long _idRedSocial) {
+        this._idRedSocial = _idRedSocial;
     }
     /**
-     * @param _borrado the _borrado to set
+     * @param _token the _token to set
      */
-    public void setBorrado(Boolean _borrado) {
-        this._borrado = _borrado;
-    }
-    /**
-     * @param _idMantencionUsuario the _idMantencionUsuario to set
-     */
-    public void setIdMantencionUsuario(Long _idMantencionUsuario) {
-        this._idMantencionUsuario = _idMantencionUsuario;
-    }
-    /**
-     * @param _costo the _costo to set
-     */
-    public void setCosto(Integer _costo) {
-        this._costo = _costo;
-    }
-    /**
-     * @param _km the _km to set
-     */
-    public void setKm(Integer _km) {
-        this._km = _km;
-    }
-    /**
-     * @param _fechaModificacion the _fechaModificacion to set
-     */
-    public void setFechaModificacion(String _fechaModificacion) {
-        this._fechaModificacion = _fechaModificacion;
+    public void setToken(String _token) {
+        this._token = _token;
     }
     /**
      * @param _idUsuario the _idUsuario to set
@@ -145,27 +94,30 @@ public class MantencionUsuarioHecha {
     public void setIdUsuario(Long _idUsuario) {
         this._idUsuario = _idUsuario;
     }
+    /**
+     * @param _id the _id to set
+     */
+    public void setId(Long _id) {
+        this._id = _id;
+    }
 
-    public static MantencionUsuarioHecha fromRS(ResultSet p_rs) throws SQLException {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static Autenticacion fromRS(ResultSet p_rs) throws SQLException {
+        Autenticacion ret = new Autenticacion();
 
         ret.setFecha(p_rs.getString("fecha"));
-        ret.setIdMantencionUsuarioHecha(p_rs.getLong("id_mantencion_usuario_hecha"));
-        ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
-        ret.setCosto(p_rs.getInt("costo"));
-        ret.setKm(p_rs.getInt("km"));
-        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setIdRedSocial(p_rs.getLong("id_red_social"));
+        ret.setToken(p_rs.getString("token"));
         ret.setIdUsuario(p_rs.getLong("id_usuario"));
+        ret.setId(p_rs.getLong("id"));
 
         return ret;
     }
 
-    public static MantencionUsuarioHecha getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
-        MantencionUsuarioHecha ret = null;
+    public static Autenticacion getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
+        Autenticacion ret = null;
         
         String str_sql = _str_sql +
-            "  WHERE ma." + p_key + " = " + p_value +
+            "  WHERE au." + p_key + " = " + p_value +
             "  LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -222,43 +174,34 @@ public class MantencionUsuarioHecha {
         return ret;        
     }
 
+    public static Autenticacion getById(Connection p_conn, String p_id) throws Exception {
+        return getByParameter(p_conn, "id_autenticacion", p_id);
+    }
     
-    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Autenticacion> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
-        ArrayList<MantencionUsuarioHecha> ret;
+        ArrayList<Autenticacion> ret;
         
         str_sql = "";
         
         try {
             ArrayList<String> array_clauses = new ArrayList<String>();
             
-            ret = new ArrayList<MantencionUsuarioHecha>();
+            ret = new ArrayList<Autenticacion>();
             
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
+                if (p.getKey().equals("id_autenticacion")) {
+                    array_clauses.add("au.id_autenticacion = " + p.getValue());
                 }
-                else if (p.getKey().equals("id_mantencion_usuario_hecha")) {
-                    array_clauses.add("ma.id_mantencion_usuario_hecha = " + p.getValue());
+                else if (p.getKey().equals("id_red_social")) {
+                    array_clauses.add("au.id_red_social = " + p.getValue());
                 }
                 else if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario")) {
-                    array_clauses.add("ma.id_mantencion_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
-                }
-                else if (p.getKey().equals("no borrado")) {
-                    array_clauses.add("ma.borrado = 0");
-                }
-                else if (p.getKey().equals("borrado")) {
-                    array_clauses.add("ma.borrado = 1");
+                    array_clauses.add("au.id_usuario = " + p.getValue());
                 }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
@@ -344,16 +287,12 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    UPDATE mantencion_usuario_hecha" +
+            "    UPDATE autenticacion" +
             "    SET" +
             "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-            "    costo = " + (_costo != null ? _costo : "null") + "," +
-            "    km = " + (_km != null ? _km : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    token = " + (_token != null ? "'" + _token + "'" : "null") +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_autenticacion = " + Long.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -399,22 +338,20 @@ public class MantencionUsuarioHecha {
         ResultSet rs = null;
 
         String str_sql =
-            "    INSERT INTO mantencion_usuario_hecha" +
+            "    INSERT INTO autenticacion" +
             "    (" +
             "    fecha, " +
-            "    id_mantencion_usuario_hecha, " +
-            "    id_mantencion_usuario, " +
-            "    costo, " +
-            "    km, " +
-            "    id_usuario)" +
+            "    id_red_social, " +
+            "    token, " +
+            "    id_usuario, " +
+            "    id_autenticacion)" +
             "    VALUES" +
             "    (" +
             "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_idMantencionUsuarioHecha != null ? "'" + _idMantencionUsuarioHecha + "'" : "null") + "," +
-            "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
-            "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
-            "    " + (_km != null ? "'" + _km + "'" : "null") + "," +
-            "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") +
+            "    " + (_idRedSocial != null ? "'" + _idRedSocial + "'" : "null") + "," +
+            "    " + (_token != null ? "'" + _token + "'" : "null") + "," +
+            "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
+            "    " + (_id != null ? "'" + _id + "'" : "null") +
             "    )";
         
         try {
@@ -465,10 +402,9 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    DELETE FROM mantencion_usuario_hecha" +
+            "    DELETE FROM autenticacion" +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_autenticacion = " + Long.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -502,12 +438,11 @@ public class MantencionUsuarioHecha {
     }
 
     public void load(Connection p_conn) throws SQLException {
-        MantencionUsuarioHecha obj = null;
+        Autenticacion obj = null;
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_autenticacion = " + Long.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -530,11 +465,9 @@ public class MantencionUsuarioHecha {
                 //System.out.println("fromRS(rs) ok");
 
                 _fecha = obj.getFecha();
-                _borrado = obj.getBorrado();
-                _idMantencionUsuario = obj.getIdMantencionUsuario();
-                _costo = obj.getCosto();
-                _km = obj.getKm();
-                _fechaModificacion = obj.getFechaModificacion();
+                _idRedSocial = obj.getIdRedSocial();
+                _token = obj.getToken();
+                _idUsuario = obj.getIdUsuario();
             }
         }
         catch (SQLException ex){
@@ -574,8 +507,7 @@ public class MantencionUsuarioHecha {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_autenticacion = " + Long.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -645,60 +577,48 @@ public class MantencionUsuarioHecha {
 
     @Override
     public String toString() {
-        return "MantencionUsuarioHecha [" +
+        return "Autenticacion [" +
 	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idMantencionUsuarioHecha = " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
-	           "    _km = " + (_km != null ? _km : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") +
+	           "    _idRedSocial = " + (_idRedSocial != null ? _idRedSocial : "null") + "," +
+	           "    _token = " + (_token != null ? "'" + _token + "'" : "null") + "," +
+	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
+	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
-        return "MantencionUsuarioHecha : {" +
+        return "Autenticacion : {" +
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
-	           "    \"_idMantencionUsuarioHecha\" : " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
-	           "    \"_km\" : " + (_km != null ? _km : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") +
+	           "    \"_idRedSocial\" : " + (_idRedSocial != null ? _idRedSocial : "null") + "," +
+	           "    \"_token\" : " + (_token != null ? "\"" + _token + "\"" : "null") + "," +
+	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
+	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
 
 
     public String toXML() {
-        return "<MantencionUsuarioHecha>" +
+        return "<Autenticacion>" +
 	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuarioHecha" + (_idMantencionUsuarioHecha != null ? ">" + _idMantencionUsuarioHecha + "</idMantencionUsuarioHecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <km" + (_km != null ? ">" + _km + "</km>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idRedSocial" + (_idRedSocial != null ? ">" + _idRedSocial + "</idRedSocial>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <token" + (_token != null ? ">" + _token + "</token>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-			   "</MantencionUsuarioHecha>";
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+			   "</Autenticacion>";
     }
 
 
-    public static MantencionUsuarioHecha fromXMLNode(Node xmlNode) {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static Autenticacion fromXMLNode(Node xmlNode) {
+        Autenticacion ret = new Autenticacion();
 
         Element element = (Element) xmlNode;
 
         ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
-        ret.setIdMantencionUsuarioHecha(Long.decode(element.getElementsByTagName("id_mantencion_usuario_hecha").item(0).getTextContent()));
-        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
-        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
-        ret.setKm(Integer.decode(element.getElementsByTagName("km").item(0).getTextContent()));
-        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setIdRedSocial(Long.decode(element.getElementsByTagName("id_red_social").item(0).getTextContent()));
+        ret.setToken(element.getElementsByTagName("token").item(0).getTextContent());
         ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
+        ret.setId(Long.decode(element.getElementsByTagName("id_autenticacion").item(0).getTextContent()));
 
         return ret;
     }

@@ -16,156 +16,140 @@ import org.w3c.dom.Node;
  * @author petete-ntbk
  *
  */
-public class MantencionUsuarioHecha {
-    protected String _fecha;
-    protected Long _idMantencionUsuarioHecha;
-    protected Boolean _borrado;
-    protected Long _idMantencionUsuario;
-    protected Integer _costo;
-    protected Integer _km;
-    protected String _fechaModificacion;
-    protected Long _idUsuario;
+public class Estilo {
+    protected String _nombre;
+    protected Byte _puertas;
+    protected String _traccion;
+    protected Long _idModeloAnio;
+    protected Short _rendimientoCarretera;
+    protected Short _rendimientoCiudad;
+    protected Long _id;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    DATE_FORMAT(ma.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
-        "    ma.id_mantencion_usuario_hecha AS id_mantencion_usuario_hecha," +
-        "    0+ma.borrado AS borrado," +
-        "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
-        "    ma.costo AS costo," +
-        "    ma.km AS km," +
-        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_usuario AS id_usuario" +
-        "    FROM mantencion_usuario_hecha ma";
+        "    es.nombre AS nombre," +
+        "    es.puertas AS puertas," +
+        "    es.traccion AS traccion," +
+        "    es.id_modelo_anio AS id_modelo_anio," +
+        "    es.rendimiento_carretera AS rendimiento_carretera," +
+        "    es.rendimiento_ciudad AS rendimiento_ciudad," +
+        "    es.id_estilo AS id" +
+        "    FROM estilo es";
 
-    public MantencionUsuarioHecha() {
-        _fecha = null;
-        _idMantencionUsuarioHecha = null;
-        _borrado = null;
-        _idMantencionUsuario = null;
-        _costo = null;
-        _km = null;
-        _fechaModificacion = null;
-        _idUsuario = null;
+    public Estilo() {
+        _nombre = null;
+        _puertas = null;
+        _traccion = null;
+        _idModeloAnio = null;
+        _rendimientoCarretera = null;
+        _rendimientoCiudad = null;
+        _id = null;
 
     }
     /**
-     * @return the _fecha
+     * @return the _nombre
      */
-    public String getFecha() {
-        return _fecha;
+    public String getNombre() {
+        return _nombre;
     }
     /**
-     * @return the _idMantencionUsuarioHecha
+     * @return the _puertas
      */
-    public Long getIdMantencionUsuarioHecha() {
-        return _idMantencionUsuarioHecha;
+    public Byte getPuertas() {
+        return _puertas;
     }
     /**
-     * @return the _borrado
+     * @return the _traccion
      */
-    public Boolean getBorrado() {
-        return _borrado;
+    public String getTraccion() {
+        return _traccion;
     }
     /**
-     * @return the _idMantencionUsuario
+     * @return the _idModeloAnio
      */
-    public Long getIdMantencionUsuario() {
-        return _idMantencionUsuario;
+    public Long getIdModeloAnio() {
+        return _idModeloAnio;
     }
     /**
-     * @return the _costo
+     * @return the _rendimientoCarretera
      */
-    public Integer getCosto() {
-        return _costo;
+    public Short getRendimientoCarretera() {
+        return _rendimientoCarretera;
     }
     /**
-     * @return the _km
+     * @return the _rendimientoCiudad
      */
-    public Integer getKm() {
-        return _km;
+    public Short getRendimientoCiudad() {
+        return _rendimientoCiudad;
     }
     /**
-     * @return the _fechaModificacion
+     * @return the _id
      */
-    public String getFechaModificacion() {
-        return _fechaModificacion;
+    public Long getId() {
+        return _id;
     }
     /**
-     * @return the _idUsuario
+     * @param _nombre the _nombre to set
      */
-    public Long getIdUsuario() {
-        return _idUsuario;
+    public void setNombre(String _nombre) {
+        this._nombre = _nombre;
     }
     /**
-     * @param _fecha the _fecha to set
+     * @param _puertas the _puertas to set
      */
-    public void setFecha(String _fecha) {
-        this._fecha = _fecha;
+    public void setPuertas(Byte _puertas) {
+        this._puertas = _puertas;
     }
     /**
-     * @param _idMantencionUsuarioHecha the _idMantencionUsuarioHecha to set
+     * @param _traccion the _traccion to set
      */
-    public void setIdMantencionUsuarioHecha(Long _idMantencionUsuarioHecha) {
-        this._idMantencionUsuarioHecha = _idMantencionUsuarioHecha;
+    public void setTraccion(String _traccion) {
+        this._traccion = _traccion;
     }
     /**
-     * @param _borrado the _borrado to set
+     * @param _idModeloAnio the _idModeloAnio to set
      */
-    public void setBorrado(Boolean _borrado) {
-        this._borrado = _borrado;
+    public void setIdModeloAnio(Long _idModeloAnio) {
+        this._idModeloAnio = _idModeloAnio;
     }
     /**
-     * @param _idMantencionUsuario the _idMantencionUsuario to set
+     * @param _rendimientoCarretera the _rendimientoCarretera to set
      */
-    public void setIdMantencionUsuario(Long _idMantencionUsuario) {
-        this._idMantencionUsuario = _idMantencionUsuario;
+    public void setRendimientoCarretera(Short _rendimientoCarretera) {
+        this._rendimientoCarretera = _rendimientoCarretera;
     }
     /**
-     * @param _costo the _costo to set
+     * @param _rendimientoCiudad the _rendimientoCiudad to set
      */
-    public void setCosto(Integer _costo) {
-        this._costo = _costo;
+    public void setRendimientoCiudad(Short _rendimientoCiudad) {
+        this._rendimientoCiudad = _rendimientoCiudad;
     }
     /**
-     * @param _km the _km to set
+     * @param _id the _id to set
      */
-    public void setKm(Integer _km) {
-        this._km = _km;
-    }
-    /**
-     * @param _fechaModificacion the _fechaModificacion to set
-     */
-    public void setFechaModificacion(String _fechaModificacion) {
-        this._fechaModificacion = _fechaModificacion;
-    }
-    /**
-     * @param _idUsuario the _idUsuario to set
-     */
-    public void setIdUsuario(Long _idUsuario) {
-        this._idUsuario = _idUsuario;
+    public void setId(Long _id) {
+        this._id = _id;
     }
 
-    public static MantencionUsuarioHecha fromRS(ResultSet p_rs) throws SQLException {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static Estilo fromRS(ResultSet p_rs) throws SQLException {
+        Estilo ret = new Estilo();
 
-        ret.setFecha(p_rs.getString("fecha"));
-        ret.setIdMantencionUsuarioHecha(p_rs.getLong("id_mantencion_usuario_hecha"));
-        ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
-        ret.setCosto(p_rs.getInt("costo"));
-        ret.setKm(p_rs.getInt("km"));
-        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
-        ret.setIdUsuario(p_rs.getLong("id_usuario"));
+        ret.setNombre(p_rs.getString("nombre"));
+        ret.setPuertas(p_rs.getByte("puertas"));
+        ret.setTraccion(p_rs.getString("traccion"));
+        ret.setIdModeloAnio(p_rs.getLong("id_modelo_anio"));
+        ret.setRendimientoCarretera(p_rs.getShort("rendimiento_carretera"));
+        ret.setRendimientoCiudad(p_rs.getShort("rendimiento_ciudad"));
+        ret.setId(p_rs.getLong("id"));
 
         return ret;
     }
 
-    public static MantencionUsuarioHecha getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
-        MantencionUsuarioHecha ret = null;
+    public static Estilo getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
+        Estilo ret = null;
         
         String str_sql = _str_sql +
-            "  WHERE ma." + p_key + " = " + p_value +
+            "  WHERE es." + p_key + " = " + p_value +
             "  LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -222,43 +206,31 @@ public class MantencionUsuarioHecha {
         return ret;        
     }
 
+    public static Estilo getById(Connection p_conn, String p_id) throws Exception {
+        return getByParameter(p_conn, "id_estilo", p_id);
+    }
     
-    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Estilo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
-        ArrayList<MantencionUsuarioHecha> ret;
+        ArrayList<Estilo> ret;
         
         str_sql = "";
         
         try {
             ArrayList<String> array_clauses = new ArrayList<String>();
             
-            ret = new ArrayList<MantencionUsuarioHecha>();
+            ret = new ArrayList<Estilo>();
             
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
+                if (p.getKey().equals("id_estilo")) {
+                    array_clauses.add("es.id_estilo = " + p.getValue());
                 }
-                else if (p.getKey().equals("id_mantencion_usuario_hecha")) {
-                    array_clauses.add("ma.id_mantencion_usuario_hecha = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario")) {
-                    array_clauses.add("ma.id_mantencion_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
-                }
-                else if (p.getKey().equals("no borrado")) {
-                    array_clauses.add("ma.borrado = 0");
-                }
-                else if (p.getKey().equals("borrado")) {
-                    array_clauses.add("ma.borrado = 1");
+                else if (p.getKey().equals("id_modelo_anio")) {
+                    array_clauses.add("es.id_modelo_anio = " + p.getValue());
                 }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
@@ -344,16 +316,15 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    UPDATE mantencion_usuario_hecha" +
+            "    UPDATE estilo" +
             "    SET" +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-            "    costo = " + (_costo != null ? _costo : "null") + "," +
-            "    km = " + (_km != null ? _km : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
+            "    puertas = " + (_puertas != null ? _puertas : "null") + "," +
+            "    traccion = " + (_traccion != null ? "'" + _traccion + "'" : "null") + "," +
+            "    rendimiento_carretera = " + (_rendimientoCarretera != null ? _rendimientoCarretera : "null") + "," +
+            "    rendimiento_ciudad = " + (_rendimientoCiudad != null ? _rendimientoCiudad : "null") +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_estilo = " + Long.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -399,22 +370,24 @@ public class MantencionUsuarioHecha {
         ResultSet rs = null;
 
         String str_sql =
-            "    INSERT INTO mantencion_usuario_hecha" +
+            "    INSERT INTO estilo" +
             "    (" +
-            "    fecha, " +
-            "    id_mantencion_usuario_hecha, " +
-            "    id_mantencion_usuario, " +
-            "    costo, " +
-            "    km, " +
-            "    id_usuario)" +
+            "    nombre, " +
+            "    puertas, " +
+            "    traccion, " +
+            "    id_modelo_anio, " +
+            "    rendimiento_carretera, " +
+            "    rendimiento_ciudad, " +
+            "    id_estilo)" +
             "    VALUES" +
             "    (" +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_idMantencionUsuarioHecha != null ? "'" + _idMantencionUsuarioHecha + "'" : "null") + "," +
-            "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
-            "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
-            "    " + (_km != null ? "'" + _km + "'" : "null") + "," +
-            "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") +
+            "    " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
+            "    " + (_puertas != null ? "'" + _puertas + "'" : "null") + "," +
+            "    " + (_traccion != null ? "'" + _traccion + "'" : "null") + "," +
+            "    " + (_idModeloAnio != null ? "'" + _idModeloAnio + "'" : "null") + "," +
+            "    " + (_rendimientoCarretera != null ? "'" + _rendimientoCarretera + "'" : "null") + "," +
+            "    " + (_rendimientoCiudad != null ? "'" + _rendimientoCiudad + "'" : "null") + "," +
+            "    " + (_id != null ? "'" + _id + "'" : "null") +
             "    )";
         
         try {
@@ -465,10 +438,9 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    DELETE FROM mantencion_usuario_hecha" +
+            "    DELETE FROM estilo" +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_estilo = " + Long.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -502,12 +474,11 @@ public class MantencionUsuarioHecha {
     }
 
     public void load(Connection p_conn) throws SQLException {
-        MantencionUsuarioHecha obj = null;
+        Estilo obj = null;
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_estilo = " + Long.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -529,12 +500,12 @@ public class MantencionUsuarioHecha {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _fecha = obj.getFecha();
-                _borrado = obj.getBorrado();
-                _idMantencionUsuario = obj.getIdMantencionUsuario();
-                _costo = obj.getCosto();
-                _km = obj.getKm();
-                _fechaModificacion = obj.getFechaModificacion();
+                _nombre = obj.getNombre();
+                _puertas = obj.getPuertas();
+                _traccion = obj.getTraccion();
+                _idModeloAnio = obj.getIdModeloAnio();
+                _rendimientoCarretera = obj.getRendimientoCarretera();
+                _rendimientoCiudad = obj.getRendimientoCiudad();
             }
         }
         catch (SQLException ex){
@@ -574,8 +545,7 @@ public class MantencionUsuarioHecha {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_estilo = " + Long.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -645,60 +615,56 @@ public class MantencionUsuarioHecha {
 
     @Override
     public String toString() {
-        return "MantencionUsuarioHecha [" +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idMantencionUsuarioHecha = " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
-	           "    _km = " + (_km != null ? _km : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") +
+        return "Estilo [" +
+	           "    _nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
+	           "    _puertas = " + (_puertas != null ? _puertas : "null") + "," +
+	           "    _traccion = " + (_traccion != null ? "'" + _traccion + "'" : "null") + "," +
+	           "    _idModeloAnio = " + (_idModeloAnio != null ? _idModeloAnio : "null") + "," +
+	           "    _rendimientoCarretera = " + (_rendimientoCarretera != null ? _rendimientoCarretera : "null") + "," +
+	           "    _rendimientoCiudad = " + (_rendimientoCiudad != null ? _rendimientoCiudad : "null") + "," +
+	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
-        return "MantencionUsuarioHecha : {" +
-	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
-	           "    \"_idMantencionUsuarioHecha\" : " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
-	           "    \"_km\" : " + (_km != null ? _km : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") +
+        return "Estilo : {" +
+	           "    \"_nombre\" : " + (_nombre != null ? "\"" + _nombre + "\"" : "null") + "," +
+	           "    \"_puertas\" : " + (_puertas != null ? _puertas : "null") + "," +
+	           "    \"_traccion\" : " + (_traccion != null ? "\"" + _traccion + "\"" : "null") + "," +
+	           "    \"_idModeloAnio\" : " + (_idModeloAnio != null ? _idModeloAnio : "null") + "," +
+	           "    \"_rendimientoCarretera\" : " + (_rendimientoCarretera != null ? _rendimientoCarretera : "null") + "," +
+	           "    \"_rendimientoCiudad\" : " + (_rendimientoCiudad != null ? _rendimientoCiudad : "null") + "," +
+	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
 
 
     public String toXML() {
-        return "<MantencionUsuarioHecha>" +
-	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuarioHecha" + (_idMantencionUsuarioHecha != null ? ">" + _idMantencionUsuarioHecha + "</idMantencionUsuarioHecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <km" + (_km != null ? ">" + _km + "</km>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-			   "</MantencionUsuarioHecha>";
+        return "<Estilo>" +
+	           "    <nombre" + (_nombre != null ? ">" + _nombre + "</nombre>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <puertas" + (_puertas != null ? ">" + _puertas + "</puertas>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <traccion" + (_traccion != null ? ">" + _traccion + "</traccion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idModeloAnio" + (_idModeloAnio != null ? ">" + _idModeloAnio + "</idModeloAnio>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <rendimientoCarretera" + (_rendimientoCarretera != null ? ">" + _rendimientoCarretera + "</rendimientoCarretera>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <rendimientoCiudad" + (_rendimientoCiudad != null ? ">" + _rendimientoCiudad + "</rendimientoCiudad>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+			   "</Estilo>";
     }
 
 
-    public static MantencionUsuarioHecha fromXMLNode(Node xmlNode) {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static Estilo fromXMLNode(Node xmlNode) {
+        Estilo ret = new Estilo();
 
         Element element = (Element) xmlNode;
 
-        ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
-        ret.setIdMantencionUsuarioHecha(Long.decode(element.getElementsByTagName("id_mantencion_usuario_hecha").item(0).getTextContent()));
-        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
-        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
-        ret.setKm(Integer.decode(element.getElementsByTagName("km").item(0).getTextContent()));
-        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
-        ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
+        ret.setNombre(element.getElementsByTagName("nombre").item(0).getTextContent());
+        ret.setPuertas(Byte.decode(element.getElementsByTagName("puertas").item(0).getTextContent()));
+        ret.setTraccion(element.getElementsByTagName("traccion").item(0).getTextContent());
+        ret.setIdModeloAnio(Long.decode(element.getElementsByTagName("id_modelo_anio").item(0).getTextContent()));
+        ret.setRendimientoCarretera(Short.decode(element.getElementsByTagName("rendimiento_carretera").item(0).getTextContent()));
+        ret.setRendimientoCiudad(Short.decode(element.getElementsByTagName("rendimiento_ciudad").item(0).getTextContent()));
+        ret.setId(Long.decode(element.getElementsByTagName("id_estilo").item(0).getTextContent()));
 
         return ret;
     }

@@ -16,74 +16,35 @@ import org.w3c.dom.Node;
  * @author petete-ntbk
  *
  */
-public class MantencionUsuarioHecha {
-    protected String _fecha;
-    protected Long _idMantencionUsuarioHecha;
-    protected Boolean _borrado;
-    protected Long _idMantencionUsuario;
-    protected Integer _costo;
-    protected Integer _km;
+public class TipoVehiculo {
+    protected String _descripcion;
+    protected Byte _id;
     protected String _fechaModificacion;
-    protected Long _idUsuario;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    DATE_FORMAT(ma.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
-        "    ma.id_mantencion_usuario_hecha AS id_mantencion_usuario_hecha," +
-        "    0+ma.borrado AS borrado," +
-        "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
-        "    ma.costo AS costo," +
-        "    ma.km AS km," +
-        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_usuario AS id_usuario" +
-        "    FROM mantencion_usuario_hecha ma";
+        "    ti.descripcion AS descripcion," +
+        "    ti.id_tipo_vehiculo AS id," +
+        "    DATE_FORMAT(ti.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion" +
+        "    FROM tipo_vehiculo ti";
 
-    public MantencionUsuarioHecha() {
-        _fecha = null;
-        _idMantencionUsuarioHecha = null;
-        _borrado = null;
-        _idMantencionUsuario = null;
-        _costo = null;
-        _km = null;
+    public TipoVehiculo() {
+        _descripcion = null;
+        _id = null;
         _fechaModificacion = null;
-        _idUsuario = null;
 
     }
     /**
-     * @return the _fecha
+     * @return the _descripcion
      */
-    public String getFecha() {
-        return _fecha;
+    public String getDescripcion() {
+        return _descripcion;
     }
     /**
-     * @return the _idMantencionUsuarioHecha
+     * @return the _id
      */
-    public Long getIdMantencionUsuarioHecha() {
-        return _idMantencionUsuarioHecha;
-    }
-    /**
-     * @return the _borrado
-     */
-    public Boolean getBorrado() {
-        return _borrado;
-    }
-    /**
-     * @return the _idMantencionUsuario
-     */
-    public Long getIdMantencionUsuario() {
-        return _idMantencionUsuario;
-    }
-    /**
-     * @return the _costo
-     */
-    public Integer getCosto() {
-        return _costo;
-    }
-    /**
-     * @return the _km
-     */
-    public Integer getKm() {
-        return _km;
+    public Byte getId() {
+        return _id;
     }
     /**
      * @return the _fechaModificacion
@@ -92,46 +53,16 @@ public class MantencionUsuarioHecha {
         return _fechaModificacion;
     }
     /**
-     * @return the _idUsuario
+     * @param _descripcion the _descripcion to set
      */
-    public Long getIdUsuario() {
-        return _idUsuario;
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
     }
     /**
-     * @param _fecha the _fecha to set
+     * @param _id the _id to set
      */
-    public void setFecha(String _fecha) {
-        this._fecha = _fecha;
-    }
-    /**
-     * @param _idMantencionUsuarioHecha the _idMantencionUsuarioHecha to set
-     */
-    public void setIdMantencionUsuarioHecha(Long _idMantencionUsuarioHecha) {
-        this._idMantencionUsuarioHecha = _idMantencionUsuarioHecha;
-    }
-    /**
-     * @param _borrado the _borrado to set
-     */
-    public void setBorrado(Boolean _borrado) {
-        this._borrado = _borrado;
-    }
-    /**
-     * @param _idMantencionUsuario the _idMantencionUsuario to set
-     */
-    public void setIdMantencionUsuario(Long _idMantencionUsuario) {
-        this._idMantencionUsuario = _idMantencionUsuario;
-    }
-    /**
-     * @param _costo the _costo to set
-     */
-    public void setCosto(Integer _costo) {
-        this._costo = _costo;
-    }
-    /**
-     * @param _km the _km to set
-     */
-    public void setKm(Integer _km) {
-        this._km = _km;
+    public void setId(Byte _id) {
+        this._id = _id;
     }
     /**
      * @param _fechaModificacion the _fechaModificacion to set
@@ -139,33 +70,22 @@ public class MantencionUsuarioHecha {
     public void setFechaModificacion(String _fechaModificacion) {
         this._fechaModificacion = _fechaModificacion;
     }
-    /**
-     * @param _idUsuario the _idUsuario to set
-     */
-    public void setIdUsuario(Long _idUsuario) {
-        this._idUsuario = _idUsuario;
-    }
 
-    public static MantencionUsuarioHecha fromRS(ResultSet p_rs) throws SQLException {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static TipoVehiculo fromRS(ResultSet p_rs) throws SQLException {
+        TipoVehiculo ret = new TipoVehiculo();
 
-        ret.setFecha(p_rs.getString("fecha"));
-        ret.setIdMantencionUsuarioHecha(p_rs.getLong("id_mantencion_usuario_hecha"));
-        ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
-        ret.setCosto(p_rs.getInt("costo"));
-        ret.setKm(p_rs.getInt("km"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
+        ret.setId(p_rs.getByte("id"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
-        ret.setIdUsuario(p_rs.getLong("id_usuario"));
 
         return ret;
     }
 
-    public static MantencionUsuarioHecha getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
-        MantencionUsuarioHecha ret = null;
+    public static TipoVehiculo getByParameter(Connection p_conn, String p_key, String p_value) throws SQLException {
+        TipoVehiculo ret = null;
         
         String str_sql = _str_sql +
-            "  WHERE ma." + p_key + " = " + p_value +
+            "  WHERE ti." + p_key + " = " + p_value +
             "  LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -222,43 +142,31 @@ public class MantencionUsuarioHecha {
         return ret;        
     }
 
+    public static TipoVehiculo getById(Connection p_conn, String p_id) throws Exception {
+        return getByParameter(p_conn, "id_tipo_vehiculo", p_id);
+    }
     
-    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<TipoVehiculo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
-        ArrayList<MantencionUsuarioHecha> ret;
+        ArrayList<TipoVehiculo> ret;
         
         str_sql = "";
         
         try {
             ArrayList<String> array_clauses = new ArrayList<String>();
             
-            ret = new ArrayList<MantencionUsuarioHecha>();
+            ret = new ArrayList<TipoVehiculo>();
             
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario_hecha")) {
-                    array_clauses.add("ma.id_mantencion_usuario_hecha = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_usuario")) {
-                    array_clauses.add("ma.id_usuario = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_mantencion_usuario")) {
-                    array_clauses.add("ma.id_mantencion_usuario = " + p.getValue());
+                if (p.getKey().equals("id_tipo_vehiculo")) {
+                    array_clauses.add("ti.id_tipo_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
-                }
-                else if (p.getKey().equals("no borrado")) {
-                    array_clauses.add("ma.borrado = 0");
-                }
-                else if (p.getKey().equals("borrado")) {
-                    array_clauses.add("ma.borrado = 1");
+                    array_clauses.add("ti.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
                 }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
@@ -344,16 +252,12 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    UPDATE mantencion_usuario_hecha" +
+            "    UPDATE tipo_vehiculo" +
             "    SET" +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-            "    costo = " + (_costo != null ? _costo : "null") + "," +
-            "    km = " + (_km != null ? _km : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
             "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_tipo_vehiculo = " + Byte.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -399,22 +303,14 @@ public class MantencionUsuarioHecha {
         ResultSet rs = null;
 
         String str_sql =
-            "    INSERT INTO mantencion_usuario_hecha" +
+            "    INSERT INTO tipo_vehiculo" +
             "    (" +
-            "    fecha, " +
-            "    id_mantencion_usuario_hecha, " +
-            "    id_mantencion_usuario, " +
-            "    costo, " +
-            "    km, " +
-            "    id_usuario)" +
+            "    descripcion, " +
+            "    id_tipo_vehiculo)" +
             "    VALUES" +
             "    (" +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_idMantencionUsuarioHecha != null ? "'" + _idMantencionUsuarioHecha + "'" : "null") + "," +
-            "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
-            "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
-            "    " + (_km != null ? "'" + _km + "'" : "null") + "," +
-            "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") +
+            "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+            "    " + (_id != null ? "'" + _id + "'" : "null") +
             "    )";
         
         try {
@@ -465,10 +361,9 @@ public class MantencionUsuarioHecha {
         Statement stmt = null;
 
         String str_sql =
-            "    DELETE FROM mantencion_usuario_hecha" +
+            "    DELETE FROM tipo_vehiculo" +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha);
+            "    id_tipo_vehiculo = " + Byte.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -502,12 +397,11 @@ public class MantencionUsuarioHecha {
     }
 
     public void load(Connection p_conn) throws SQLException {
-        MantencionUsuarioHecha obj = null;
+        TipoVehiculo obj = null;
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_tipo_vehiculo = " + Byte.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -529,11 +423,7 @@ public class MantencionUsuarioHecha {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _fecha = obj.getFecha();
-                _borrado = obj.getBorrado();
-                _idMantencionUsuario = obj.getIdMantencionUsuario();
-                _costo = obj.getCosto();
-                _km = obj.getKm();
+                _descripcion = obj.getDescripcion();
                 _fechaModificacion = obj.getFechaModificacion();
             }
         }
@@ -574,8 +464,7 @@ public class MantencionUsuarioHecha {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
-            "    id_mantencion_usuario_hecha = " + Long.toString(this._idMantencionUsuarioHecha) +
+            "    id_tipo_vehiculo = " + Byte.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -645,60 +534,40 @@ public class MantencionUsuarioHecha {
 
     @Override
     public String toString() {
-        return "MantencionUsuarioHecha [" +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idMantencionUsuarioHecha = " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
-	           "    _km = " + (_km != null ? _km : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") +
+        return "TipoVehiculo [" +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+	           "    _id = " + (_id != null ? _id : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
-        return "MantencionUsuarioHecha : {" +
-	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
-	           "    \"_idMantencionUsuarioHecha\" : " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
-	           "    \"_km\" : " + (_km != null ? _km : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") +
+        return "TipoVehiculo : {" +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
+	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") +
 			   "}";
     }
 
 
     public String toXML() {
-        return "<MantencionUsuarioHecha>" +
-	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuarioHecha" + (_idMantencionUsuarioHecha != null ? ">" + _idMantencionUsuarioHecha + "</idMantencionUsuarioHecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <km" + (_km != null ? ">" + _km + "</km>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+        return "<TipoVehiculo>" +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-			   "</MantencionUsuarioHecha>";
+			   "</TipoVehiculo>";
     }
 
 
-    public static MantencionUsuarioHecha fromXMLNode(Node xmlNode) {
-        MantencionUsuarioHecha ret = new MantencionUsuarioHecha();
+    public static TipoVehiculo fromXMLNode(Node xmlNode) {
+        TipoVehiculo ret = new TipoVehiculo();
 
         Element element = (Element) xmlNode;
 
-        ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
-        ret.setIdMantencionUsuarioHecha(Long.decode(element.getElementsByTagName("id_mantencion_usuario_hecha").item(0).getTextContent()));
-        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
-        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
-        ret.setKm(Integer.decode(element.getElementsByTagName("km").item(0).getTextContent()));
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
+        ret.setId(Byte.decode(element.getElementsByTagName("id_tipo_vehiculo").item(0).getTextContent()));
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
-        ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
 
         return ret;
     }

@@ -630,7 +630,6 @@ public class Recordatorio {
         
     }
 
-
     public void save(Connection p_conn) throws SQLException {
         
         String str_sql = _str_sql +
@@ -704,8 +703,7 @@ public class Recordatorio {
         
     }
 
-
-@Override
+    @Override
     public String toString() {
         return "Recordatorio [" +
 	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +

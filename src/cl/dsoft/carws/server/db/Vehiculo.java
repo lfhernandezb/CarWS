@@ -696,7 +696,6 @@ public class Vehiculo {
         
     }
 
-
     public void save(Connection p_conn) throws SQLException {
         
         String str_sql = _str_sql +
@@ -770,8 +769,7 @@ public class Vehiculo {
         
     }
 
-
-@Override
+    @Override
     public String toString() {
         return "Vehiculo [" +
 	           "    _anio = " + (_anio != null ? _anio : "null") + "," +

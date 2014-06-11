@@ -630,7 +630,6 @@ public class Rendimiento {
         
     }
 
-
     public void save(Connection p_conn) throws SQLException {
         
         String str_sql = _str_sql +
@@ -704,8 +703,7 @@ public class Rendimiento {
         
     }
 
-
-@Override
+    @Override
     public String toString() {
         return "Rendimiento [" +
 	           "    _estanque_lleno = " + (_estanqueLleno != null ? "b'" + _estanqueLleno : "null") + "," +
