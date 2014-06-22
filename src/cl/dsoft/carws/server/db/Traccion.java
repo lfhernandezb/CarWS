@@ -17,22 +17,28 @@ import org.w3c.dom.Node;
  *
  */
 public class Traccion {
+    protected String _fechaModificacion;
     protected String _descripcion;
     protected Byte _id;
-    protected String _fechaModificacion;
 
     private final static String _str_sql = 
         "    SELECT" +
+        "    DATE_FORMAT(tr.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
         "    tr.descripcion AS descripcion," +
-        "    tr.id_traccion AS id," +
-        "    DATE_FORMAT(tr.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion" +
+        "    tr.id_traccion AS id" +
         "    FROM traccion tr";
 
     public Traccion() {
+        _fechaModificacion = null;
         _descripcion = null;
         _id = null;
-        _fechaModificacion = null;
 
+    }
+    /**
+     * @return the _fechaModificacion
+     */
+    public String getFechaModificacion() {
+        return _fechaModificacion;
     }
     /**
      * @return the _descripcion
@@ -47,10 +53,10 @@ public class Traccion {
         return _id;
     }
     /**
-     * @return the _fechaModificacion
+     * @param _fechaModificacion the _fechaModificacion to set
      */
-    public String getFechaModificacion() {
-        return _fechaModificacion;
+    public void setFechaModificacion(String _fechaModificacion) {
+        this._fechaModificacion = _fechaModificacion;
     }
     /**
      * @param _descripcion the _descripcion to set
@@ -64,19 +70,13 @@ public class Traccion {
     public void setId(Byte _id) {
         this._id = _id;
     }
-    /**
-     * @param _fechaModificacion the _fechaModificacion to set
-     */
-    public void setFechaModificacion(String _fechaModificacion) {
-        this._fechaModificacion = _fechaModificacion;
-    }
 
     public static Traccion fromRS(ResultSet p_rs) throws SQLException {
         Traccion ret = new Traccion();
 
+        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
         ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setId(p_rs.getByte("id"));
-        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
 
         return ret;
     }
@@ -254,8 +254,8 @@ public class Traccion {
         String str_sql =
             "    UPDATE traccion" +
             "    SET" +
-            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
             "    id_traccion = " + Byte.toString(this._id);
 
@@ -423,8 +423,8 @@ public class Traccion {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _descripcion = obj.getDescripcion();
                 _fechaModificacion = obj.getFechaModificacion();
+                _descripcion = obj.getDescripcion();
             }
         }
         catch (SQLException ex){
@@ -535,27 +535,27 @@ public class Traccion {
     @Override
     public String toString() {
         return "Traccion [" +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
         return "Traccion : {" +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
 	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
-	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") +
+	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
 
 
     public String toXML() {
         return "<Traccion>" +
+	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Traccion>";
     }
 
@@ -565,9 +565,9 @@ public class Traccion {
 
         Element element = (Element) xmlNode;
 
+        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
         ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setId(Byte.decode(element.getElementsByTagName("id_traccion").item(0).getTextContent()));
-        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
 
         return ret;
     }

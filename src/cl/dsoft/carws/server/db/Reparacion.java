@@ -17,55 +17,40 @@ import org.w3c.dom.Node;
  *
  */
 public class Reparacion {
-    protected Boolean _borrado;
-    protected String _descripcion;
-    protected Integer _costo;
     protected String _titulo;
     protected String _fechaModificacion;
+    protected String _fecha;
     protected Long _idUsuario;
     protected Long _idVehiculo;
+    protected Boolean _borrado;
+    protected String _descripcion;
     protected Long _idReparacion;
+    protected Integer _costo;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    0+re.borrado AS borrado," +
-        "    re.descripcion AS descripcion," +
-        "    re.costo AS costo," +
         "    re.titulo AS titulo," +
         "    DATE_FORMAT(re.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
+        "    DATE_FORMAT(re.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
         "    re.id_usuario AS id_usuario," +
         "    re.id_vehiculo AS id_vehiculo," +
-        "    re.id_reparacion AS id_reparacion" +
+        "    0+re.borrado AS borrado," +
+        "    re.descripcion AS descripcion," +
+        "    re.id_reparacion AS id_reparacion," +
+        "    re.costo AS costo" +
         "    FROM reparacion re";
 
     public Reparacion() {
-        _borrado = null;
-        _descripcion = null;
-        _costo = null;
         _titulo = null;
         _fechaModificacion = null;
+        _fecha = null;
         _idUsuario = null;
         _idVehiculo = null;
+        _borrado = null;
+        _descripcion = null;
         _idReparacion = null;
+        _costo = null;
 
-    }
-    /**
-     * @return the _borrado
-     */
-    public Boolean getBorrado() {
-        return _borrado;
-    }
-    /**
-     * @return the _descripcion
-     */
-    public String getDescripcion() {
-        return _descripcion;
-    }
-    /**
-     * @return the _costo
-     */
-    public Integer getCosto() {
-        return _costo;
     }
     /**
      * @return the _titulo
@@ -80,6 +65,12 @@ public class Reparacion {
         return _fechaModificacion;
     }
     /**
+     * @return the _fecha
+     */
+    public String getFecha() {
+        return _fecha;
+    }
+    /**
      * @return the _idUsuario
      */
     public Long getIdUsuario() {
@@ -92,28 +83,28 @@ public class Reparacion {
         return _idVehiculo;
     }
     /**
+     * @return the _borrado
+     */
+    public Boolean getBorrado() {
+        return _borrado;
+    }
+    /**
+     * @return the _descripcion
+     */
+    public String getDescripcion() {
+        return _descripcion;
+    }
+    /**
      * @return the _idReparacion
      */
     public Long getIdReparacion() {
         return _idReparacion;
     }
     /**
-     * @param _borrado the _borrado to set
+     * @return the _costo
      */
-    public void setBorrado(Boolean _borrado) {
-        this._borrado = _borrado;
-    }
-    /**
-     * @param _descripcion the _descripcion to set
-     */
-    public void setDescripcion(String _descripcion) {
-        this._descripcion = _descripcion;
-    }
-    /**
-     * @param _costo the _costo to set
-     */
-    public void setCosto(Integer _costo) {
-        this._costo = _costo;
+    public Integer getCosto() {
+        return _costo;
     }
     /**
      * @param _titulo the _titulo to set
@@ -128,6 +119,12 @@ public class Reparacion {
         this._fechaModificacion = _fechaModificacion;
     }
     /**
+     * @param _fecha the _fecha to set
+     */
+    public void setFecha(String _fecha) {
+        this._fecha = _fecha;
+    }
+    /**
      * @param _idUsuario the _idUsuario to set
      */
     public void setIdUsuario(Long _idUsuario) {
@@ -140,23 +137,42 @@ public class Reparacion {
         this._idVehiculo = _idVehiculo;
     }
     /**
+     * @param _borrado the _borrado to set
+     */
+    public void setBorrado(Boolean _borrado) {
+        this._borrado = _borrado;
+    }
+    /**
+     * @param _descripcion the _descripcion to set
+     */
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
+    }
+    /**
      * @param _idReparacion the _idReparacion to set
      */
     public void setIdReparacion(Long _idReparacion) {
         this._idReparacion = _idReparacion;
     }
+    /**
+     * @param _costo the _costo to set
+     */
+    public void setCosto(Integer _costo) {
+        this._costo = _costo;
+    }
 
     public static Reparacion fromRS(ResultSet p_rs) throws SQLException {
         Reparacion ret = new Reparacion();
 
-        ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setDescripcion(p_rs.getString("descripcion"));
-        ret.setCosto(p_rs.getInt("costo"));
         ret.setTitulo(p_rs.getString("titulo"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setFecha(p_rs.getString("fecha"));
         ret.setIdUsuario(p_rs.getLong("id_usuario"));
         ret.setIdVehiculo(p_rs.getLong("id_vehiculo"));
+        ret.setBorrado(p_rs.getBoolean("borrado"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setIdReparacion(p_rs.getLong("id_reparacion"));
+        ret.setCosto(p_rs.getInt("costo"));
 
         return ret;
     }
@@ -346,11 +362,12 @@ public class Reparacion {
         String str_sql =
             "    UPDATE reparacion" +
             "    SET" +
+            "    titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    costo = " + (_costo != null ? _costo : "null") + "," +
-            "    titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    costo = " + (_costo != null ? _costo : "null") +
             "    WHERE" +
             "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
             "    id_reparacion = " + Long.toString(this._idReparacion);
@@ -401,20 +418,22 @@ public class Reparacion {
         String str_sql =
             "    INSERT INTO reparacion" +
             "    (" +
-            "    descripcion, " +
-            "    costo, " +
             "    titulo, " +
+            "    fecha, " +
             "    id_usuario, " +
             "    id_vehiculo, " +
-            "    id_reparacion)" +
+            "    descripcion, " +
+            "    id_reparacion, " +
+            "    costo)" +
             "    VALUES" +
             "    (" +
-            "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
             "    " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
-            "    " + (_idReparacion != null ? "'" + _idReparacion + "'" : "null") +
+            "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+            "    " + (_idReparacion != null ? "'" + _idReparacion + "'" : "null") + "," +
+            "    " + (_costo != null ? "'" + _costo + "'" : "null") +
             "    )";
         
         try {
@@ -529,12 +548,13 @@ public class Reparacion {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
+                _titulo = obj.getTitulo();
+                _fechaModificacion = obj.getFechaModificacion();
+                _fecha = obj.getFecha();
+                _idVehiculo = obj.getIdVehiculo();
                 _borrado = obj.getBorrado();
                 _descripcion = obj.getDescripcion();
                 _costo = obj.getCosto();
-                _titulo = obj.getTitulo();
-                _fechaModificacion = obj.getFechaModificacion();
-                _idVehiculo = obj.getIdVehiculo();
             }
         }
         catch (SQLException ex){
@@ -646,42 +666,45 @@ public class Reparacion {
     @Override
     public String toString() {
         return "Reparacion [" +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
 	           "    _titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
 	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _idReparacion = " + (_idReparacion != null ? _idReparacion : "null") +
+	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+	           "    _idReparacion = " + (_idReparacion != null ? _idReparacion : "null") + "," +
+	           "    _costo = " + (_costo != null ? _costo : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
         return "Reparacion : {" +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
-	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
 	           "    \"_titulo\" : " + (_titulo != null ? "\"" + _titulo + "\"" : "null") + "," +
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
+	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_idReparacion\" : " + (_idReparacion != null ? _idReparacion : "null") +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
+	           "    \"_idReparacion\" : " + (_idReparacion != null ? _idReparacion : "null") + "," +
+	           "    \"_costo\" : " + (_costo != null ? _costo : "null") +
 			   "}";
     }
 
 
     public String toXML() {
         return "<Reparacion>" +
-	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <titulo" + (_titulo != null ? ">" + _titulo + "</titulo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idVehiculo" + (_idVehiculo != null ? ">" + _idVehiculo + "</idVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idReparacion" + (_idReparacion != null ? ">" + _idReparacion + "</idReparacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Reparacion>";
     }
 
@@ -691,14 +714,15 @@ public class Reparacion {
 
         Element element = (Element) xmlNode;
 
-        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
-        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
         ret.setTitulo(element.getElementsByTagName("titulo").item(0).getTextContent());
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
         ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
         ret.setIdVehiculo(Long.decode(element.getElementsByTagName("id_vehiculo").item(0).getTextContent()));
+        ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setIdReparacion(Long.decode(element.getElementsByTagName("id_reparacion").item(0).getTextContent()));
+        ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
 
         return ret;
     }

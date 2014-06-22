@@ -17,55 +17,55 @@ import org.w3c.dom.Node;
  *
  */
 public class MantencionBase {
+    protected String _nombre;
     protected Integer _diasEntreMantenciones;
-    protected String _tipoTransmision;
-    protected String _codigoMotor;
+    protected String _descripcionItem;
+    protected String _fechaModificacion;
+    protected Long _id;
     protected Integer _kmEntreMantenciones;
+    protected Byte _idTraccion;
     protected Boolean _dependeKm;
     protected String _accion;
     protected String _url;
-    protected String _descripcionItem;
-    protected String _fechaModificacion;
-    protected Long _idModeloAnio;
-    protected Long _id;
-    protected String _item;
-    protected String _tipoTraccion;
+    protected Byte _idCombustible;
     protected String _beneficios;
 
     private final static String _str_sql = 
         "    SELECT" +
+        "    ma.nombre AS nombre," +
         "    ma.dias_entre_mantenciones AS dias_entre_mantenciones," +
-        "    ma.tipo_transmision AS tipo_transmision," +
-        "    ma.codigo_motor AS codigo_motor," +
+        "    ma.descripcion_item AS descripcion_item," +
+        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
+        "    ma.id_mantencion_base AS id," +
         "    ma.km_entre_mantenciones AS km_entre_mantenciones," +
+        "    ma.id_traccion AS id_traccion," +
         "    0+ma.depende_km AS depende_km," +
         "    ma.accion AS accion," +
         "    ma.url AS url," +
-        "    ma.descripcion_item AS descripcion_item," +
-        "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_modelo_anio AS id_modelo_anio," +
-        "    ma.id_mantencion_base AS id," +
-        "    ma.item AS item," +
-        "    ma.tipo_traccion AS tipo_traccion," +
+        "    ma.id_combustible AS id_combustible," +
         "    ma.beneficios AS beneficios" +
         "    FROM mantencion_base ma";
 
     public MantencionBase() {
+        _nombre = null;
         _diasEntreMantenciones = null;
-        _tipoTransmision = null;
-        _codigoMotor = null;
+        _descripcionItem = null;
+        _fechaModificacion = null;
+        _id = null;
         _kmEntreMantenciones = null;
+        _idTraccion = null;
         _dependeKm = null;
         _accion = null;
         _url = null;
-        _descripcionItem = null;
-        _fechaModificacion = null;
-        _idModeloAnio = null;
-        _id = null;
-        _item = null;
-        _tipoTraccion = null;
+        _idCombustible = null;
         _beneficios = null;
 
+    }
+    /**
+     * @return the _nombre
+     */
+    public String getNombre() {
+        return _nombre;
     }
     /**
      * @return the _diasEntreMantenciones
@@ -74,22 +74,34 @@ public class MantencionBase {
         return _diasEntreMantenciones;
     }
     /**
-     * @return the _tipoTransmision
+     * @return the _descripcionItem
      */
-    public String getTipoTransmision() {
-        return _tipoTransmision;
+    public String getDescripcionItem() {
+        return _descripcionItem;
     }
     /**
-     * @return the _codigoMotor
+     * @return the _fechaModificacion
      */
-    public String getCodigoMotor() {
-        return _codigoMotor;
+    public String getFechaModificacion() {
+        return _fechaModificacion;
+    }
+    /**
+     * @return the _id
+     */
+    public Long getId() {
+        return _id;
     }
     /**
      * @return the _kmEntreMantenciones
      */
     public Integer getKmEntreMantenciones() {
         return _kmEntreMantenciones;
+    }
+    /**
+     * @return the _idTraccion
+     */
+    public Byte getIdTraccion() {
+        return _idTraccion;
     }
     /**
      * @return the _dependeKm
@@ -110,40 +122,10 @@ public class MantencionBase {
         return _url;
     }
     /**
-     * @return the _descripcionItem
+     * @return the _idCombustible
      */
-    public String getDescripcionItem() {
-        return _descripcionItem;
-    }
-    /**
-     * @return the _fechaModificacion
-     */
-    public String getFechaModificacion() {
-        return _fechaModificacion;
-    }
-    /**
-     * @return the _idModeloAnio
-     */
-    public Long getIdModeloAnio() {
-        return _idModeloAnio;
-    }
-    /**
-     * @return the _id
-     */
-    public Long getId() {
-        return _id;
-    }
-    /**
-     * @return the _item
-     */
-    public String getItem() {
-        return _item;
-    }
-    /**
-     * @return the _tipoTraccion
-     */
-    public String getTipoTraccion() {
-        return _tipoTraccion;
+    public Byte getIdCombustible() {
+        return _idCombustible;
     }
     /**
      * @return the _beneficios
@@ -152,28 +134,46 @@ public class MantencionBase {
         return _beneficios;
     }
     /**
+     * @param _nombre the _nombre to set
+     */
+    public void setNombre(String _nombre) {
+        this._nombre = _nombre;
+    }
+    /**
      * @param _diasEntreMantenciones the _diasEntreMantenciones to set
      */
     public void setDiasEntreMantenciones(Integer _diasEntreMantenciones) {
         this._diasEntreMantenciones = _diasEntreMantenciones;
     }
     /**
-     * @param _tipoTransmision the _tipoTransmision to set
+     * @param _descripcionItem the _descripcionItem to set
      */
-    public void setTipoTransmision(String _tipoTransmision) {
-        this._tipoTransmision = _tipoTransmision;
+    public void setDescripcionItem(String _descripcionItem) {
+        this._descripcionItem = _descripcionItem;
     }
     /**
-     * @param _codigoMotor the _codigoMotor to set
+     * @param _fechaModificacion the _fechaModificacion to set
      */
-    public void setCodigoMotor(String _codigoMotor) {
-        this._codigoMotor = _codigoMotor;
+    public void setFechaModificacion(String _fechaModificacion) {
+        this._fechaModificacion = _fechaModificacion;
+    }
+    /**
+     * @param _id the _id to set
+     */
+    public void setId(Long _id) {
+        this._id = _id;
     }
     /**
      * @param _kmEntreMantenciones the _kmEntreMantenciones to set
      */
     public void setKmEntreMantenciones(Integer _kmEntreMantenciones) {
         this._kmEntreMantenciones = _kmEntreMantenciones;
+    }
+    /**
+     * @param _idTraccion the _idTraccion to set
+     */
+    public void setIdTraccion(Byte _idTraccion) {
+        this._idTraccion = _idTraccion;
     }
     /**
      * @param _dependeKm the _dependeKm to set
@@ -194,40 +194,10 @@ public class MantencionBase {
         this._url = _url;
     }
     /**
-     * @param _descripcionItem the _descripcionItem to set
+     * @param _idCombustible the _idCombustible to set
      */
-    public void setDescripcionItem(String _descripcionItem) {
-        this._descripcionItem = _descripcionItem;
-    }
-    /**
-     * @param _fechaModificacion the _fechaModificacion to set
-     */
-    public void setFechaModificacion(String _fechaModificacion) {
-        this._fechaModificacion = _fechaModificacion;
-    }
-    /**
-     * @param _idModeloAnio the _idModeloAnio to set
-     */
-    public void setIdModeloAnio(Long _idModeloAnio) {
-        this._idModeloAnio = _idModeloAnio;
-    }
-    /**
-     * @param _id the _id to set
-     */
-    public void setId(Long _id) {
-        this._id = _id;
-    }
-    /**
-     * @param _item the _item to set
-     */
-    public void setItem(String _item) {
-        this._item = _item;
-    }
-    /**
-     * @param _tipoTraccion the _tipoTraccion to set
-     */
-    public void setTipoTraccion(String _tipoTraccion) {
-        this._tipoTraccion = _tipoTraccion;
+    public void setIdCombustible(Byte _idCombustible) {
+        this._idCombustible = _idCombustible;
     }
     /**
      * @param _beneficios the _beneficios to set
@@ -239,19 +209,17 @@ public class MantencionBase {
     public static MantencionBase fromRS(ResultSet p_rs) throws SQLException {
         MantencionBase ret = new MantencionBase();
 
+        ret.setNombre(p_rs.getString("nombre"));
         ret.setDiasEntreMantenciones(p_rs.getInt("dias_entre_mantenciones"));
-        ret.setTipoTransmision(p_rs.getString("tipo_transmision"));
-        ret.setCodigoMotor(p_rs.getString("codigo_motor"));
+        ret.setDescripcionItem(p_rs.getString("descripcion_item"));
+        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setId(p_rs.getLong("id"));
         ret.setKmEntreMantenciones(p_rs.getInt("km_entre_mantenciones"));
+        ret.setIdTraccion(p_rs.getByte("id_traccion"));
         ret.setDependeKm(p_rs.getBoolean("depende_km"));
         ret.setAccion(p_rs.getString("accion"));
         ret.setUrl(p_rs.getString("url"));
-        ret.setDescripcionItem(p_rs.getString("descripcion_item"));
-        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
-        ret.setIdModeloAnio(p_rs.getLong("id_modelo_anio"));
-        ret.setId(p_rs.getLong("id"));
-        ret.setItem(p_rs.getString("item"));
-        ret.setTipoTraccion(p_rs.getString("tipo_traccion"));
+        ret.setIdCombustible(p_rs.getByte("id_combustible"));
         ret.setBeneficios(p_rs.getString("beneficios"));
 
         return ret;
@@ -341,8 +309,11 @@ public class MantencionBase {
                 if (p.getKey().equals("id_mantencion_base")) {
                     array_clauses.add("ma.id_mantencion_base = " + p.getValue());
                 }
-                else if (p.getKey().equals("id_modelo_anio")) {
-                    array_clauses.add("ma.id_modelo_anio = " + p.getValue());
+                else if (p.getKey().equals("id_traccion")) {
+                    array_clauses.add("ma.id_traccion = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_combustible")) {
+                    array_clauses.add("ma.id_combustible = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
                     array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
@@ -433,17 +404,14 @@ public class MantencionBase {
         String str_sql =
             "    UPDATE mantencion_base" +
             "    SET" +
+            "    nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
             "    dias_entre_mantenciones = " + (_diasEntreMantenciones != null ? _diasEntreMantenciones : "null") + "," +
-            "    tipo_transmision = " + (_tipoTransmision != null ? "'" + _tipoTransmision + "'" : "null") + "," +
-            "    codigo_motor = " + (_codigoMotor != null ? "'" + _codigoMotor + "'" : "null") + "," +
+            "    descripcion_item = " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    km_entre_mantenciones = " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
             "    depende_km = " + (_dependeKm != null ? "b'" + _dependeKm : "null") + "," +
             "    accion = " + (_accion != null ? "'" + _accion + "'" : "null") + "," +
             "    url = " + (_url != null ? "'" + _url + "'" : "null") + "," +
-            "    descripcion_item = " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    item = " + (_item != null ? "'" + _item + "'" : "null") + "," +
-            "    tipo_traccion = " + (_tipoTraccion != null ? "'" + _tipoTraccion + "'" : "null") + "," +
             "    beneficios = " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
             "    WHERE" +
             "    id_mantencion_base = " + Long.toString(this._id);
@@ -494,33 +462,29 @@ public class MantencionBase {
         String str_sql =
             "    INSERT INTO mantencion_base" +
             "    (" +
+            "    nombre, " +
             "    dias_entre_mantenciones, " +
-            "    tipo_transmision, " +
-            "    codigo_motor, " +
+            "    descripcion_item, " +
+            "    id_mantencion_base, " +
             "    km_entre_mantenciones, " +
+            "    id_traccion, " +
             "    depende_km, " +
             "    accion, " +
             "    url, " +
-            "    descripcion_item, " +
-            "    id_modelo_anio, " +
-            "    id_mantencion_base, " +
-            "    item, " +
-            "    tipo_traccion, " +
+            "    id_combustible, " +
             "    beneficios)" +
             "    VALUES" +
             "    (" +
+            "    " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
             "    " + (_diasEntreMantenciones != null ? "'" + _diasEntreMantenciones + "'" : "null") + "," +
-            "    " + (_tipoTransmision != null ? "'" + _tipoTransmision + "'" : "null") + "," +
-            "    " + (_codigoMotor != null ? "'" + _codigoMotor + "'" : "null") + "," +
+            "    " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
+            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
             "    " + (_kmEntreMantenciones != null ? "'" + _kmEntreMantenciones + "'" : "null") + "," +
+            "    " + (_idTraccion != null ? "'" + _idTraccion + "'" : "null") + "," +
             "    " + (_dependeKm != null ? "b'" + (_dependeKm ? 1 : 0) + "'" : "null") + "," +
             "    " + (_accion != null ? "'" + _accion + "'" : "null") + "," +
             "    " + (_url != null ? "'" + _url + "'" : "null") + "," +
-            "    " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
-            "    " + (_idModeloAnio != null ? "'" + _idModeloAnio + "'" : "null") + "," +
-            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
-            "    " + (_item != null ? "'" + _item + "'" : "null") + "," +
-            "    " + (_tipoTraccion != null ? "'" + _tipoTraccion + "'" : "null") + "," +
+            "    " + (_idCombustible != null ? "'" + _idCombustible + "'" : "null") + "," +
             "    " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
             "    )";
         
@@ -634,18 +598,16 @@ public class MantencionBase {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
+                _nombre = obj.getNombre();
                 _diasEntreMantenciones = obj.getDiasEntreMantenciones();
-                _tipoTransmision = obj.getTipoTransmision();
-                _codigoMotor = obj.getCodigoMotor();
+                _descripcionItem = obj.getDescripcionItem();
+                _fechaModificacion = obj.getFechaModificacion();
                 _kmEntreMantenciones = obj.getKmEntreMantenciones();
+                _idTraccion = obj.getIdTraccion();
                 _dependeKm = obj.getDependeKm();
                 _accion = obj.getAccion();
                 _url = obj.getUrl();
-                _descripcionItem = obj.getDescripcionItem();
-                _fechaModificacion = obj.getFechaModificacion();
-                _idModeloAnio = obj.getIdModeloAnio();
-                _item = obj.getItem();
-                _tipoTraccion = obj.getTipoTraccion();
+                _idCombustible = obj.getIdCombustible();
                 _beneficios = obj.getBeneficios();
             }
         }
@@ -757,19 +719,17 @@ public class MantencionBase {
     @Override
     public String toString() {
         return "MantencionBase [" +
+	           "    _nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
 	           "    _diasEntreMantenciones = " + (_diasEntreMantenciones != null ? _diasEntreMantenciones : "null") + "," +
-	           "    _tipo_transmision = " + (_tipoTransmision != null ? "'" + _tipoTransmision + "'" : "null") + "," +
-	           "    _codigo_motor = " + (_codigoMotor != null ? "'" + _codigoMotor + "'" : "null") + "," +
+	           "    _descripcion_item = " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _kmEntreMantenciones = " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
+	           "    _idTraccion = " + (_idTraccion != null ? _idTraccion : "null") + "," +
 	           "    _depende_km = " + (_dependeKm != null ? "b'" + _dependeKm : "null") + "," +
 	           "    _accion = " + (_accion != null ? "'" + _accion + "'" : "null") + "," +
 	           "    _url = " + (_url != null ? "'" + _url + "'" : "null") + "," +
-	           "    _descripcion_item = " + (_descripcionItem != null ? "'" + _descripcionItem + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _idModeloAnio = " + (_idModeloAnio != null ? _idModeloAnio : "null") + "," +
-	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _item = " + (_item != null ? "'" + _item + "'" : "null") + "," +
-	           "    _tipo_traccion = " + (_tipoTraccion != null ? "'" + _tipoTraccion + "'" : "null") + "," +
+	           "    _idCombustible = " + (_idCombustible != null ? _idCombustible : "null") + "," +
 	           "    _beneficios = " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
 			   "]";
     }
@@ -777,19 +737,17 @@ public class MantencionBase {
 
     public String toJSON() {
         return "MantencionBase : {" +
+	           "    \"_nombre\" : " + (_nombre != null ? "\"" + _nombre + "\"" : "null") + "," +
 	           "    \"_diasEntreMantenciones\" : " + (_diasEntreMantenciones != null ? _diasEntreMantenciones : "null") + "," +
-	           "    \"_tipo_transmision\" : " + (_tipoTransmision != null ? "\"" + _tipoTransmision + "\"" : "null") + "," +
-	           "    \"_codigo_motor\" : " + (_codigoMotor != null ? "\"" + _codigoMotor + "\"" : "null") + "," +
+	           "    \"_descripcion_item\" : " + (_descripcionItem != null ? "\"" + _descripcionItem + "\"" : "null") + "," +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
+	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_kmEntreMantenciones\" : " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
+	           "    \"_idTraccion\" : " + (_idTraccion != null ? _idTraccion : "null") + "," +
 	           "    \"_depende_km\" : " + (_dependeKm != null ? "b'" + _dependeKm : "null") + "," +
 	           "    \"_accion\" : " + (_accion != null ? "\"" + _accion + "\"" : "null") + "," +
 	           "    \"_url\" : " + (_url != null ? "\"" + _url + "\"" : "null") + "," +
-	           "    \"_descripcion_item\" : " + (_descripcionItem != null ? "\"" + _descripcionItem + "\"" : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_idModeloAnio\" : " + (_idModeloAnio != null ? _idModeloAnio : "null") + "," +
-	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
-	           "    \"_item\" : " + (_item != null ? "\"" + _item + "\"" : "null") + "," +
-	           "    \"_tipo_traccion\" : " + (_tipoTraccion != null ? "\"" + _tipoTraccion + "\"" : "null") + "," +
+	           "    \"_idCombustible\" : " + (_idCombustible != null ? _idCombustible : "null") + "," +
 	           "    \"_beneficios\" : " + (_beneficios != null ? "\"" + _beneficios + "\"" : "null") +
 			   "}";
     }
@@ -797,19 +755,17 @@ public class MantencionBase {
 
     public String toXML() {
         return "<MantencionBase>" +
+	           "    <nombre" + (_nombre != null ? ">" + _nombre + "</nombre>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <diasEntreMantenciones" + (_diasEntreMantenciones != null ? ">" + _diasEntreMantenciones + "</diasEntreMantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <tipoTransmision" + (_tipoTransmision != null ? ">" + _tipoTransmision + "</tipoTransmision>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <codigoMotor" + (_codigoMotor != null ? ">" + _codigoMotor + "</codigoMotor>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcionItem" + (_descripcionItem != null ? ">" + _descripcionItem + "</descripcionItem>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <kmEntreMantenciones" + (_kmEntreMantenciones != null ? ">" + _kmEntreMantenciones + "</kmEntreMantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idTraccion" + (_idTraccion != null ? ">" + _idTraccion + "</idTraccion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <dependeKm" + (_dependeKm != null ? ">" + _dependeKm + "</dependeKm>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <accion" + (_accion != null ? ">" + _accion + "</accion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <url" + (_url != null ? ">" + _url + "</url>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <descripcionItem" + (_descripcionItem != null ? ">" + _descripcionItem + "</descripcionItem>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idModeloAnio" + (_idModeloAnio != null ? ">" + _idModeloAnio + "</idModeloAnio>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <item" + (_item != null ? ">" + _item + "</item>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <tipoTraccion" + (_tipoTraccion != null ? ">" + _tipoTraccion + "</tipoTraccion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idCombustible" + (_idCombustible != null ? ">" + _idCombustible + "</idCombustible>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <beneficios" + (_beneficios != null ? ">" + _beneficios + "</beneficios>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</MantencionBase>";
     }
@@ -820,19 +776,17 @@ public class MantencionBase {
 
         Element element = (Element) xmlNode;
 
+        ret.setNombre(element.getElementsByTagName("nombre").item(0).getTextContent());
         ret.setDiasEntreMantenciones(Integer.decode(element.getElementsByTagName("dias_entre_mantenciones").item(0).getTextContent()));
-        ret.setTipoTransmision(element.getElementsByTagName("tipo_transmision").item(0).getTextContent());
-        ret.setCodigoMotor(element.getElementsByTagName("codigo_motor").item(0).getTextContent());
+        ret.setDescripcionItem(element.getElementsByTagName("descripcion_item").item(0).getTextContent());
+        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setId(Long.decode(element.getElementsByTagName("id_mantencion_base").item(0).getTextContent()));
         ret.setKmEntreMantenciones(Integer.decode(element.getElementsByTagName("km_entre_mantenciones").item(0).getTextContent()));
+        ret.setIdTraccion(Byte.decode(element.getElementsByTagName("id_traccion").item(0).getTextContent()));
         ret.setDependeKm(Boolean.valueOf(element.getElementsByTagName("depende_km").item(0).getTextContent()));
         ret.setAccion(element.getElementsByTagName("accion").item(0).getTextContent());
         ret.setUrl(element.getElementsByTagName("url").item(0).getTextContent());
-        ret.setDescripcionItem(element.getElementsByTagName("descripcion_item").item(0).getTextContent());
-        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
-        ret.setIdModeloAnio(Long.decode(element.getElementsByTagName("id_modelo_anio").item(0).getTextContent()));
-        ret.setId(Long.decode(element.getElementsByTagName("id_mantencion_base").item(0).getTextContent()));
-        ret.setItem(element.getElementsByTagName("item").item(0).getTextContent());
-        ret.setTipoTraccion(element.getElementsByTagName("tipo_traccion").item(0).getTextContent());
+        ret.setIdCombustible(Byte.decode(element.getElementsByTagName("id_combustible").item(0).getTextContent()));
         ret.setBeneficios(element.getElementsByTagName("beneficios").item(0).getTextContent());
 
         return ret;

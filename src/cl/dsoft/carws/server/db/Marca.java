@@ -17,28 +17,40 @@ import org.w3c.dom.Node;
  *
  */
 public class Marca {
-    protected String _descripcion;
+    protected Byte _idTipoVehiculo;
+    protected Long _idPais;
     protected String _fechaModificacion;
-    protected Short _id;
+    protected String _descripcion;
+    protected Short _idMarca;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    ma.descripcion AS descripcion," +
+        "    ma.id_tipo_vehiculo AS id_tipo_vehiculo," +
+        "    ma.id_pais AS id_pais," +
         "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
-        "    ma.id_marca AS id" +
+        "    ma.descripcion AS descripcion," +
+        "    ma.id_marca AS id_marca" +
         "    FROM marca ma";
 
     public Marca() {
-        _descripcion = null;
+        _idTipoVehiculo = null;
+        _idPais = null;
         _fechaModificacion = null;
-        _id = null;
+        _descripcion = null;
+        _idMarca = null;
 
     }
     /**
-     * @return the _descripcion
+     * @return the _idTipoVehiculo
      */
-    public String getDescripcion() {
-        return _descripcion;
+    public Byte getIdTipoVehiculo() {
+        return _idTipoVehiculo;
+    }
+    /**
+     * @return the _idPais
+     */
+    public Long getIdPais() {
+        return _idPais;
     }
     /**
      * @return the _fechaModificacion
@@ -47,16 +59,28 @@ public class Marca {
         return _fechaModificacion;
     }
     /**
-     * @return the _id
+     * @return the _descripcion
      */
-    public Short getId() {
-        return _id;
+    public String getDescripcion() {
+        return _descripcion;
     }
     /**
-     * @param _descripcion the _descripcion to set
+     * @return the _idMarca
      */
-    public void setDescripcion(String _descripcion) {
-        this._descripcion = _descripcion;
+    public Short getIdMarca() {
+        return _idMarca;
+    }
+    /**
+     * @param _idTipoVehiculo the _idTipoVehiculo to set
+     */
+    public void setIdTipoVehiculo(Byte _idTipoVehiculo) {
+        this._idTipoVehiculo = _idTipoVehiculo;
+    }
+    /**
+     * @param _idPais the _idPais to set
+     */
+    public void setIdPais(Long _idPais) {
+        this._idPais = _idPais;
     }
     /**
      * @param _fechaModificacion the _fechaModificacion to set
@@ -65,18 +89,26 @@ public class Marca {
         this._fechaModificacion = _fechaModificacion;
     }
     /**
-     * @param _id the _id to set
+     * @param _descripcion the _descripcion to set
      */
-    public void setId(Short _id) {
-        this._id = _id;
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
+    }
+    /**
+     * @param _idMarca the _idMarca to set
+     */
+    public void setIdMarca(Short _idMarca) {
+        this._idMarca = _idMarca;
     }
 
     public static Marca fromRS(ResultSet p_rs) throws SQLException {
         Marca ret = new Marca();
 
-        ret.setDescripcion(p_rs.getString("descripcion"));
+        ret.setIdTipoVehiculo(p_rs.getByte("id_tipo_vehiculo"));
+        ret.setIdPais(p_rs.getLong("id_pais"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
-        ret.setId(p_rs.getShort("id"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
+        ret.setIdMarca(p_rs.getShort("id_marca"));
 
         return ret;
     }
@@ -142,9 +174,6 @@ public class Marca {
         return ret;        
     }
 
-    public static Marca getById(Connection p_conn, String p_id) throws Exception {
-        return getByParameter(p_conn, "id_marca", p_id);
-    }
     
     public static ArrayList<Marca> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
@@ -162,8 +191,17 @@ public class Marca {
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_marca")) {
+                if (p.getKey().equals("id_tipo_vehiculo")) {
+                    array_clauses.add("ma.id_tipo_vehiculo = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_marca")) {
                     array_clauses.add("ma.id_marca = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_tipo_vehiculo")) {
+                    array_clauses.add("ma.id_tipo_vehiculo = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_pais")) {
+                    array_clauses.add("ma.id_pais = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
                     array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
@@ -254,10 +292,11 @@ public class Marca {
         String str_sql =
             "    UPDATE marca" +
             "    SET" +
-            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
-            "    id_marca = " + Short.toString(this._id);
+            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
+            "    id_marca = " + Short.toString(this._idMarca);
 
         try {
             stmt = p_conn.createStatement();
@@ -305,12 +344,16 @@ public class Marca {
         String str_sql =
             "    INSERT INTO marca" +
             "    (" +
+            "    id_tipo_vehiculo, " +
+            "    id_pais, " +
             "    descripcion, " +
             "    id_marca)" +
             "    VALUES" +
             "    (" +
+            "    " + (_idTipoVehiculo != null ? "'" + _idTipoVehiculo + "'" : "null") + "," +
+            "    " + (_idPais != null ? "'" + _idPais + "'" : "null") + "," +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    " + (_id != null ? "'" + _id + "'" : "null") +
+            "    " + (_idMarca != null ? "'" + _idMarca + "'" : "null") +
             "    )";
         
         try {
@@ -363,7 +406,8 @@ public class Marca {
         String str_sql =
             "    DELETE FROM marca" +
             "    WHERE" +
-            "    id_marca = " + Short.toString(this._id);
+            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
+            "    id_marca = " + Short.toString(this._idMarca);
 
         try {
             stmt = p_conn.createStatement();
@@ -401,7 +445,8 @@ public class Marca {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_marca = " + Short.toString(this._id) +
+            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
+            "    id_marca = " + Short.toString(this._idMarca) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -423,8 +468,9 @@ public class Marca {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _descripcion = obj.getDescripcion();
+                _idPais = obj.getIdPais();
                 _fechaModificacion = obj.getFechaModificacion();
+                _descripcion = obj.getDescripcion();
             }
         }
         catch (SQLException ex){
@@ -464,7 +510,8 @@ public class Marca {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_marca = " + Short.toString(this._id) +
+            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
+            "    id_marca = " + Short.toString(this._idMarca) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -535,27 +582,33 @@ public class Marca {
     @Override
     public String toString() {
         return "Marca [" +
-	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+	           "    _idTipoVehiculo = " + (_idTipoVehiculo != null ? _idTipoVehiculo : "null") + "," +
+	           "    _idPais = " + (_idPais != null ? _idPais : "null") + "," +
 	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _id = " + (_id != null ? _id : "null") +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
+	           "    _idMarca = " + (_idMarca != null ? _idMarca : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
         return "Marca : {" +
-	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
+	           "    \"_idTipoVehiculo\" : " + (_idTipoVehiculo != null ? _idTipoVehiculo : "null") + "," +
+	           "    \"_idPais\" : " + (_idPais != null ? _idPais : "null") + "," +
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
-	           "    \"_id\" : " + (_id != null ? _id : "null") +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
+	           "    \"_idMarca\" : " + (_idMarca != null ? _idMarca : "null") +
 			   "}";
     }
 
 
     public String toXML() {
         return "<Marca>" +
-	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idTipoVehiculo" + (_idTipoVehiculo != null ? ">" + _idTipoVehiculo + "</idTipoVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idPais" + (_idPais != null ? ">" + _idPais + "</idPais>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idMarca" + (_idMarca != null ? ">" + _idMarca + "</idMarca>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Marca>";
     }
 
@@ -565,9 +618,11 @@ public class Marca {
 
         Element element = (Element) xmlNode;
 
-        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
+        ret.setIdTipoVehiculo(Byte.decode(element.getElementsByTagName("id_tipo_vehiculo").item(0).getTextContent()));
+        ret.setIdPais(Long.decode(element.getElementsByTagName("id_pais").item(0).getTextContent()));
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
-        ret.setId(Short.decode(element.getElementsByTagName("id_marca").item(0).getTextContent()));
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
+        ret.setIdMarca(Short.decode(element.getElementsByTagName("id_marca").item(0).getTextContent()));
 
         return ret;
     }

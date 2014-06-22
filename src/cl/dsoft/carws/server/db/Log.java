@@ -22,7 +22,7 @@ public class Log {
     protected Long _idUsuario;
     protected Long _idVehiculo;
     protected Double _latitud;
-    protected Long _id;
+    protected Long _idLog;
     protected Long _idModelo;
     protected Double _longitud;
     protected String _accion;
@@ -36,7 +36,7 @@ public class Log {
         "    lo.id_usuario AS id_usuario," +
         "    lo.id_vehiculo AS id_vehiculo," +
         "    lo.latitud AS latitud," +
-        "    lo.id_log AS id," +
+        "    lo.id_log AS id_log," +
         "    lo.id_modelo AS id_modelo," +
         "    lo.longitud AS longitud," +
         "    lo.accion AS accion," +
@@ -50,7 +50,7 @@ public class Log {
         _idUsuario = null;
         _idVehiculo = null;
         _latitud = null;
-        _id = null;
+        _idLog = null;
         _idModelo = null;
         _longitud = null;
         _accion = null;
@@ -89,10 +89,10 @@ public class Log {
         return _latitud;
     }
     /**
-     * @return the _id
+     * @return the _idLog
      */
-    public Long getId() {
-        return _id;
+    public Long getIdLog() {
+        return _idLog;
     }
     /**
      * @return the _idModelo
@@ -155,10 +155,10 @@ public class Log {
         this._latitud = _latitud;
     }
     /**
-     * @param _id the _id to set
+     * @param _idLog the _idLog to set
      */
-    public void setId(Long _id) {
-        this._id = _id;
+    public void setIdLog(Long _idLog) {
+        this._idLog = _idLog;
     }
     /**
      * @param _idModelo the _idModelo to set
@@ -199,7 +199,7 @@ public class Log {
         ret.setIdUsuario(p_rs.getLong("id_usuario"));
         ret.setIdVehiculo(p_rs.getLong("id_vehiculo"));
         ret.setLatitud(p_rs.getDouble("latitud"));
-        ret.setId(p_rs.getLong("id"));
+        ret.setIdLog(p_rs.getLong("id_log"));
         ret.setIdModelo(p_rs.getLong("id_modelo"));
         ret.setLongitud(p_rs.getDouble("longitud"));
         ret.setAccion(p_rs.getString("accion"));
@@ -270,9 +270,6 @@ public class Log {
         return ret;        
     }
 
-    public static Log getById(Connection p_conn, String p_id) throws Exception {
-        return getByParameter(p_conn, "id_log", p_id);
-    }
     
     public static ArrayList<Log> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
@@ -290,7 +287,10 @@ public class Log {
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_log")) {
+                if (p.getKey().equals("id_usuario")) {
+                    array_clauses.add("lo.id_usuario = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_log")) {
                     array_clauses.add("lo.id_log = " + p.getValue());
                 }
                 else {
@@ -381,7 +381,6 @@ public class Log {
             "    SET" +
             "    id_tipo_vehiculo = " + (_idTipoVehiculo != null ? _idTipoVehiculo : "null") + "," +
             "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    id_usuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
             "    id_vehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
             "    latitud = " + (_latitud != null ? _latitud : "null") + "," +
             "    id_modelo = " + (_idModelo != null ? _idModelo : "null") + "," +
@@ -390,7 +389,8 @@ public class Log {
             "    km = " + (_km != null ? _km : "null") + "," +
             "    id_marca = " + (_idMarca != null ? _idMarca : "null") +
             "    WHERE" +
-            "    id_log = " + Long.toString(this._id);
+            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
+            "    id_log = " + Long.toString(this._idLog);
 
         try {
             stmt = p_conn.createStatement();
@@ -454,7 +454,7 @@ public class Log {
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_latitud != null ? "'" + _latitud + "'" : "null") + "," +
-            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
+            "    " + (_idLog != null ? "'" + _idLog + "'" : "null") + "," +
             "    " + (_idModelo != null ? "'" + _idModelo + "'" : "null") + "," +
             "    " + (_longitud != null ? "'" + _longitud + "'" : "null") + "," +
             "    " + (_accion != null ? "'" + _accion + "'" : "null") + "," +
@@ -512,7 +512,8 @@ public class Log {
         String str_sql =
             "    DELETE FROM log" +
             "    WHERE" +
-            "    id_log = " + Long.toString(this._id);
+            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
+            "    id_log = " + Long.toString(this._idLog);
 
         try {
             stmt = p_conn.createStatement();
@@ -550,7 +551,8 @@ public class Log {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_log = " + Long.toString(this._id) +
+            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
+            "    id_log = " + Long.toString(this._idLog) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -574,7 +576,6 @@ public class Log {
 
                 _idTipoVehiculo = obj.getIdTipoVehiculo();
                 _fecha = obj.getFecha();
-                _idUsuario = obj.getIdUsuario();
                 _idVehiculo = obj.getIdVehiculo();
                 _latitud = obj.getLatitud();
                 _idModelo = obj.getIdModelo();
@@ -621,7 +622,8 @@ public class Log {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_log = " + Long.toString(this._id) +
+            "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
+            "    id_log = " + Long.toString(this._idLog) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -697,7 +699,7 @@ public class Log {
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
 	           "    _latitud = " + (_latitud != null ? _latitud : "null") + "," +
-	           "    _id = " + (_id != null ? _id : "null") + "," +
+	           "    _idLog = " + (_idLog != null ? _idLog : "null") + "," +
 	           "    _idModelo = " + (_idModelo != null ? _idModelo : "null") + "," +
 	           "    _longitud = " + (_longitud != null ? _longitud : "null") + "," +
 	           "    _accion = " + (_accion != null ? "'" + _accion + "'" : "null") + "," +
@@ -714,7 +716,7 @@ public class Log {
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
 	           "    \"_latitud\" : " + (_latitud != null ? _latitud : "null") + "," +
-	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
+	           "    \"_idLog\" : " + (_idLog != null ? _idLog : "null") + "," +
 	           "    \"_idModelo\" : " + (_idModelo != null ? _idModelo : "null") + "," +
 	           "    \"_longitud\" : " + (_longitud != null ? _longitud : "null") + "," +
 	           "    \"_accion\" : " + (_accion != null ? "\"" + _accion + "\"" : "null") + "," +
@@ -731,7 +733,7 @@ public class Log {
 	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idVehiculo" + (_idVehiculo != null ? ">" + _idVehiculo + "</idVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <latitud" + (_latitud != null ? ">" + _latitud + "</latitud>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idLog" + (_idLog != null ? ">" + _idLog + "</idLog>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idModelo" + (_idModelo != null ? ">" + _idModelo + "</idModelo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <longitud" + (_longitud != null ? ">" + _longitud + "</longitud>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <accion" + (_accion != null ? ">" + _accion + "</accion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
@@ -751,7 +753,7 @@ public class Log {
         ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
         ret.setIdVehiculo(Long.decode(element.getElementsByTagName("id_vehiculo").item(0).getTextContent()));
         ret.setLatitud(Double.valueOf(element.getElementsByTagName("latitud").item(0).getTextContent()));
-        ret.setId(Long.decode(element.getElementsByTagName("id_log").item(0).getTextContent()));
+        ret.setIdLog(Long.decode(element.getElementsByTagName("id_log").item(0).getTextContent()));
         ret.setIdModelo(Long.decode(element.getElementsByTagName("id_modelo").item(0).getTextContent()));
         ret.setLongitud(Double.valueOf(element.getElementsByTagName("longitud").item(0).getTextContent()));
         ret.setAccion(element.getElementsByTagName("accion").item(0).getTextContent());

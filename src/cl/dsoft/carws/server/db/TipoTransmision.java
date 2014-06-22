@@ -17,28 +17,22 @@ import org.w3c.dom.Node;
  *
  */
 public class TipoTransmision {
-    protected String _descripcion;
     protected String _fechaModificacion;
+    protected String _descripcion;
     protected Byte _id;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    ti.descripcion AS descripcion," +
         "    DATE_FORMAT(ti.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
+        "    ti.descripcion AS descripcion," +
         "    ti.id_tipo_transmision AS id" +
         "    FROM tipo_transmision ti";
 
     public TipoTransmision() {
-        _descripcion = null;
         _fechaModificacion = null;
+        _descripcion = null;
         _id = null;
 
-    }
-    /**
-     * @return the _descripcion
-     */
-    public String getDescripcion() {
-        return _descripcion;
     }
     /**
      * @return the _fechaModificacion
@@ -47,22 +41,28 @@ public class TipoTransmision {
         return _fechaModificacion;
     }
     /**
+     * @return the _descripcion
+     */
+    public String getDescripcion() {
+        return _descripcion;
+    }
+    /**
      * @return the _id
      */
     public Byte getId() {
         return _id;
     }
     /**
-     * @param _descripcion the _descripcion to set
-     */
-    public void setDescripcion(String _descripcion) {
-        this._descripcion = _descripcion;
-    }
-    /**
      * @param _fechaModificacion the _fechaModificacion to set
      */
     public void setFechaModificacion(String _fechaModificacion) {
         this._fechaModificacion = _fechaModificacion;
+    }
+    /**
+     * @param _descripcion the _descripcion to set
+     */
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
     }
     /**
      * @param _id the _id to set
@@ -74,8 +74,8 @@ public class TipoTransmision {
     public static TipoTransmision fromRS(ResultSet p_rs) throws SQLException {
         TipoTransmision ret = new TipoTransmision();
 
-        ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setId(p_rs.getByte("id"));
 
         return ret;
@@ -254,8 +254,8 @@ public class TipoTransmision {
         String str_sql =
             "    UPDATE tipo_transmision" +
             "    SET" +
-            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
             "    id_tipo_transmision = " + Byte.toString(this._id);
 
@@ -423,8 +423,8 @@ public class TipoTransmision {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _descripcion = obj.getDescripcion();
                 _fechaModificacion = obj.getFechaModificacion();
+                _descripcion = obj.getDescripcion();
             }
         }
         catch (SQLException ex){
@@ -535,8 +535,8 @@ public class TipoTransmision {
     @Override
     public String toString() {
         return "TipoTransmision [" +
-	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
@@ -544,8 +544,8 @@ public class TipoTransmision {
 
     public String toJSON() {
         return "TipoTransmision : {" +
-	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
@@ -553,8 +553,8 @@ public class TipoTransmision {
 
     public String toXML() {
         return "<TipoTransmision>" +
-	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</TipoTransmision>";
     }
@@ -565,8 +565,8 @@ public class TipoTransmision {
 
         Element element = (Element) xmlNode;
 
-        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setId(Byte.decode(element.getElementsByTagName("id_tipo_transmision").item(0).getTextContent()));
 
         return ret;

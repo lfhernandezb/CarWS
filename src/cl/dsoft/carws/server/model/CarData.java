@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 import cl.dsoft.carws.server.db.MantencionUsuario;
 import cl.dsoft.carws.server.db.MantencionUsuarioHecha;
 import cl.dsoft.carws.server.db.Recordatorio;
-import cl.dsoft.carws.server.db.Rendimiento;
+import cl.dsoft.carws.server.db.CargaCombustible;
 import cl.dsoft.carws.server.db.Reparacion;
 import cl.dsoft.carws.server.db.Usuario;
 import cl.dsoft.carws.server.db.Vehiculo;
@@ -16,7 +16,7 @@ import cl.dsoft.carws.server.db.Vehiculo;
 @XmlRootElement(name = "CarData")
 //If you want you can define the order in which the fields are written
 //Optional
-@XmlType(propOrder = { "usuarios", "vehiculos", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "rendimientos", "reparaciones" })
+@XmlType(propOrder = { "usuarios", "vehiculos", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
 public class CarData {
 
 	protected Usuarios usuarios;
@@ -24,7 +24,7 @@ public class CarData {
 	protected MantencionUsuarios mantencionUsuarios;
 	protected MantencionUsuarioHechas mantencionUsuarioHechas;
 	protected Recordatorios recordatorios;
-	protected Rendimientos rendimientos;
+	protected CargaCombustibles cargaCombustibles;
 	protected Reparaciones reparaciones;
 	
 	public CarData() {
@@ -34,7 +34,7 @@ public class CarData {
 		this.mantencionUsuarios = null;
 		this.mantencionUsuarioHechas = null;
 		this.recordatorios = null;
-		this.rendimientos = null;
+		this.cargaCombustibles = null;
 		this.reparaciones = null;
 	}
 
@@ -45,7 +45,7 @@ public class CarData {
 		this.mantencionUsuarios = new MantencionUsuarios(conn, idUsuario, fechaModificacion);
 		this.mantencionUsuarioHechas = new MantencionUsuarioHechas(conn, idUsuario, fechaModificacion);
 		this.recordatorios = new Recordatorios(conn, idUsuario, fechaModificacion);
-		this.rendimientos = new Rendimientos(conn, idUsuario, fechaModificacion);
+		this.cargaCombustibles = new CargaCombustibles(conn, idUsuario, fechaModificacion);
 		this.reparaciones = new Reparaciones(conn, idUsuario, fechaModificacion);
 	}
 
@@ -60,7 +60,7 @@ public class CarData {
 			this.mantencionUsuarios = new MantencionUsuarios(conn, u.getId(), "1900-01-01");
 			this.mantencionUsuarioHechas = new MantencionUsuarioHechas(conn, u.getId(), "1900-01-01");
 			this.recordatorios = new Recordatorios(conn, u.getId(), "1900-01-01");
-			this.rendimientos = new Rendimientos(conn, u.getId(), "1900-01-01");
+			this.cargaCombustibles = new CargaCombustibles(conn, u.getId(), "1900-01-01");
 			this.reparaciones = new Reparaciones(conn, u.getId(), "1900-01-01");
 		}
 		else {
@@ -69,7 +69,7 @@ public class CarData {
 			this.mantencionUsuarios = new MantencionUsuarios();
 			this.mantencionUsuarioHechas = new MantencionUsuarioHechas();
 			this.recordatorios = new Recordatorios();
-			this.rendimientos = new Rendimientos();
+			this.cargaCombustibles = new CargaCombustibles();
 			this.reparaciones = new Reparaciones();
 		}
 		
@@ -149,15 +149,15 @@ public class CarData {
 	/**
 	 * @return the rendimientos
 	 */
-	public Rendimientos getRendimientos() {
-		return rendimientos;
+	public CargaCombustibles getCargaCombustibles() {
+		return cargaCombustibles;
 	}
 
 	/**
 	 * @param rendimientos the rendimientos to set
 	 */
-	public void setRendimientos(Rendimientos rendimientos) {
-		this.rendimientos = rendimientos;
+	public void setCargaCombustibles(CargaCombustibles cargaCombustibles) {
+		this.cargaCombustibles = cargaCombustibles;
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class CarData {
 			recordatorio.save(conn);
 		}
 
-		for (Rendimiento rendimiento : this.rendimientos.getRendimientos()) {
+		for (CargaCombustible rendimiento : this.cargaCombustibles.getCargaCombustibles()) {
 			
 			rendimiento.save(conn);
 		}

@@ -17,25 +17,19 @@ import org.w3c.dom.Node;
  *
  */
 public class Pais {
-    protected String _pais;
     protected Long _id;
+    protected String _pais;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    pa.pais AS pais," +
-        "    pa.id_pais AS id" +
+        "    pa.id_pais AS id," +
+        "    pa.pais AS pais" +
         "    FROM pais pa";
 
     public Pais() {
-        _pais = null;
         _id = null;
+        _pais = null;
 
-    }
-    /**
-     * @return the _pais
-     */
-    public String getPais() {
-        return _pais;
     }
     /**
      * @return the _id
@@ -44,10 +38,10 @@ public class Pais {
         return _id;
     }
     /**
-     * @param _pais the _pais to set
+     * @return the _pais
      */
-    public void setPais(String _pais) {
-        this._pais = _pais;
+    public String getPais() {
+        return _pais;
     }
     /**
      * @param _id the _id to set
@@ -55,12 +49,18 @@ public class Pais {
     public void setId(Long _id) {
         this._id = _id;
     }
+    /**
+     * @param _pais the _pais to set
+     */
+    public void setPais(String _pais) {
+        this._pais = _pais;
+    }
 
     public static Pais fromRS(ResultSet p_rs) throws SQLException {
         Pais ret = new Pais();
 
-        ret.setPais(p_rs.getString("pais"));
         ret.setId(p_rs.getLong("id"));
+        ret.setPais(p_rs.getString("pais"));
 
         return ret;
     }
@@ -285,12 +285,12 @@ public class Pais {
         String str_sql =
             "    INSERT INTO pais" +
             "    (" +
-            "    pais, " +
-            "    id_pais)" +
+            "    id_pais, " +
+            "    pais)" +
             "    VALUES" +
             "    (" +
-            "    " + (_pais != null ? "'" + _pais + "'" : "null") + "," +
-            "    " + (_id != null ? "'" + _id + "'" : "null") +
+            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
+            "    " + (_pais != null ? "'" + _pais + "'" : "null") +
             "    )";
         
         try {
@@ -514,24 +514,24 @@ public class Pais {
     @Override
     public String toString() {
         return "Pais [" +
-	           "    _pais = " + (_pais != null ? "'" + _pais + "'" : "null") + "," +
-	           "    _id = " + (_id != null ? _id : "null") +
+	           "    _id = " + (_id != null ? _id : "null") + "," +
+	           "    _pais = " + (_pais != null ? "'" + _pais + "'" : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
         return "Pais : {" +
-	           "    \"_pais\" : " + (_pais != null ? "\"" + _pais + "\"" : "null") + "," +
-	           "    \"_id\" : " + (_id != null ? _id : "null") +
+	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
+	           "    \"_pais\" : " + (_pais != null ? "\"" + _pais + "\"" : "null") +
 			   "}";
     }
 
 
     public String toXML() {
         return "<Pais>" +
-	           "    <pais" + (_pais != null ? ">" + _pais + "</pais>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <pais" + (_pais != null ? ">" + _pais + "</pais>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Pais>";
     }
 
@@ -541,8 +541,8 @@ public class Pais {
 
         Element element = (Element) xmlNode;
 
-        ret.setPais(element.getElementsByTagName("pais").item(0).getTextContent());
         ret.setId(Long.decode(element.getElementsByTagName("id_pais").item(0).getTextContent()));
+        ret.setPais(element.getElementsByTagName("pais").item(0).getTextContent());
 
         return ret;
     }

@@ -17,46 +17,37 @@ import org.w3c.dom.Node;
  *
  */
 public class Modelo {
-    protected String _descripcion;
-    protected Byte _idTipoVehiculo;
     protected String _fechaModificacion;
+    protected String _descripcion;
     protected Long _id;
     protected Short _idMarca;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    mo.descripcion AS descripcion," +
-        "    mo.id_tipo_vehiculo AS id_tipo_vehiculo," +
         "    DATE_FORMAT(mo.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
+        "    mo.descripcion AS descripcion," +
         "    mo.id_modelo AS id," +
         "    mo.id_marca AS id_marca" +
         "    FROM modelo mo";
 
     public Modelo() {
-        _descripcion = null;
-        _idTipoVehiculo = null;
         _fechaModificacion = null;
+        _descripcion = null;
         _id = null;
         _idMarca = null;
 
-    }
-    /**
-     * @return the _descripcion
-     */
-    public String getDescripcion() {
-        return _descripcion;
-    }
-    /**
-     * @return the _idTipoVehiculo
-     */
-    public Byte getIdTipoVehiculo() {
-        return _idTipoVehiculo;
     }
     /**
      * @return the _fechaModificacion
      */
     public String getFechaModificacion() {
         return _fechaModificacion;
+    }
+    /**
+     * @return the _descripcion
+     */
+    public String getDescripcion() {
+        return _descripcion;
     }
     /**
      * @return the _id
@@ -71,22 +62,16 @@ public class Modelo {
         return _idMarca;
     }
     /**
-     * @param _descripcion the _descripcion to set
-     */
-    public void setDescripcion(String _descripcion) {
-        this._descripcion = _descripcion;
-    }
-    /**
-     * @param _idTipoVehiculo the _idTipoVehiculo to set
-     */
-    public void setIdTipoVehiculo(Byte _idTipoVehiculo) {
-        this._idTipoVehiculo = _idTipoVehiculo;
-    }
-    /**
      * @param _fechaModificacion the _fechaModificacion to set
      */
     public void setFechaModificacion(String _fechaModificacion) {
         this._fechaModificacion = _fechaModificacion;
+    }
+    /**
+     * @param _descripcion the _descripcion to set
+     */
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
     }
     /**
      * @param _id the _id to set
@@ -104,9 +89,8 @@ public class Modelo {
     public static Modelo fromRS(ResultSet p_rs) throws SQLException {
         Modelo ret = new Modelo();
 
-        ret.setDescripcion(p_rs.getString("descripcion"));
-        ret.setIdTipoVehiculo(p_rs.getByte("id_tipo_vehiculo"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setId(p_rs.getLong("id"));
         ret.setIdMarca(p_rs.getShort("id_marca"));
 
@@ -196,9 +180,6 @@ public class Modelo {
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
                 if (p.getKey().equals("id_modelo")) {
                     array_clauses.add("mo.id_modelo = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_tipo_vehiculo")) {
-                    array_clauses.add("mo.id_tipo_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("id_marca")) {
                     array_clauses.add("mo.id_marca = " + p.getValue());
@@ -292,8 +273,8 @@ public class Modelo {
         String str_sql =
             "    UPDATE modelo" +
             "    SET" +
-            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
             "    id_modelo = " + Long.toString(this._id);
 
@@ -344,13 +325,11 @@ public class Modelo {
             "    INSERT INTO modelo" +
             "    (" +
             "    descripcion, " +
-            "    id_tipo_vehiculo, " +
             "    id_modelo, " +
             "    id_marca)" +
             "    VALUES" +
             "    (" +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    " + (_idTipoVehiculo != null ? "'" + _idTipoVehiculo + "'" : "null") + "," +
             "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
             "    " + (_idMarca != null ? "'" + _idMarca + "'" : "null") +
             "    )";
@@ -465,9 +444,8 @@ public class Modelo {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _descripcion = obj.getDescripcion();
-                _idTipoVehiculo = obj.getIdTipoVehiculo();
                 _fechaModificacion = obj.getFechaModificacion();
+                _descripcion = obj.getDescripcion();
                 _idMarca = obj.getIdMarca();
             }
         }
@@ -579,9 +557,8 @@ public class Modelo {
     @Override
     public String toString() {
         return "Modelo [" +
-	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-	           "    _idTipoVehiculo = " + (_idTipoVehiculo != null ? _idTipoVehiculo : "null") + "," +
 	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _idMarca = " + (_idMarca != null ? _idMarca : "null") +
 			   "]";
@@ -590,9 +567,8 @@ public class Modelo {
 
     public String toJSON() {
         return "Modelo : {" +
-	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
-	           "    \"_idTipoVehiculo\" : " + (_idTipoVehiculo != null ? _idTipoVehiculo : "null") + "," +
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_idMarca\" : " + (_idMarca != null ? _idMarca : "null") +
 			   "}";
@@ -601,9 +577,8 @@ public class Modelo {
 
     public String toXML() {
         return "<Modelo>" +
-	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idTipoVehiculo" + (_idTipoVehiculo != null ? ">" + _idTipoVehiculo + "</idTipoVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idMarca" + (_idMarca != null ? ">" + _idMarca + "</idMarca>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Modelo>";
@@ -615,9 +590,8 @@ public class Modelo {
 
         Element element = (Element) xmlNode;
 
-        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
-        ret.setIdTipoVehiculo(Byte.decode(element.getElementsByTagName("id_tipo_vehiculo").item(0).getTextContent()));
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setId(Long.decode(element.getElementsByTagName("id_modelo").item(0).getTextContent()));
         ret.setIdMarca(Short.decode(element.getElementsByTagName("id_marca").item(0).getTextContent()));
 

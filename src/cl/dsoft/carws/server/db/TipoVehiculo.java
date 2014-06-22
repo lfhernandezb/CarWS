@@ -17,28 +17,22 @@ import org.w3c.dom.Node;
  *
  */
 public class TipoVehiculo {
-    protected String _descripcion;
     protected Byte _id;
     protected String _fechaModificacion;
+    protected String _descripcion;
 
     private final static String _str_sql = 
         "    SELECT" +
-        "    ti.descripcion AS descripcion," +
         "    ti.id_tipo_vehiculo AS id," +
-        "    DATE_FORMAT(ti.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion" +
+        "    DATE_FORMAT(ti.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
+        "    ti.descripcion AS descripcion" +
         "    FROM tipo_vehiculo ti";
 
     public TipoVehiculo() {
-        _descripcion = null;
         _id = null;
         _fechaModificacion = null;
+        _descripcion = null;
 
-    }
-    /**
-     * @return the _descripcion
-     */
-    public String getDescripcion() {
-        return _descripcion;
     }
     /**
      * @return the _id
@@ -53,10 +47,10 @@ public class TipoVehiculo {
         return _fechaModificacion;
     }
     /**
-     * @param _descripcion the _descripcion to set
+     * @return the _descripcion
      */
-    public void setDescripcion(String _descripcion) {
-        this._descripcion = _descripcion;
+    public String getDescripcion() {
+        return _descripcion;
     }
     /**
      * @param _id the _id to set
@@ -70,13 +64,19 @@ public class TipoVehiculo {
     public void setFechaModificacion(String _fechaModificacion) {
         this._fechaModificacion = _fechaModificacion;
     }
+    /**
+     * @param _descripcion the _descripcion to set
+     */
+    public void setDescripcion(String _descripcion) {
+        this._descripcion = _descripcion;
+    }
 
     public static TipoVehiculo fromRS(ResultSet p_rs) throws SQLException {
         TipoVehiculo ret = new TipoVehiculo();
 
-        ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setId(p_rs.getByte("id"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
+        ret.setDescripcion(p_rs.getString("descripcion"));
 
         return ret;
     }
@@ -254,8 +254,8 @@ public class TipoVehiculo {
         String str_sql =
             "    UPDATE tipo_vehiculo" +
             "    SET" +
-            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
             "    id_tipo_vehiculo = " + Byte.toString(this._id);
 
@@ -305,12 +305,12 @@ public class TipoVehiculo {
         String str_sql =
             "    INSERT INTO tipo_vehiculo" +
             "    (" +
-            "    descripcion, " +
-            "    id_tipo_vehiculo)" +
+            "    id_tipo_vehiculo, " +
+            "    descripcion)" +
             "    VALUES" +
             "    (" +
-            "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    " + (_id != null ? "'" + _id + "'" : "null") +
+            "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
+            "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    )";
         
         try {
@@ -423,8 +423,8 @@ public class TipoVehiculo {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
-                _descripcion = obj.getDescripcion();
                 _fechaModificacion = obj.getFechaModificacion();
+                _descripcion = obj.getDescripcion();
             }
         }
         catch (SQLException ex){
@@ -535,27 +535,27 @@ public class TipoVehiculo {
     @Override
     public String toString() {
         return "TipoVehiculo [" +
-	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
 			   "]";
     }
 
 
     public String toJSON() {
         return "TipoVehiculo : {" +
-	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
-	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
+	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") +
 			   "}";
     }
 
 
     public String toXML() {
         return "<TipoVehiculo>" +
-	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</TipoVehiculo>";
     }
 
@@ -565,9 +565,9 @@ public class TipoVehiculo {
 
         Element element = (Element) xmlNode;
 
-        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setId(Byte.decode(element.getElementsByTagName("id_tipo_vehiculo").item(0).getTextContent()));
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
+        ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
 
         return ret;
     }
