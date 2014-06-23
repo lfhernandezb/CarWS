@@ -17,19 +17,28 @@ import org.w3c.dom.Node;
  *
  */
 public class RedSocial {
+    protected String _fechaModificacion;
     protected Long _id;
     protected String _redSocial;
 
     private final static String _str_sql = 
         "    SELECT" +
+        "    DATE_FORMAT(re.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
         "    re.id_red_social AS id," +
         "    re.red_social AS red_social" +
         "    FROM red_social re";
 
     public RedSocial() {
+        _fechaModificacion = null;
         _id = null;
         _redSocial = null;
 
+    }
+    /**
+     * @return the _fechaModificacion
+     */
+    public String getFechaModificacion() {
+        return _fechaModificacion;
     }
     /**
      * @return the _id
@@ -42,6 +51,12 @@ public class RedSocial {
      */
     public String getRedSocial() {
         return _redSocial;
+    }
+    /**
+     * @param _fechaModificacion the _fechaModificacion to set
+     */
+    public void setFechaModificacion(String _fechaModificacion) {
+        this._fechaModificacion = _fechaModificacion;
     }
     /**
      * @param _id the _id to set
@@ -59,6 +74,7 @@ public class RedSocial {
     public static RedSocial fromRS(ResultSet p_rs) throws SQLException {
         RedSocial ret = new RedSocial();
 
+        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
         ret.setId(p_rs.getLong("id"));
         ret.setRedSocial(p_rs.getString("red_social"));
 
@@ -149,6 +165,9 @@ public class RedSocial {
                 if (p.getKey().equals("id_red_social")) {
                     array_clauses.add("re.id_red_social = " + p.getValue());
                 }
+                else if (p.getKey().equals("mas reciente")) {
+                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
                 }
@@ -235,6 +254,7 @@ public class RedSocial {
         String str_sql =
             "    UPDATE red_social" +
             "    SET" +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    red_social = " + (_redSocial != null ? "'" + _redSocial + "'" : "null") +
             "    WHERE" +
             "    id_red_social = " + Long.toString(this._id);
@@ -403,6 +423,7 @@ public class RedSocial {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
+                _fechaModificacion = obj.getFechaModificacion();
                 _redSocial = obj.getRedSocial();
             }
         }
@@ -514,6 +535,7 @@ public class RedSocial {
     @Override
     public String toString() {
         return "RedSocial [" +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _red_social = " + (_redSocial != null ? "'" + _redSocial + "'" : "null") +
 			   "]";
@@ -522,6 +544,7 @@ public class RedSocial {
 
     public String toJSON() {
         return "RedSocial : {" +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_red_social\" : " + (_redSocial != null ? "\"" + _redSocial + "\"" : "null") +
 			   "}";
@@ -530,6 +553,7 @@ public class RedSocial {
 
     public String toXML() {
         return "<RedSocial>" +
+	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <redSocial" + (_redSocial != null ? ">" + _redSocial + "</redSocial>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</RedSocial>";
@@ -541,6 +565,7 @@ public class RedSocial {
 
         Element element = (Element) xmlNode;
 
+        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
         ret.setId(Long.decode(element.getElementsByTagName("id_red_social").item(0).getTextContent()));
         ret.setRedSocial(element.getElementsByTagName("red_social").item(0).getTextContent());
 

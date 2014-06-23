@@ -381,7 +381,6 @@ public class MantencionBaseHecha {
         String str_sql =
             "    INSERT INTO mantencion_base_hecha" +
             "    (" +
-            "    fecha_modificacion, " +
             "    fecha, " +
             "    id_mantencion_base, " +
             "    borrado, " +
@@ -390,7 +389,6 @@ public class MantencionBaseHecha {
             "    id_mantencion_base_hecha)" +
             "    VALUES" +
             "    (" +
-            "    " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idMantencionBase != null ? "'" + _idMantencionBase + "'" : "null") + "," +
             "    " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +

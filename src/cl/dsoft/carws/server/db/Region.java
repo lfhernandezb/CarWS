@@ -20,18 +20,21 @@ public class Region {
     protected String _region;
     protected Long _id;
     protected Long _idPais;
+    protected String _fechaModificacion;
 
     private final static String _str_sql = 
         "    SELECT" +
         "    re.region AS region," +
         "    re.id_region AS id," +
-        "    re.id_pais AS id_pais" +
+        "    re.id_pais AS id_pais," +
+        "    DATE_FORMAT(re.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion" +
         "    FROM region re";
 
     public Region() {
         _region = null;
         _id = null;
         _idPais = null;
+        _fechaModificacion = null;
 
     }
     /**
@@ -53,6 +56,12 @@ public class Region {
         return _idPais;
     }
     /**
+     * @return the _fechaModificacion
+     */
+    public String getFechaModificacion() {
+        return _fechaModificacion;
+    }
+    /**
      * @param _region the _region to set
      */
     public void setRegion(String _region) {
@@ -70,6 +79,12 @@ public class Region {
     public void setIdPais(Long _idPais) {
         this._idPais = _idPais;
     }
+    /**
+     * @param _fechaModificacion the _fechaModificacion to set
+     */
+    public void setFechaModificacion(String _fechaModificacion) {
+        this._fechaModificacion = _fechaModificacion;
+    }
 
     public static Region fromRS(ResultSet p_rs) throws SQLException {
         Region ret = new Region();
@@ -77,6 +92,7 @@ public class Region {
         ret.setRegion(p_rs.getString("region"));
         ret.setId(p_rs.getLong("id"));
         ret.setIdPais(p_rs.getLong("id_pais"));
+        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
 
         return ret;
     }
@@ -168,6 +184,25 @@ public class Region {
                 else if (p.getKey().equals("id_pais")) {
                     array_clauses.add("re.id_pais = " + p.getValue());
                 }
+                else if (p.getKey().equals("id_usuario")) {
+                	str_sql +=
+                		"    JOIN comuna c ON c.id_region = re.id_region" +
+                		"    JOIN usuario u ON u.id_comuna = c.id_comuna";
+                    array_clauses.add("u.id_usuario = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_red_social")) {
+                	str_sql +=
+                		"    JOIN comuna c ON c.id_region = re.id_region" +
+                		"    JOIN usuario u ON u.id_comuna = c.id_comuna" +
+                		"    JOIN autenticacion a ON a.id_usuario = u.id_usuario";
+                    array_clauses.add("a.id_red_social = " + p.getValue());
+                }
+                else if (p.getKey().equals("token")) {
+                    array_clauses.add("a.token = '" + p.getValue() + "'");
+                }
+                else if (p.getKey().equals("mas reciente")) {
+                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
                 }
@@ -254,7 +289,8 @@ public class Region {
         String str_sql =
             "    UPDATE region" +
             "    SET" +
-            "    region = " + (_region != null ? "'" + _region + "'" : "null") +
+            "    region = " + (_region != null ? "'" + _region + "'" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
             "    WHERE" +
             "    id_region = " + Long.toString(this._id);
 
@@ -426,6 +462,7 @@ public class Region {
 
                 _region = obj.getRegion();
                 _idPais = obj.getIdPais();
+                _fechaModificacion = obj.getFechaModificacion();
             }
         }
         catch (SQLException ex){
@@ -538,7 +575,8 @@ public class Region {
         return "Region [" +
 	           "    _region = " + (_region != null ? "'" + _region + "'" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _idPais = " + (_idPais != null ? _idPais : "null") +
+	           "    _idPais = " + (_idPais != null ? _idPais : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
 			   "]";
     }
 
@@ -547,7 +585,8 @@ public class Region {
         return "Region : {" +
 	           "    \"_region\" : " + (_region != null ? "\"" + _region + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
-	           "    \"_idPais\" : " + (_idPais != null ? _idPais : "null") +
+	           "    \"_idPais\" : " + (_idPais != null ? _idPais : "null") + "," +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") +
 			   "}";
     }
 
@@ -557,6 +596,7 @@ public class Region {
 	           "    <region" + (_region != null ? ">" + _region + "</region>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idPais" + (_idPais != null ? ">" + _idPais + "</idPais>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Region>";
     }
 
@@ -569,6 +609,7 @@ public class Region {
         ret.setRegion(element.getElementsByTagName("region").item(0).getTextContent());
         ret.setId(Long.decode(element.getElementsByTagName("id_region").item(0).getTextContent()));
         ret.setIdPais(Long.decode(element.getElementsByTagName("id_pais").item(0).getTextContent()));
+        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
 
         return ret;
     }

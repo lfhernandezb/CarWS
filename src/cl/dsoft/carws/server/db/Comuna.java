@@ -19,18 +19,21 @@ import org.w3c.dom.Node;
 public class Comuna {
     protected Long _idRegion;
     protected String _comuna;
+    protected String _fechaModificacion;
     protected Long _id;
 
     private final static String _str_sql = 
         "    SELECT" +
         "    co.id_region AS id_region," +
         "    co.comuna AS comuna," +
+        "    DATE_FORMAT(co.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
         "    co.id_comuna AS id" +
         "    FROM comuna co";
 
     public Comuna() {
         _idRegion = null;
         _comuna = null;
+        _fechaModificacion = null;
         _id = null;
 
     }
@@ -45,6 +48,12 @@ public class Comuna {
      */
     public String getComuna() {
         return _comuna;
+    }
+    /**
+     * @return the _fechaModificacion
+     */
+    public String getFechaModificacion() {
+        return _fechaModificacion;
     }
     /**
      * @return the _id
@@ -65,6 +74,12 @@ public class Comuna {
         this._comuna = _comuna;
     }
     /**
+     * @param _fechaModificacion the _fechaModificacion to set
+     */
+    public void setFechaModificacion(String _fechaModificacion) {
+        this._fechaModificacion = _fechaModificacion;
+    }
+    /**
      * @param _id the _id to set
      */
     public void setId(Long _id) {
@@ -76,6 +91,7 @@ public class Comuna {
 
         ret.setIdRegion(p_rs.getLong("id_region"));
         ret.setComuna(p_rs.getString("comuna"));
+        ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
         ret.setId(p_rs.getLong("id"));
 
         return ret;
@@ -168,6 +184,23 @@ public class Comuna {
                 else if (p.getKey().equals("id_region")) {
                     array_clauses.add("co.id_region = " + p.getValue());
                 }
+                else if (p.getKey().equals("id_usuario")) {
+                	str_sql +=
+                		"    JOIN usuario u ON u.id_comuna = co.id_comuna";
+                    array_clauses.add("u.id_usuario = " + p.getValue());
+                }
+                else if (p.getKey().equals("id_red_social")) {
+                	str_sql +=
+                		"    JOIN usuario u ON u.id_comuna = co.id_comuna" +
+                		"    JOIN autenticacion a ON a.id_usuario = u.id_usuario";
+                    array_clauses.add("a.id_red_social = " + p.getValue());
+                }
+                else if (p.getKey().equals("token")) {
+                    array_clauses.add("a.token = '" + p.getValue() + "'");
+                }
+                else if (p.getKey().equals("mas reciente")) {
+                    array_clauses.add("co.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                }
                 else {
                     throw new Exception("Parametro no soportado: " + p.getKey());
                 }
@@ -254,7 +287,8 @@ public class Comuna {
         String str_sql =
             "    UPDATE comuna" +
             "    SET" +
-            "    comuna = " + (_comuna != null ? "'" + _comuna + "'" : "null") +
+            "    comuna = " + (_comuna != null ? "'" + _comuna + "'" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
             "    WHERE" +
             "    id_comuna = " + Long.toString(this._id);
 
@@ -426,6 +460,7 @@ public class Comuna {
 
                 _idRegion = obj.getIdRegion();
                 _comuna = obj.getComuna();
+                _fechaModificacion = obj.getFechaModificacion();
             }
         }
         catch (SQLException ex){
@@ -538,6 +573,7 @@ public class Comuna {
         return "Comuna [" +
 	           "    _idRegion = " + (_idRegion != null ? _idRegion : "null") + "," +
 	           "    _comuna = " + (_comuna != null ? "'" + _comuna + "'" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
@@ -547,6 +583,7 @@ public class Comuna {
         return "Comuna : {" +
 	           "    \"_idRegion\" : " + (_idRegion != null ? _idRegion : "null") + "," +
 	           "    \"_comuna\" : " + (_comuna != null ? "\"" + _comuna + "\"" : "null") + "," +
+	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
 	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
@@ -556,6 +593,7 @@ public class Comuna {
         return "<Comuna>" +
 	           "    <idRegion" + (_idRegion != null ? ">" + _idRegion + "</idRegion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <comuna" + (_comuna != null ? ">" + _comuna + "</comuna>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Comuna>";
     }
@@ -568,6 +606,7 @@ public class Comuna {
 
         ret.setIdRegion(Long.decode(element.getElementsByTagName("id_region").item(0).getTextContent()));
         ret.setComuna(element.getElementsByTagName("comuna").item(0).getTextContent());
+        ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
         ret.setId(Long.decode(element.getElementsByTagName("id_comuna").item(0).getTextContent()));
 
         return ret;

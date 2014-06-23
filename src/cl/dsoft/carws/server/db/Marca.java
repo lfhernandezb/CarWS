@@ -21,7 +21,7 @@ public class Marca {
     protected Long _idPais;
     protected String _fechaModificacion;
     protected String _descripcion;
-    protected Short _idMarca;
+    protected Short _id;
 
     private final static String _str_sql = 
         "    SELECT" +
@@ -29,7 +29,7 @@ public class Marca {
         "    ma.id_pais AS id_pais," +
         "    DATE_FORMAT(ma.fecha_modificacion, '%Y-%m-%d %H:%i:%s') AS fecha_modificacion," +
         "    ma.descripcion AS descripcion," +
-        "    ma.id_marca AS id_marca" +
+        "    ma.id_marca AS id" +
         "    FROM marca ma";
 
     public Marca() {
@@ -37,7 +37,7 @@ public class Marca {
         _idPais = null;
         _fechaModificacion = null;
         _descripcion = null;
-        _idMarca = null;
+        _id = null;
 
     }
     /**
@@ -65,10 +65,10 @@ public class Marca {
         return _descripcion;
     }
     /**
-     * @return the _idMarca
+     * @return the _id
      */
-    public Short getIdMarca() {
-        return _idMarca;
+    public Short getId() {
+        return _id;
     }
     /**
      * @param _idTipoVehiculo the _idTipoVehiculo to set
@@ -95,10 +95,10 @@ public class Marca {
         this._descripcion = _descripcion;
     }
     /**
-     * @param _idMarca the _idMarca to set
+     * @param _id the _id to set
      */
-    public void setIdMarca(Short _idMarca) {
-        this._idMarca = _idMarca;
+    public void setId(Short _id) {
+        this._id = _id;
     }
 
     public static Marca fromRS(ResultSet p_rs) throws SQLException {
@@ -108,7 +108,7 @@ public class Marca {
         ret.setIdPais(p_rs.getLong("id_pais"));
         ret.setFechaModificacion(p_rs.getString("fecha_modificacion"));
         ret.setDescripcion(p_rs.getString("descripcion"));
-        ret.setIdMarca(p_rs.getShort("id_marca"));
+        ret.setId(p_rs.getShort("id"));
 
         return ret;
     }
@@ -174,6 +174,9 @@ public class Marca {
         return ret;        
     }
 
+    public static Marca getById(Connection p_conn, String p_id) throws Exception {
+        return getByParameter(p_conn, "id_marca", p_id);
+    }
     
     public static ArrayList<Marca> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
         Statement stmt = null;
@@ -191,10 +194,7 @@ public class Marca {
             str_sql = _str_sql;
             
             for (AbstractMap.SimpleEntry<String, String> p : p_parameters) {
-                if (p.getKey().equals("id_tipo_vehiculo")) {
-                    array_clauses.add("ma.id_tipo_vehiculo = " + p.getValue());
-                }
-                else if (p.getKey().equals("id_marca")) {
+                if (p.getKey().equals("id_marca")) {
                     array_clauses.add("ma.id_marca = " + p.getValue());
                 }
                 else if (p.getKey().equals("id_tipo_vehiculo")) {
@@ -295,8 +295,7 @@ public class Marca {
             "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
-            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
-            "    id_marca = " + Short.toString(this._idMarca);
+            "    id_marca = " + Short.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -353,7 +352,7 @@ public class Marca {
             "    " + (_idTipoVehiculo != null ? "'" + _idTipoVehiculo + "'" : "null") + "," +
             "    " + (_idPais != null ? "'" + _idPais + "'" : "null") + "," +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    " + (_idMarca != null ? "'" + _idMarca + "'" : "null") +
+            "    " + (_id != null ? "'" + _id + "'" : "null") +
             "    )";
         
         try {
@@ -406,8 +405,7 @@ public class Marca {
         String str_sql =
             "    DELETE FROM marca" +
             "    WHERE" +
-            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
-            "    id_marca = " + Short.toString(this._idMarca);
+            "    id_marca = " + Short.toString(this._id);
 
         try {
             stmt = p_conn.createStatement();
@@ -445,8 +443,7 @@ public class Marca {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
-            "    id_marca = " + Short.toString(this._idMarca) +
+            "    id_marca = " + Short.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -468,6 +465,7 @@ public class Marca {
                 obj = fromRS(rs);
                 //System.out.println("fromRS(rs) ok");
 
+                _idTipoVehiculo = obj.getIdTipoVehiculo();
                 _idPais = obj.getIdPais();
                 _fechaModificacion = obj.getFechaModificacion();
                 _descripcion = obj.getDescripcion();
@@ -510,8 +508,7 @@ public class Marca {
         
         String str_sql = _str_sql +
             "    WHERE" +
-            "    id_tipo_vehiculo = " + Byte.toString(this._idTipoVehiculo) + " AND" +
-            "    id_marca = " + Short.toString(this._idMarca) +
+            "    id_marca = " + Short.toString(this._id) +
             "    LIMIT 0, 1";
         
         //System.out.println(str_sql);
@@ -586,7 +583,7 @@ public class Marca {
 	           "    _idPais = " + (_idPais != null ? _idPais : "null") + "," +
 	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-	           "    _idMarca = " + (_idMarca != null ? _idMarca : "null") +
+	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }
 
@@ -597,7 +594,7 @@ public class Marca {
 	           "    \"_idPais\" : " + (_idPais != null ? _idPais : "null") + "," +
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
 	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
-	           "    \"_idMarca\" : " + (_idMarca != null ? _idMarca : "null") +
+	           "    \"_id\" : " + (_id != null ? _id : "null") +
 			   "}";
     }
 
@@ -608,7 +605,7 @@ public class Marca {
 	           "    <idPais" + (_idPais != null ? ">" + _idPais + "</idPais>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fechaModificacion" + (_fechaModificacion != null ? ">" + _fechaModificacion + "</fechaModificacion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <idMarca" + (_idMarca != null ? ">" + _idMarca + "</idMarca>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</Marca>";
     }
 
@@ -622,7 +619,7 @@ public class Marca {
         ret.setIdPais(Long.decode(element.getElementsByTagName("id_pais").item(0).getTextContent()));
         ret.setFechaModificacion(element.getElementsByTagName("fecha_modificacion").item(0).getTextContent());
         ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
-        ret.setIdMarca(Short.decode(element.getElementsByTagName("id_marca").item(0).getTextContent()));
+        ret.setId(Short.decode(element.getElementsByTagName("id_marca").item(0).getTextContent()));
 
         return ret;
     }
