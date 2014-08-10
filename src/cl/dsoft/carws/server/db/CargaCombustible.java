@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 /**
  * @author petete-ntbk
  *
@@ -78,6 +83,17 @@ public class CargaCombustible {
      */
     public String getFecha() {
         return _fecha;
+    }
+    /**
+     * @return the _fecha as Date
+     */
+    public Date getFechaAsDate() throws ParseException {
+        Date d;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        d = formatter.parse(_fecha);
+
+        return d;
     }
     /**
      * @return the _idUsuario
@@ -287,7 +303,7 @@ public class CargaCombustible {
     }
 
     
-    public static ArrayList<CargaCombustible> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<CargaCombustible> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -316,7 +332,7 @@ public class CargaCombustible {
                     array_clauses.add("ca.id_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ca.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("ca.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("ca.borrado = 0");
@@ -325,7 +341,7 @@ public class CargaCombustible {
                     array_clauses.add("ca.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -373,7 +389,7 @@ public class CargaCombustible {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -410,10 +426,10 @@ public class CargaCombustible {
         String str_sql =
             "    UPDATE carga_combustible" +
             "    SET" +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    estanque_lleno = " + (_estanqueLleno != null ? "b'" + _estanqueLleno : "null") + "," +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    estanque_lleno = " + (_estanqueLleno != null ? "b'" + (_estanqueLleno ? 1 : 0) + "'" : "null") + "," +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    latitud = " + (_latitud != null ? _latitud : "null") + "," +
             "    costo = " + (_costo != null ? _costo : "null") + "," +
             "    longitud = " + (_longitud != null ? _longitud : "null") + "," +
@@ -482,7 +498,7 @@ public class CargaCombustible {
             "    VALUES" +
             "    (" +
             "    " + (_estanqueLleno != null ? "b'" + (_estanqueLleno ? 1 : 0) + "'" : "null") + "," +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_latitud != null ? "'" + _latitud + "'" : "null") + "," +
@@ -726,12 +742,12 @@ public class CargaCombustible {
     @Override
     public String toString() {
         return "CargaCombustible [" +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _estanque_lleno = " + (_estanqueLleno != null ? "b'" + _estanqueLleno : "null") + "," +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _latitud = " + (_latitud != null ? _latitud : "null") + "," +
 	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
 	           "    _longitud = " + (_longitud != null ? _longitud : "null") + "," +
@@ -749,7 +765,7 @@ public class CargaCombustible {
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_latitud\" : " + (_latitud != null ? _latitud : "null") + "," +
 	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
 	           "    \"_longitud\" : " + (_longitud != null ? _longitud : "null") + "," +

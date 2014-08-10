@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Ant-Test" default="main" basedir=".">
+<project name="Ant-Test" default="war" basedir=".">
   <!-- Sets variables which can later be used. -->
   <!-- The value of a property is accessed via ${} -->
   <property name="src.dir" location="src" />
@@ -33,7 +33,7 @@
 
   <!-- Compiles the java code (including the usage of library for JUnit -->
   <target name="compile" depends="clean, makedir">
-    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" >
+    <javac srcdir="${src.dir}" debuglevel="lines,vars,source" destdir="${build.dir}" classpathref="build.classpath" >
     </javac>
 
   </target>
@@ -50,11 +50,14 @@
 
   <!--Creates the deployable jar file  -->
   <target name="war" depends="compile">
-    <jar destfile="${dist.dir}\cl.dsoft.carws.war" basedir="${build.dir}">
+    <war destfile="${dist.dir}\cl.dsoft.carws.war" webxml="WebContent/WEB-INF/web.xml" basedir="${build.dir}">
+      <fileset dir="WebContent"/>
+      <!--lib dir="WebContent/WEB-INF/lib"/>
+      <classes dir="build/classes"/-->
       <manifest>
         <attribute name="Main-Class" value="test.Main" />
       </manifest>
-    </jar>
+    </war>
   </target>
 
   <target name="main" depends="compile, war">

@@ -239,7 +239,7 @@ public class Reparacion {
     }
 
     
-    public static ArrayList<Reparacion> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Reparacion> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -268,7 +268,7 @@ public class Reparacion {
                     array_clauses.add("re.id_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("re.borrado = 0");
@@ -277,7 +277,7 @@ public class Reparacion {
                     array_clauses.add("re.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -325,7 +325,7 @@ public class Reparacion {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -363,9 +363,9 @@ public class Reparacion {
             "    UPDATE reparacion" +
             "    SET" +
             "    titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
             "    costo = " + (_costo != null ? _costo : "null") +
             "    WHERE" +
@@ -428,7 +428,7 @@ public class Reparacion {
             "    VALUES" +
             "    (" +
             "    " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
@@ -667,11 +667,11 @@ public class Reparacion {
     public String toString() {
         return "Reparacion [" +
 	           "    _titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _idReparacion = " + (_idReparacion != null ? _idReparacion : "null") + "," +
 	           "    _costo = " + (_costo != null ? _costo : "null") +
@@ -686,7 +686,7 @@ public class Reparacion {
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_idReparacion\" : " + (_idReparacion != null ? _idReparacion : "null") + "," +
 	           "    \"_costo\" : " + (_costo != null ? _costo : "null") +

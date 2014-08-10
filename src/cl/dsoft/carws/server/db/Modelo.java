@@ -158,11 +158,11 @@ public class Modelo {
         return ret;        
     }
 
-    public static Modelo getById(Connection p_conn, String p_id) throws Exception {
+    public static Modelo getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_modelo", p_id);
     }
     
-    public static ArrayList<Modelo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Modelo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -185,10 +185,10 @@ public class Modelo {
                     array_clauses.add("mo.id_marca = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("mo.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("mo.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -236,7 +236,7 @@ public class Modelo {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -273,7 +273,7 @@ public class Modelo {
         String str_sql =
             "    UPDATE modelo" +
             "    SET" +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") +
             "    WHERE" +
             "    id_modelo = " + Long.toString(this._id);
@@ -557,7 +557,7 @@ public class Modelo {
     @Override
     public String toString() {
         return "Modelo [" +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _idMarca = " + (_idMarca != null ? _idMarca : "null") +

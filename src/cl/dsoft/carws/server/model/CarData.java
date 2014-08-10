@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import cl.dsoft.carws.server.db.MantencionBaseHecha;
 import cl.dsoft.carws.server.db.MantencionUsuario;
 import cl.dsoft.carws.server.db.MantencionUsuarioHecha;
 import cl.dsoft.carws.server.db.Recordatorio;
@@ -16,7 +17,7 @@ import cl.dsoft.carws.server.db.Vehiculo;
 @XmlRootElement(name = "CarData")
 //If you want you can define the order in which the fields are written
 //Optional
-@XmlType(propOrder = { "paises", "regiones", "comunas", "usuarios", "vehiculos", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
+@XmlType(propOrder = { "paises", "regiones", "comunas", "usuarios", "vehiculos", "mantencionBaseHechas", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
 public class CarData {
 
 	protected Paises paises;
@@ -24,6 +25,7 @@ public class CarData {
 	protected Comunas comunas;
 	protected Usuarios usuarios;
 	protected Vehiculos vehiculos;
+	protected MantencionBaseHechas mantencionBaseHechas;
 	protected MantencionUsuarios mantencionUsuarios;
 	protected MantencionUsuarioHechas mantencionUsuarioHechas;
 	protected Recordatorios recordatorios;
@@ -37,6 +39,7 @@ public class CarData {
 		this.comunas = null;
 		this.usuarios = null;
 		this.vehiculos = null;
+		this.mantencionBaseHechas = null;
 		this.mantencionUsuarios = null;
 		this.mantencionUsuarioHechas = null;
 		this.recordatorios = null;
@@ -51,6 +54,7 @@ public class CarData {
 		this.comunas = new Comunas(conn, idUsuario, fechaModificacion);
 		this.usuarios = new Usuarios(conn, idUsuario, fechaModificacion);
 		this.vehiculos = new Vehiculos(conn, idUsuario, fechaModificacion);
+		this.mantencionBaseHechas = new MantencionBaseHechas(conn, idUsuario, fechaModificacion);
 		this.mantencionUsuarios = new MantencionUsuarios(conn, idUsuario, fechaModificacion);
 		this.mantencionUsuarioHechas = new MantencionUsuarioHechas(conn, idUsuario, fechaModificacion);
 		this.recordatorios = new Recordatorios(conn, idUsuario, fechaModificacion);
@@ -69,6 +73,7 @@ public class CarData {
 			this.regiones = new Regiones(conn, u.getId(), "1900-01-01");
 			this.comunas = new Comunas(conn, u.getId(), "1900-01-01");
 			this.vehiculos = new Vehiculos(conn, u.getId(), "1900-01-01");
+			this.mantencionBaseHechas = new MantencionBaseHechas(conn, u.getId(), "1900-01-01");
 			this.mantencionUsuarios = new MantencionUsuarios(conn, u.getId(), "1900-01-01");
 			this.mantencionUsuarioHechas = new MantencionUsuarioHechas(conn, u.getId(), "1900-01-01");
 			this.recordatorios = new Recordatorios(conn, u.getId(), "1900-01-01");
@@ -81,6 +86,7 @@ public class CarData {
 			this.regiones = new Regiones();
 			this.comunas = new Comunas();
 			this.vehiculos = new Vehiculos();
+			this.mantencionBaseHechas = new MantencionBaseHechas();
 			this.mantencionUsuarios = new MantencionUsuarios();
 			this.mantencionUsuarioHechas = new MantencionUsuarioHechas();
 			this.recordatorios = new Recordatorios();
@@ -158,6 +164,21 @@ public class CarData {
 	 */
 	public void setVehiculos(Vehiculos vehiculos) {
 		this.vehiculos = vehiculos;
+	}
+	
+	/**
+	 * @return the mantencionBaseHechas
+	 */
+	public MantencionBaseHechas getMantencionBaseHechas() {
+		return mantencionBaseHechas;
+	}
+
+	/**
+	 * @param mantencionBaseHechas the mantencionBaseHechas to set
+	 */
+	public void setMantencionBaseHechas(
+			MantencionBaseHechas mantencionBaseHechas) {
+		this.mantencionBaseHechas = mantencionBaseHechas;
 	}
 
 	/**
@@ -243,6 +264,11 @@ public class CarData {
 			vehiculo.save(conn);
 		}
 	
+		for (MantencionBaseHecha mantencionBaseHecha : this.mantencionBaseHechas.getMantencionBaseHechas()) {
+			
+			mantencionBaseHecha.save(conn);
+		}
+
 		for (MantencionUsuario mantencionUsuario : this.mantencionUsuarios.getMantencionUsuarios()) {
 			
 			mantencionUsuario.save(conn);

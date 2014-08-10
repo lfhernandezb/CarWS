@@ -7,27 +7,27 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "Recordatorios", propOrder = {
-	    "recordatorios"
+@XmlType(name = "MantencionUsuario", propOrder = {
+	    "mantencionUsuario"
 })
-public class Recordatorios {
+public class MantencionUsuario {
 
-	@XmlElement(name = "recordatorio")
-    protected ArrayList<cl.dsoft.carws.server.db.Recordatorio> recordatorios;
+	@XmlElement(name = "mantencionUsuario")
+    protected ArrayList<cl.dsoft.carws.server.db.MantencionUsuario> mantencionUsuario;
 
-    public Recordatorios() {
-		recordatorios = null;
+    public MantencionUsuario() {
+		mantencionUsuario = null;
 	}
 
-    public Recordatorios(java.sql.Connection conn, Long idUsuario, String fechaModificacion) {
+    public MantencionUsuario(java.sql.Connection conn, Long idUsuario, String fechaModificacion) {
 		seek(conn, idUsuario, fechaModificacion);
 	}
 
-    public List<cl.dsoft.carws.server.db.Recordatorio> getRecordatorios() {
-		if (recordatorios == null) {
-			recordatorios = new ArrayList<cl.dsoft.carws.server.db.Recordatorio>();
+    public List<cl.dsoft.carws.server.db.MantencionUsuario> getMantencionUsuario() {
+		if (mantencionUsuario == null) {
+			mantencionUsuario = new ArrayList<cl.dsoft.carws.server.db.MantencionUsuario>();
 		}
-		return recordatorios;
+		return mantencionUsuario;
 	}
 
     private void seek(java.sql.Connection conn, Long idUsuario, String fechaModificacion) {
@@ -40,7 +40,7 @@ public class Recordatorios {
 			listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(idUsuario)));
 			listParameters.add(new AbstractMap.SimpleEntry<String, String>("mas reciente", fechaModificacion));
 			
-			this.recordatorios = cl.dsoft.carws.server.db.Recordatorio.seek(conn, listParameters, null, null, 0, 1);
+			this.mantencionUsuario = cl.dsoft.carws.server.db.MantencionUsuario.seek(conn, listParameters, null, null, 0, 1);
 			
 			
 		} catch (Exception e) {

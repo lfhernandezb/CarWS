@@ -142,11 +142,11 @@ public class Pais {
         return ret;        
     }
 
-    public static Pais getById(Connection p_conn, String p_id) throws Exception {
+    public static Pais getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_pais", p_id);
     }
     
-    public static ArrayList<Pais> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Pais> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -184,10 +184,10 @@ public class Pais {
                     array_clauses.add("a.token = '" + p.getValue() + "'");
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("pa.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("pa.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -235,7 +235,7 @@ public class Pais {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -272,7 +272,7 @@ public class Pais {
         String str_sql =
             "    UPDATE pais" +
             "    SET" +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    pais = " + (_pais != null ? "'" + _pais + "'" : "null") +
             "    WHERE" +
             "    id_pais = " + Long.toString(this._id);
@@ -554,7 +554,7 @@ public class Pais {
     public String toString() {
         return "Pais [" +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _pais = " + (_pais != null ? "'" + _pais + "'" : "null") +
 			   "]";
     }

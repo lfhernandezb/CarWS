@@ -22,12 +22,12 @@ public class MantencionUsuario {
     protected Long _idUsuario;
     protected Long _idVehiculo;
     protected Boolean _borrado;
-    protected Integer _kmentremantenciones;
     protected String _descripcion;
     protected Long _idMantencionUsuario;
-    protected Integer _diasentremantenciones;
+    protected Integer _kmEntreMantenciones;
+    protected Integer _mesesEntreMantenciones;
+    protected Boolean _dependeKm;
     protected String _url;
-    protected Boolean _dependekm;
     protected String _beneficios;
 
     private final static String _str_sql = 
@@ -37,12 +37,12 @@ public class MantencionUsuario {
         "    ma.id_usuario AS id_usuario," +
         "    ma.id_vehiculo AS id_vehiculo," +
         "    0+ma.borrado AS borrado," +
-        "    ma.KmEntreMantenciones AS KmEntreMantenciones," +
         "    ma.descripcion AS descripcion," +
         "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
-        "    ma.DiasEntreMantenciones AS DiasEntreMantenciones," +
-        "    ma.URL AS URL," +
-        "    0+ma.DependeKm AS DependeKm," +
+        "    ma.km_entre_mantenciones AS km_entre_mantenciones," +
+        "    ma.meses_entre_mantenciones AS meses_entre_mantenciones," +
+        "    0+ma.depende_km AS depende_km," +
+        "    ma.url AS url," +
         "    ma.beneficios AS beneficios" +
         "    FROM mantencion_usuario ma";
 
@@ -52,12 +52,12 @@ public class MantencionUsuario {
         _idUsuario = null;
         _idVehiculo = null;
         _borrado = null;
-        _kmentremantenciones = null;
         _descripcion = null;
         _idMantencionUsuario = null;
-        _diasentremantenciones = null;
+        _kmEntreMantenciones = null;
+        _mesesEntreMantenciones = null;
+        _dependeKm = null;
         _url = null;
-        _dependekm = null;
         _beneficios = null;
 
     }
@@ -92,12 +92,6 @@ public class MantencionUsuario {
         return _borrado;
     }
     /**
-     * @return the _kmentremantenciones
-     */
-    public Integer getKmentremantenciones() {
-        return _kmentremantenciones;
-    }
-    /**
      * @return the _descripcion
      */
     public String getDescripcion() {
@@ -110,22 +104,28 @@ public class MantencionUsuario {
         return _idMantencionUsuario;
     }
     /**
-     * @return the _diasentremantenciones
+     * @return the _kmEntreMantenciones
      */
-    public Integer getDiasentremantenciones() {
-        return _diasentremantenciones;
+    public Integer getKmEntreMantenciones() {
+        return _kmEntreMantenciones;
+    }
+    /**
+     * @return the _mesesEntreMantenciones
+     */
+    public Integer getMesesEntreMantenciones() {
+        return _mesesEntreMantenciones;
+    }
+    /**
+     * @return the _dependeKm
+     */
+    public Boolean getDependeKm() {
+        return _dependeKm;
     }
     /**
      * @return the _url
      */
     public String getUrl() {
         return _url;
-    }
-    /**
-     * @return the _dependekm
-     */
-    public Boolean getDependekm() {
-        return _dependekm;
     }
     /**
      * @return the _beneficios
@@ -164,12 +164,6 @@ public class MantencionUsuario {
         this._borrado = _borrado;
     }
     /**
-     * @param _kmentremantenciones the _kmentremantenciones to set
-     */
-    public void setKmentremantenciones(Integer _kmentremantenciones) {
-        this._kmentremantenciones = _kmentremantenciones;
-    }
-    /**
      * @param _descripcion the _descripcion to set
      */
     public void setDescripcion(String _descripcion) {
@@ -182,22 +176,28 @@ public class MantencionUsuario {
         this._idMantencionUsuario = _idMantencionUsuario;
     }
     /**
-     * @param _diasentremantenciones the _diasentremantenciones to set
+     * @param _kmEntreMantenciones the _kmEntreMantenciones to set
      */
-    public void setDiasentremantenciones(Integer _diasentremantenciones) {
-        this._diasentremantenciones = _diasentremantenciones;
+    public void setKmEntreMantenciones(Integer _kmEntreMantenciones) {
+        this._kmEntreMantenciones = _kmEntreMantenciones;
+    }
+    /**
+     * @param _mesesEntreMantenciones the _mesesEntreMantenciones to set
+     */
+    public void setMesesEntreMantenciones(Integer _mesesEntreMantenciones) {
+        this._mesesEntreMantenciones = _mesesEntreMantenciones;
+    }
+    /**
+     * @param _dependeKm the _dependeKm to set
+     */
+    public void setDependeKm(Boolean _dependeKm) {
+        this._dependeKm = _dependeKm;
     }
     /**
      * @param _url the _url to set
      */
     public void setUrl(String _url) {
         this._url = _url;
-    }
-    /**
-     * @param _dependekm the _dependekm to set
-     */
-    public void setDependekm(Boolean _dependekm) {
-        this._dependekm = _dependekm;
     }
     /**
      * @param _beneficios the _beneficios to set
@@ -214,12 +214,12 @@ public class MantencionUsuario {
         ret.setIdUsuario(p_rs.getLong("id_usuario"));
         ret.setIdVehiculo(p_rs.getLong("id_vehiculo"));
         ret.setBorrado(p_rs.getBoolean("borrado"));
-        ret.setKmentremantenciones(p_rs.getInt("KmEntreMantenciones"));
         ret.setDescripcion(p_rs.getString("descripcion"));
         ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
-        ret.setDiasentremantenciones(p_rs.getInt("DiasEntreMantenciones"));
-        ret.setUrl(p_rs.getString("URL"));
-        ret.setDependekm(p_rs.getBoolean("DependeKm"));
+        ret.setKmEntreMantenciones(p_rs.getInt("km_entre_mantenciones"));
+        ret.setMesesEntreMantenciones(p_rs.getInt("meses_entre_mantenciones"));
+        ret.setDependeKm(p_rs.getBoolean("depende_km"));
+        ret.setUrl(p_rs.getString("url"));
         ret.setBeneficios(p_rs.getString("beneficios"));
 
         return ret;
@@ -287,7 +287,7 @@ public class MantencionUsuario {
     }
 
     
-    public static ArrayList<MantencionUsuario> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<MantencionUsuario> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -316,7 +316,7 @@ public class MantencionUsuario {
                     array_clauses.add("ma.id_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("ma.borrado = 0");
@@ -325,7 +325,7 @@ public class MantencionUsuario {
                     array_clauses.add("ma.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -373,7 +373,7 @@ public class MantencionUsuario {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -411,13 +411,13 @@ public class MantencionUsuario {
             "    UPDATE mantencion_usuario" +
             "    SET" +
             "    nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-            "    KmEntreMantenciones = " + (_kmentremantenciones != null ? _kmentremantenciones : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    DiasEntreMantenciones = " + (_diasentremantenciones != null ? _diasentremantenciones : "null") + "," +
-            "    URL = " + (_url != null ? "'" + _url + "'" : "null") + "," +
-            "    DependeKm = " + (_dependekm != null ? "b'" + _dependekm : "null") + "," +
+            "    km_entre_mantenciones = " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
+            "    meses_entre_mantenciones = " + (_mesesEntreMantenciones != null ? _mesesEntreMantenciones : "null") + "," +
+            "    depende_km = " + (_dependeKm != null ? "b'" + (_dependeKm ? 1 : 0) + "'" : "null") + "," +
+            "    url = " + (_url != null ? "'" + _url + "'" : "null") + "," +
             "    beneficios = " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
             "    WHERE" +
             "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
@@ -472,24 +472,24 @@ public class MantencionUsuario {
             "    nombre, " +
             "    id_usuario, " +
             "    id_vehiculo, " +
-            "    KmEntreMantenciones, " +
             "    descripcion, " +
             "    id_mantencion_usuario, " +
-            "    DiasEntreMantenciones, " +
-            "    URL, " +
-            "    DependeKm, " +
+            "    km_entre_mantenciones, " +
+            "    meses_entre_mantenciones, " +
+            "    depende_km, " +
+            "    url, " +
             "    beneficios)" +
             "    VALUES" +
             "    (" +
             "    " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
-            "    " + (_kmentremantenciones != null ? "'" + _kmentremantenciones + "'" : "null") + "," +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
             "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
-            "    " + (_diasentremantenciones != null ? "'" + _diasentremantenciones + "'" : "null") + "," +
+            "    " + (_kmEntreMantenciones != null ? "'" + _kmEntreMantenciones + "'" : "null") + "," +
+            "    " + (_mesesEntreMantenciones != null ? "'" + _mesesEntreMantenciones + "'" : "null") + "," +
+            "    " + (_dependeKm != null ? "b'" + (_dependeKm ? 1 : 0) + "'" : "null") + "," +
             "    " + (_url != null ? "'" + _url + "'" : "null") + "," +
-            "    " + (_dependekm != null ? "b'" + (_dependekm ? 1 : 0) + "'" : "null") + "," +
             "    " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
             "    )";
         
@@ -609,11 +609,11 @@ public class MantencionUsuario {
                 _fechaModificacion = obj.getFechaModificacion();
                 _idVehiculo = obj.getIdVehiculo();
                 _borrado = obj.getBorrado();
-                _kmentremantenciones = obj.getKmentremantenciones();
                 _descripcion = obj.getDescripcion();
-                _diasentremantenciones = obj.getDiasentremantenciones();
+                _kmEntreMantenciones = obj.getKmEntreMantenciones();
+                _mesesEntreMantenciones = obj.getMesesEntreMantenciones();
+                _dependeKm = obj.getDependeKm();
                 _url = obj.getUrl();
-                _dependekm = obj.getDependekm();
                 _beneficios = obj.getBeneficios();
             }
         }
@@ -727,16 +727,16 @@ public class MantencionUsuario {
     public String toString() {
         return "MantencionUsuario [" +
 	           "    _nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    _kmentremantenciones = " + (_kmentremantenciones != null ? _kmentremantenciones : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    _diasentremantenciones = " + (_diasentremantenciones != null ? _diasentremantenciones : "null") + "," +
-	           "    _URL = " + (_url != null ? "'" + _url + "'" : "null") + "," +
-	           "    _DependeKm = " + (_dependekm != null ? "b'" + _dependekm : "null") + "," +
+	           "    _kmEntreMantenciones = " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
+	           "    _mesesEntreMantenciones = " + (_mesesEntreMantenciones != null ? _mesesEntreMantenciones : "null") + "," +
+	           "    _depende_km = " + (_dependeKm != null ? "b'" + _dependeKm : "null") + "," +
+	           "    _url = " + (_url != null ? "'" + _url + "'" : "null") + "," +
 	           "    _beneficios = " + (_beneficios != null ? "'" + _beneficios + "'" : "null") +
 			   "]";
     }
@@ -748,13 +748,13 @@ public class MantencionUsuario {
 	           "    \"_fecha_modificacion\" : " + (_fechaModificacion != null ? "\"" + _fechaModificacion + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
-	           "    \"_kmentremantenciones\" : " + (_kmentremantenciones != null ? _kmentremantenciones : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
-	           "    \"_diasentremantenciones\" : " + (_diasentremantenciones != null ? _diasentremantenciones : "null") + "," +
-	           "    \"_URL\" : " + (_url != null ? "\"" + _url + "\"" : "null") + "," +
-	           "    \"_DependeKm\" : " + (_dependekm != null ? "b'" + _dependekm : "null") + "," +
+	           "    \"_kmEntreMantenciones\" : " + (_kmEntreMantenciones != null ? _kmEntreMantenciones : "null") + "," +
+	           "    \"_mesesEntreMantenciones\" : " + (_mesesEntreMantenciones != null ? _mesesEntreMantenciones : "null") + "," +
+	           "    \"_depende_km\" : " + (_dependeKm != null ? "b'" + _dependeKm : "null") + "," +
+	           "    \"_url\" : " + (_url != null ? "\"" + _url + "\"" : "null") + "," +
 	           "    \"_beneficios\" : " + (_beneficios != null ? "\"" + _beneficios + "\"" : "null") +
 			   "}";
     }
@@ -767,12 +767,12 @@ public class MantencionUsuario {
 	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idVehiculo" + (_idVehiculo != null ? ">" + _idVehiculo + "</idVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <kmentremantenciones" + (_kmentremantenciones != null ? ">" + _kmentremantenciones + "</kmentremantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <descripcion" + (_descripcion != null ? ">" + _descripcion + "</descripcion>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <diasentremantenciones" + (_diasentremantenciones != null ? ">" + _diasentremantenciones + "</diasentremantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <kmEntreMantenciones" + (_kmEntreMantenciones != null ? ">" + _kmEntreMantenciones + "</kmEntreMantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <mesesEntreMantenciones" + (_mesesEntreMantenciones != null ? ">" + _mesesEntreMantenciones + "</mesesEntreMantenciones>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <dependeKm" + (_dependeKm != null ? ">" + _dependeKm + "</dependeKm>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <url" + (_url != null ? ">" + _url + "</url>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <dependekm" + (_dependekm != null ? ">" + _dependekm + "</dependekm>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <beneficios" + (_beneficios != null ? ">" + _beneficios + "</beneficios>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</MantencionUsuario>";
     }
@@ -788,12 +788,12 @@ public class MantencionUsuario {
         ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
         ret.setIdVehiculo(Long.decode(element.getElementsByTagName("id_vehiculo").item(0).getTextContent()));
         ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
-        ret.setKmentremantenciones(Integer.decode(element.getElementsByTagName("KmEntreMantenciones").item(0).getTextContent()));
         ret.setDescripcion(element.getElementsByTagName("descripcion").item(0).getTextContent());
         ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
-        ret.setDiasentremantenciones(Integer.decode(element.getElementsByTagName("DiasEntreMantenciones").item(0).getTextContent()));
-        ret.setUrl(element.getElementsByTagName("URL").item(0).getTextContent());
-        ret.setDependekm(Boolean.valueOf(element.getElementsByTagName("DependeKm").item(0).getTextContent()));
+        ret.setKmEntreMantenciones(Integer.decode(element.getElementsByTagName("km_entre_mantenciones").item(0).getTextContent()));
+        ret.setMesesEntreMantenciones(Integer.decode(element.getElementsByTagName("meses_entre_mantenciones").item(0).getTextContent()));
+        ret.setDependeKm(Boolean.valueOf(element.getElementsByTagName("depende_km").item(0).getTextContent()));
+        ret.setUrl(element.getElementsByTagName("url").item(0).getTextContent());
         ret.setBeneficios(element.getElementsByTagName("beneficios").item(0).getTextContent());
 
         return ret;

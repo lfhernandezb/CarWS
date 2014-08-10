@@ -158,11 +158,11 @@ public class Comuna {
         return ret;        
     }
 
-    public static Comuna getById(Connection p_conn, String p_id) throws Exception {
+    public static Comuna getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_comuna", p_id);
     }
     
-    public static ArrayList<Comuna> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Comuna> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -199,10 +199,10 @@ public class Comuna {
                     array_clauses.add("a.token = '" + p.getValue() + "'");
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("co.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("co.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -250,7 +250,7 @@ public class Comuna {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -288,7 +288,7 @@ public class Comuna {
             "    UPDATE comuna" +
             "    SET" +
             "    comuna = " + (_comuna != null ? "'" + _comuna + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") +
             "    WHERE" +
             "    id_comuna = " + Long.toString(this._id);
 
@@ -573,7 +573,7 @@ public class Comuna {
         return "Comuna [" +
 	           "    _idRegion = " + (_idRegion != null ? _idRegion : "null") + "," +
 	           "    _comuna = " + (_comuna != null ? "'" + _comuna + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") +
 			   "]";
     }

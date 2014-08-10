@@ -19,34 +19,22 @@ import org.w3c.dom.Node;
 public class InfoSincro {
     protected Integer _id;
     protected String _fecha;
-    protected String _fechaFinProcesamiento;
     protected Byte _sentido;
-    protected String _fechaLectura;
-    protected String _archivoNombre;
-    protected String _archivoMd5;
-    protected Long _archivoTamano;
+    protected Long _usuarioIdUsuario;
 
     private final static String _str_sql = 
         "    SELECT" +
         "    in.id_info_sincro AS id," +
         "    DATE_FORMAT(in.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
-        "    DATE_FORMAT(in.fecha_fin_procesamiento, '%Y-%m-%d %H:%i:%s') AS fecha_fin_procesamiento," +
         "    in.sentido AS sentido," +
-        "    DATE_FORMAT(in.fecha_lectura, '%Y-%m-%d %H:%i:%s') AS fecha_lectura," +
-        "    in.archivo_nombre AS archivo_nombre," +
-        "    in.archivo_md5 AS archivo_md5," +
-        "    in.archivo_tamano AS archivo_tamano" +
+        "    in.usuario_id_usuario AS usuario_id_usuario" +
         "    FROM info_sincro in";
 
     public InfoSincro() {
         _id = null;
         _fecha = null;
-        _fechaFinProcesamiento = null;
         _sentido = null;
-        _fechaLectura = null;
-        _archivoNombre = null;
-        _archivoMd5 = null;
-        _archivoTamano = null;
+        _usuarioIdUsuario = null;
 
     }
     /**
@@ -62,40 +50,16 @@ public class InfoSincro {
         return _fecha;
     }
     /**
-     * @return the _fechaFinProcesamiento
-     */
-    public String getFechaFinProcesamiento() {
-        return _fechaFinProcesamiento;
-    }
-    /**
      * @return the _sentido
      */
     public Byte getSentido() {
         return _sentido;
     }
     /**
-     * @return the _fechaLectura
+     * @return the _usuarioIdUsuario
      */
-    public String getFechaLectura() {
-        return _fechaLectura;
-    }
-    /**
-     * @return the _archivoNombre
-     */
-    public String getArchivoNombre() {
-        return _archivoNombre;
-    }
-    /**
-     * @return the _archivoMd5
-     */
-    public String getArchivoMd5() {
-        return _archivoMd5;
-    }
-    /**
-     * @return the _archivoTamano
-     */
-    public Long getArchivoTamano() {
-        return _archivoTamano;
+    public Long getUsuarioIdUsuario() {
+        return _usuarioIdUsuario;
     }
     /**
      * @param _id the _id to set
@@ -110,40 +74,16 @@ public class InfoSincro {
         this._fecha = _fecha;
     }
     /**
-     * @param _fechaFinProcesamiento the _fechaFinProcesamiento to set
-     */
-    public void setFechaFinProcesamiento(String _fechaFinProcesamiento) {
-        this._fechaFinProcesamiento = _fechaFinProcesamiento;
-    }
-    /**
      * @param _sentido the _sentido to set
      */
     public void setSentido(Byte _sentido) {
         this._sentido = _sentido;
     }
     /**
-     * @param _fechaLectura the _fechaLectura to set
+     * @param _usuarioIdUsuario the _usuarioIdUsuario to set
      */
-    public void setFechaLectura(String _fechaLectura) {
-        this._fechaLectura = _fechaLectura;
-    }
-    /**
-     * @param _archivoNombre the _archivoNombre to set
-     */
-    public void setArchivoNombre(String _archivoNombre) {
-        this._archivoNombre = _archivoNombre;
-    }
-    /**
-     * @param _archivoMd5 the _archivoMd5 to set
-     */
-    public void setArchivoMd5(String _archivoMd5) {
-        this._archivoMd5 = _archivoMd5;
-    }
-    /**
-     * @param _archivoTamano the _archivoTamano to set
-     */
-    public void setArchivoTamano(Long _archivoTamano) {
-        this._archivoTamano = _archivoTamano;
+    public void setUsuarioIdUsuario(Long _usuarioIdUsuario) {
+        this._usuarioIdUsuario = _usuarioIdUsuario;
     }
 
     public static InfoSincro fromRS(ResultSet p_rs) throws SQLException {
@@ -151,12 +91,8 @@ public class InfoSincro {
 
         ret.setId(p_rs.getInt("id"));
         ret.setFecha(p_rs.getString("fecha"));
-        ret.setFechaFinProcesamiento(p_rs.getString("fecha_fin_procesamiento"));
         ret.setSentido(p_rs.getByte("sentido"));
-        ret.setFechaLectura(p_rs.getString("fecha_lectura"));
-        ret.setArchivoNombre(p_rs.getString("archivo_nombre"));
-        ret.setArchivoMd5(p_rs.getString("archivo_md5"));
-        ret.setArchivoTamano(p_rs.getLong("archivo_tamano"));
+        ret.setUsuarioIdUsuario(p_rs.getLong("usuario_id_usuario"));
 
         return ret;
     }
@@ -222,11 +158,11 @@ public class InfoSincro {
         return ret;        
     }
 
-    public static InfoSincro getById(Connection p_conn, String p_id) throws Exception {
+    public static InfoSincro getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_info_sincro", p_id);
     }
     
-    public static ArrayList<InfoSincro> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<InfoSincro> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -245,8 +181,11 @@ public class InfoSincro {
                 if (p.getKey().equals("id_info_sincro")) {
                     array_clauses.add("in.id_info_sincro = " + p.getValue());
                 }
+                else if (p.getKey().equals("usuario_id_usuario")) {
+                    array_clauses.add("in.usuario_id_usuario = " + p.getValue());
+                }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -294,7 +233,7 @@ public class InfoSincro {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -331,13 +270,8 @@ public class InfoSincro {
         String str_sql =
             "    UPDATE info_sincro" +
             "    SET" +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    fecha_fin_procesamiento = " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    sentido = " + (_sentido != null ? _sentido : "null") + "," +
-            "    fecha_lectura = " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    archivo_nombre = " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
-            "    archivo_md5 = " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
-            "    archivo_tamano = " + (_archivoTamano != null ? _archivoTamano : "null") +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    sentido = " + (_sentido != null ? _sentido : "null") +
             "    WHERE" +
             "    id_info_sincro = " + Integer.toString(this._id);
 
@@ -389,22 +323,14 @@ public class InfoSincro {
             "    (" +
             "    id_info_sincro, " +
             "    fecha, " +
-            "    fecha_fin_procesamiento, " +
             "    sentido, " +
-            "    fecha_lectura, " +
-            "    archivo_nombre, " +
-            "    archivo_md5, " +
-            "    archivo_tamano)" +
+            "    usuario_id_usuario)" +
             "    VALUES" +
             "    (" +
             "    " + (_id != null ? "'" + _id + "'" : "null") + "," +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_sentido != null ? "'" + _sentido + "'" : "null") + "," +
-            "    " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
-            "    " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
-            "    " + (_archivoTamano != null ? "'" + _archivoTamano + "'" : "null") +
+            "    " + (_usuarioIdUsuario != null ? "'" + _usuarioIdUsuario + "'" : "null") +
             "    )";
         
         try {
@@ -518,12 +444,8 @@ public class InfoSincro {
                 //System.out.println("fromRS(rs) ok");
 
                 _fecha = obj.getFecha();
-                _fechaFinProcesamiento = obj.getFechaFinProcesamiento();
                 _sentido = obj.getSentido();
-                _fechaLectura = obj.getFechaLectura();
-                _archivoNombre = obj.getArchivoNombre();
-                _archivoMd5 = obj.getArchivoMd5();
-                _archivoTamano = obj.getArchivoTamano();
+                _usuarioIdUsuario = obj.getUsuarioIdUsuario();
             }
         }
         catch (SQLException ex){
@@ -635,13 +557,9 @@ public class InfoSincro {
     public String toString() {
         return "InfoSincro [" +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _fecha_fin_procesamiento = " + (_fechaFinProcesamiento != null ? "STR_TO_DATE(" + _fechaFinProcesamiento + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _sentido = " + (_sentido != null ? _sentido : "null") + "," +
-	           "    _fecha_lectura = " + (_fechaLectura != null ? "STR_TO_DATE(" + _fechaLectura + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _archivo_nombre = " + (_archivoNombre != null ? "'" + _archivoNombre + "'" : "null") + "," +
-	           "    _archivo_md5 = " + (_archivoMd5 != null ? "'" + _archivoMd5 + "'" : "null") + "," +
-	           "    _archivoTamano = " + (_archivoTamano != null ? _archivoTamano : "null") +
+	           "    _usuarioIdUsuario = " + (_usuarioIdUsuario != null ? _usuarioIdUsuario : "null") +
 			   "]";
     }
 
@@ -650,12 +568,8 @@ public class InfoSincro {
         return "InfoSincro : {" +
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
-	           "    \"_fecha_fin_procesamiento\" : " + (_fechaFinProcesamiento != null ? "\"" + _fechaFinProcesamiento + "\"" : "null") + "," +
 	           "    \"_sentido\" : " + (_sentido != null ? _sentido : "null") + "," +
-	           "    \"_fecha_lectura\" : " + (_fechaLectura != null ? "\"" + _fechaLectura + "\"" : "null") + "," +
-	           "    \"_archivo_nombre\" : " + (_archivoNombre != null ? "\"" + _archivoNombre + "\"" : "null") + "," +
-	           "    \"_archivo_md5\" : " + (_archivoMd5 != null ? "\"" + _archivoMd5 + "\"" : "null") + "," +
-	           "    \"_archivoTamano\" : " + (_archivoTamano != null ? _archivoTamano : "null") +
+	           "    \"_usuarioIdUsuario\" : " + (_usuarioIdUsuario != null ? _usuarioIdUsuario : "null") +
 			   "}";
     }
 
@@ -664,12 +578,8 @@ public class InfoSincro {
         return "<InfoSincro>" +
 	           "    <id" + (_id != null ? ">" + _id + "</id>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaFinProcesamiento" + (_fechaFinProcesamiento != null ? ">" + _fechaFinProcesamiento + "</fechaFinProcesamiento>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <sentido" + (_sentido != null ? ">" + _sentido + "</sentido>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <fechaLectura" + (_fechaLectura != null ? ">" + _fechaLectura + "</fechaLectura>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <archivoNombre" + (_archivoNombre != null ? ">" + _archivoNombre + "</archivoNombre>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <archivoMd5" + (_archivoMd5 != null ? ">" + _archivoMd5 + "</archivoMd5>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
-	           "    <archivoTamano" + (_archivoTamano != null ? ">" + _archivoTamano + "</archivoTamano>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <usuarioIdUsuario" + (_usuarioIdUsuario != null ? ">" + _usuarioIdUsuario + "</usuarioIdUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 			   "</InfoSincro>";
     }
 
@@ -681,12 +591,8 @@ public class InfoSincro {
 
         ret.setId(Integer.decode(element.getElementsByTagName("id_info_sincro").item(0).getTextContent()));
         ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
-        ret.setFechaFinProcesamiento(element.getElementsByTagName("fecha_fin_procesamiento").item(0).getTextContent());
         ret.setSentido(Byte.decode(element.getElementsByTagName("sentido").item(0).getTextContent()));
-        ret.setFechaLectura(element.getElementsByTagName("fecha_lectura").item(0).getTextContent());
-        ret.setArchivoNombre(element.getElementsByTagName("archivo_nombre").item(0).getTextContent());
-        ret.setArchivoMd5(element.getElementsByTagName("archivo_md5").item(0).getTextContent());
-        ret.setArchivoTamano(Long.decode(element.getElementsByTagName("archivo_tamano").item(0).getTextContent()));
+        ret.setUsuarioIdUsuario(Long.decode(element.getElementsByTagName("usuario_id_usuario").item(0).getTextContent()));
 
         return ret;
     }

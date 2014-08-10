@@ -177,9 +177,75 @@ public class CarResource {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String putTodo(JAXBElement<CarData> todo) {
-	    //CarData c = todo.getValue();
-		System.out.println(todo);
-	    return "ok"; //putAndGetResponse(null);
+		
+		
+		CarData carData;
+		java.sql.Connection conn;
+		Wini ini;
+		
+		carData = null;
+		conn = null;
+		
+    	try {
+    		// cargo archivo de configuracion
+            ini = new Wini();
+        	
+        	
+        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
+        	
+			// abro conexion a la BD
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
+        			ini.get("DB", "user"), ini.get("DB", "password"));
+			
+			carData = todo.getValue();
+			
+			System.out.println(todo);
+			
+			conn.setAutoCommit(false);
+
+			carData.save(conn);
+			
+			conn.commit();
+			
+		    //return "ok"; //putAndGetResponse(null);
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+    	return "ok";
+		
+		
 	}
 	
 	private Response putAndGetResponse(CarData todo) {

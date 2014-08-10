@@ -271,7 +271,7 @@ public class Recordatorio {
     }
 
     
-    public static ArrayList<Recordatorio> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Recordatorio> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -300,7 +300,7 @@ public class Recordatorio {
                     array_clauses.add("re.id_vehiculo = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("re.borrado = 0");
@@ -309,7 +309,7 @@ public class Recordatorio {
                     array_clauses.add("re.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -357,7 +357,7 @@ public class Recordatorio {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -395,13 +395,13 @@ public class Recordatorio {
             "    UPDATE recordatorio" +
             "    SET" +
             "    titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
-            "    recordar_km = " + (_recordarKm != null ? "b'" + _recordarKm : "null") + "," +
+            "    recordar_km = " + (_recordarKm != null ? "b'" + (_recordarKm ? 1 : 0) + "'" : "null") + "," +
             "    km = " + (_km != null ? _km : "null") + "," +
-            "    recordar_fecha = " + (_recordarFecha != null ? "b'" + _recordarFecha : "null") +
+            "    recordar_fecha = " + (_recordarFecha != null ? "b'" + (_recordarFecha ? 1 : 0) + "'" : "null") +
             "    WHERE" +
             "    id_recordatorio = " + Long.toString(this._idRecordatorio) + " AND" +
             "    id_usuario = " + Long.toString(this._idUsuario);
@@ -465,7 +465,7 @@ public class Recordatorio {
             "    (" +
             "    " + (_idRecordatorio != null ? "'" + _idRecordatorio + "'" : "null") + "," +
             "    " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
@@ -708,11 +708,11 @@ public class Recordatorio {
         return "Recordatorio [" +
 	           "    _idRecordatorio = " + (_idRecordatorio != null ? _idRecordatorio : "null") + "," +
 	           "    _titulo = " + (_titulo != null ? "'" + _titulo + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _descripcion = " + (_descripcion != null ? "'" + _descripcion + "'" : "null") + "," +
 	           "    _recordar_km = " + (_recordarKm != null ? "b'" + _recordarKm : "null") + "," +
 	           "    _km = " + (_km != null ? _km : "null") + "," +
@@ -729,7 +729,7 @@ public class Recordatorio {
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_descripcion\" : " + (_descripcion != null ? "\"" + _descripcion + "\"" : "null") + "," +
 	           "    \"_recordar_km\" : " + (_recordarKm != null ? "b'" + _recordarKm : "null") + "," +
 	           "    \"_km\" : " + (_km != null ? _km : "null") + "," +

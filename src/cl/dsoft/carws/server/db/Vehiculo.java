@@ -7,10 +7,21 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Date;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
+import org.joda.time.DateTime ;
+import org.joda.time.Months;
+
 
 /**
  * @author petete-ntbk
@@ -319,7 +330,7 @@ public class Vehiculo {
     }
 
     
-    public static ArrayList<Vehiculo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Vehiculo> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -357,7 +368,7 @@ public class Vehiculo {
                     array_clauses.add("ve.id_tipo_transmision = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ve.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("ve.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("ve.borrado = 0");
@@ -366,7 +377,7 @@ public class Vehiculo {
                     array_clauses.add("ve.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -414,7 +425,7 @@ public class Vehiculo {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -452,13 +463,13 @@ public class Vehiculo {
             "    UPDATE vehiculo" +
             "    SET" +
             "    anio = " + (_anio != null ? _anio : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    aire_acondicionado = " + (_aireAcondicionado != null ? "b'" + _aireAcondicionado : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    aire_acondicionado = " + (_aireAcondicionado != null ? "b'" + (_aireAcondicionado ? 1 : 0) + "'" : "null") + "," +
             "    alias = " + (_alias != null ? "'" + _alias + "'" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    patente = " + (_patente != null ? "'" + _patente + "'" : "null") + "," +
             "    km = " + (_km != null ? _km : "null") + "," +
-            "    alza_vidrios = " + (_alzaVidrios != null ? "b'" + _alzaVidrios : "null") +
+            "    alza_vidrios = " + (_alzaVidrios != null ? "b'" + (_alzaVidrios ? 1 : 0) + "'" : "null") +
             "    WHERE" +
             "    id_usuario = " + Long.toString(this._idUsuario) + " AND" +
             "    id_vehiculo = " + Long.toString(this._idVehiculo);
@@ -773,12 +784,12 @@ public class Vehiculo {
     public String toString() {
         return "Vehiculo [" +
 	           "    _anio = " + (_anio != null ? _anio : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _aire_acondicionado = " + (_aireAcondicionado != null ? "b'" + _aireAcondicionado : "null") + "," +
 	           "    _alias = " + (_alias != null ? "'" + _alias + "'" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _patente = " + (_patente != null ? "'" + _patente + "'" : "null") + "," +
 	           "    _idModelo = " + (_idModelo != null ? _idModelo : "null") + "," +
 	           "    _idTraccion = " + (_idTraccion != null ? _idTraccion : "null") + "," +
@@ -798,7 +809,7 @@ public class Vehiculo {
 	           "    \"_alias\" : " + (_alias != null ? "\"" + _alias + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_patente\" : " + (_patente != null ? "\"" + _patente + "\"" : "null") + "," +
 	           "    \"_idModelo\" : " + (_idModelo != null ? _idModelo : "null") + "," +
 	           "    \"_idTraccion\" : " + (_idTraccion != null ? _idTraccion : "null") + "," +
@@ -851,5 +862,283 @@ public class Vehiculo {
         ret.setAlzaVidrios(Boolean.valueOf(element.getElementsByTagName("alza_vidrios").item(0).getTextContent()));
 
         return ret;
+    }
+    
+    public ArrayList<MantencionBaseHecha> getMantencionesBasePendientes(Connection p_conn) throws SQLException, UnsupportedParameter, ParseException {
+    	
+    	ArrayList<MantencionBaseHecha> ret;
+    	ArrayList<MantencionBase> list_mb;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> parametros;
+    	Integer kmInicial;
+    	Date dInicial, dFinal;
+    	DateTime dtInicial, dtFinal;
+    	String traccion, combustible;
+    	
+    	traccion = Traccion.getById(p_conn, this.getIdTraccion().toString()).getDescripcion();
+    	combustible = Combustible.getById(p_conn, this.getIdCombustible().toString()).getDescripcion();
+    	
+    	parametros = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+    	
+    	ret = new ArrayList<MantencionBaseHecha>();
+    	
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("traccion", traccion));
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("combustible", combustible));
+    	
+    	list_mb = MantencionBase.seek(p_conn, parametros, null, null, 0, 10000);
+    	
+    	for (MantencionBase mb : list_mb) {
+    		
+    		ArrayList<MantencionBaseHecha> list_mbh;
+    		MantencionBaseHecha mbh; // = new MantencionBaseHecha();
+    		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		Integer n;
+            Boolean bFound = false;
+            
+    		// encuentro ultima mantencion hecha de este tipo
+    		parametros.clear();
+    		
+    		parametros.add(new AbstractMap.SimpleEntry<String, String>("id_mantencion_base", mb.getId().toString()));
+    		
+    		list_mbh = MantencionBaseHecha.seek(p_conn, parametros, "fecha", "DESC", 0, 1);
+    		
+			mbh = new MantencionBaseHecha();
+			
+			mbh.setIdMantencionBase(mb.getId());
+			mbh.setIdVehiculo(this.getIdVehiculo());
+			mbh.setIdUsuario(this.getIdUsuario());
+    		
+    			
+    		if (mb.getDependeKm() && mb.getKmEntreMantenciones() != null && mb.getKmEntreMantenciones() > 0) {
+    			
+    			kmInicial = 0;
+    			
+    			if (list_mbh.size() > 0) {
+        			
+        			kmInicial = list_mbh.get(0).getKm();
+        		}
+
+	    		n = (this.getKm() - kmInicial) / mb.getKmEntreMantenciones();
+	    		
+	    		if (n > 0) {
+	    			// hay mantencion pendiente, o bien no la ha informado
+	    			mbh.setKm(kmInicial + n * mb.getKmEntreMantenciones());
+	    			//mbh.setFecha(formatter.format(new Date()));
+	    			
+	    			ret.add(mbh);
+	    			
+	    			bFound = true;
+	    		}
+    		}
+
+    		if (!bFound && mb.getMesesEntreMantenciones() != null && mb.getMesesEntreMantenciones() > 0) {
+    			
+    	        formatter = new SimpleDateFormat("yyyy-MM-dd");
+        		
+    			dInicial = formatter.parse(this.getAnio().toString() + "-01-01"); // anio de compra
+    			dFinal = new Date(); // now
+    			    			
+    			if (list_mbh.size() > 0) {
+        			
+    				dInicial = list_mbh.get(0).getFechaAsDate();
+        		}
+    			
+    			dtInicial = new DateTime(dInicial);
+    			dtFinal = new DateTime(dFinal);
+    			
+    			Months d = Months.monthsBetween(dtInicial, dtFinal);
+	    		
+	    		n = d.getMonths() / mb.getMesesEntreMantenciones();
+	    		
+	    		if (n > 0) {
+	    			// hay mantencion pendiente, o bien no la ha informado
+	    			mbh.setFecha(dtInicial.plusMonths(n * mb.getMesesEntreMantenciones()).toDate());
+	    			
+	    			ret.add(mbh);
+	    			
+	    			bFound = true;
+	    		}
+    		}
+
+    			
+    		
+
+    		
+    		
+    	}
+    	
+		return ret;
+    	
+    }
+
+    public ArrayList<MantencionUsuarioHecha> getMantencionesUsuarioPendientes(Connection p_conn) throws UnsupportedParameter, SQLException, ParseException {
+    	
+    	ArrayList<MantencionUsuarioHecha> ret;
+    	ArrayList<MantencionUsuario> list_mu;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> parametros;
+    	Integer kmInicial;
+    	Date dInicial, dFinal;
+    	DateTime dtInicial, dtFinal;
+    	
+    	parametros = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+    	
+    	ret = new ArrayList<MantencionUsuarioHecha>();
+    	
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", getIdUsuario().toString()));
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("id_vehiculo", getIdVehiculo().toString()));
+    	
+    	list_mu = MantencionUsuario.seek(p_conn, parametros, null, null, 0, 10000);
+    	
+    	for (MantencionUsuario mu : list_mu) {
+    		
+    		ArrayList<MantencionUsuarioHecha> list_muh;
+    		MantencionUsuarioHecha muh; // = new MantencionUsuarioHecha();
+    		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		Integer n;
+            Boolean bFound = false;
+            
+    		// encuentro ultima mantencion hecha de este tipo
+    		parametros.clear();
+    		
+    		parametros.add(new AbstractMap.SimpleEntry<String, String>("id_mantencion_usuario", mu.getIdMantencionUsuario().toString()));
+    		parametros.add(new AbstractMap.SimpleEntry<String, String>("id_vehiculo", getIdVehiculo().toString()));
+    		
+    		list_muh = MantencionUsuarioHecha.seek(p_conn, parametros, "fecha", "DESC", 0, 1);
+    		
+			muh = new MantencionUsuarioHecha();
+			
+			muh.setIdMantencionUsuario(mu.getIdMantencionUsuario());
+			muh.setIdVehiculo(this.getIdVehiculo());
+			muh.setIdUsuario(this.getIdUsuario());
+    		
+    			
+    		if (mu.getDependeKm() && mu.getKmEntreMantenciones() != null && mu.getKmEntreMantenciones() > 0) {
+    			
+    			kmInicial = 0;
+    			
+    			if (list_muh.size() > 0) {
+        			
+        			kmInicial = list_muh.get(0).getKm();
+        		}
+
+	    		n = (this.getKm() - kmInicial) / mu.getKmEntreMantenciones();
+	    		
+	    		if (n > 0) {
+	    			// hay mantencion pendiente, o bien no la ha informado
+	    			muh.setKm(kmInicial + n * mu.getKmEntreMantenciones());
+	    			//muh.setFecha(formatter.format(new Date()));
+	    			
+	    			ret.add(muh);
+	    			
+	    			bFound = true;
+	    		}
+    		}
+
+    		if (!bFound && mu.getMesesEntreMantenciones() != null && mu.getMesesEntreMantenciones() > 0) {
+        		
+    	        formatter = new SimpleDateFormat("yyyy-MM-dd");
+        		
+    			dInicial = formatter.parse(this.getAnio().toString() + "-01-01"); // anio de compra
+    			dFinal = new Date(); // now
+    			    			
+    			if (list_muh.size() > 0) {
+        			
+    				dInicial = list_muh.get(0).getFechaAsDate();
+        		}
+    			
+    			dtInicial = new DateTime(dInicial);
+    			dtFinal = new DateTime(dFinal);
+
+    			Months d = Months.monthsBetween(dtInicial, dtFinal);
+	    		
+	    		n = d.getMonths() / mu.getMesesEntreMantenciones();
+	    		
+	    		if (n > 0) {
+	    			// hay mantencion pendiente, o bien no la ha informado
+	    			muh.setFecha(dtInicial.plusMonths(n * mu.getMesesEntreMantenciones()).toDate());
+	    			
+	    			ret.add(muh);
+	    			
+	    			bFound = true;
+	    		}
+    		}
+
+    			
+    		
+
+    		
+    		
+    	}
+    	
+		return ret;
+    	
+    }
+
+    /**
+     * @throws SQLException 
+     * @throws UnsupportedParameter 
+     * @throws ParseException 
+     * 
+     */
+    public ArrayList<Rendimiento> getRendimiento(Connection p_conn) throws UnsupportedParameter, SQLException, ParseException {
+    	ArrayList<Rendimiento> ret;
+    	ArrayList<CargaCombustible> list_cc;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> parametros;
+    	Integer kmInicial, kmFinal;
+    	Date dInicial, dFinal;
+    	//DateTime dtInicial, dtFinal;
+    	Boolean bFirstFound = false;
+    	
+    	dInicial = new Date(0);
+    	kmInicial = 0;
+    	
+    	parametros = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+    	
+    	ret = new ArrayList<Rendimiento>();
+    	
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", getIdUsuario().toString()));
+    	parametros.add(new AbstractMap.SimpleEntry<String, String>("id_vehiculo", getIdVehiculo().toString()));
+    	
+    	list_cc = CargaCombustible.seek(p_conn, parametros, "fecha", "ASC", 0, 10000);
+    	
+    	// busco 2 registros consecutivos con llenado de estanque
+    	
+    	for (CargaCombustible cc : list_cc) {
+    		if (!bFirstFound) {
+    			if (cc.getEstanqueLleno()) {
+    				bFirstFound = true;
+    				
+    				kmInicial = cc.getKm();
+    				dInicial = cc.getFechaAsDate();
+    			}
+    		}
+    		else {
+    			if (cc.getEstanqueLleno()) {
+    				// encontre el par, calculo rendimiento
+    				kmFinal = cc.getKm();
+    				dFinal = cc.getFechaAsDate();
+    				
+    				Rendimiento rendimiento = new Rendimiento();
+    				
+    				rendimiento.setInitialDate(dInicial);
+    				rendimiento.setFinalDate(dFinal);
+    				rendimiento.setRendimiento((float) (kmFinal - kmInicial) / cc.getLitros());
+    				
+    				ret.add(rendimiento);
+    				
+    				//System.out.println(rendimiento);
+    				
+    				// no vuelvo a false bFirstfound, ya que este registro me sirve como primero para la proxima
+    				kmInicial = kmFinal;
+    				dInicial = dFinal;
+    			}
+    			else {
+    				// comienzo la busqueda nuevamente
+    				bFirstFound = false;
+    			}
+    		}
+    	}
+    	
+    	return ret;
+    	
     }
 }

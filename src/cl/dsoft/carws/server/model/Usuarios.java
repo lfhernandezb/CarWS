@@ -42,7 +42,7 @@ public class Usuarios {
 			listParameters = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
 			
 			listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(idUsuario)));
-			listParameters.add(new AbstractMap.SimpleEntry<String, String>("mas reciente", "'" + fechaModificacion + "'"));
+			listParameters.add(new AbstractMap.SimpleEntry<String, String>("mas reciente", fechaModificacion));
 			
 			this.usuarios = cl.dsoft.carws.server.db.Usuario.seek(conn, listParameters, null, null, 0, 1);
 			

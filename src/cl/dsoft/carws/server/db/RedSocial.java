@@ -142,11 +142,11 @@ public class RedSocial {
         return ret;        
     }
 
-    public static RedSocial getById(Connection p_conn, String p_id) throws Exception {
+    public static RedSocial getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_red_social", p_id);
     }
     
-    public static ArrayList<RedSocial> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<RedSocial> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -166,10 +166,10 @@ public class RedSocial {
                     array_clauses.add("re.id_red_social = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("re.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -217,7 +217,7 @@ public class RedSocial {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -254,7 +254,7 @@ public class RedSocial {
         String str_sql =
             "    UPDATE red_social" +
             "    SET" +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    red_social = " + (_redSocial != null ? "'" + _redSocial + "'" : "null") +
             "    WHERE" +
             "    id_red_social = " + Long.toString(this._id);
@@ -535,7 +535,7 @@ public class RedSocial {
     @Override
     public String toString() {
         return "RedSocial [" +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _red_social = " + (_redSocial != null ? "'" + _redSocial + "'" : "null") +
 			   "]";

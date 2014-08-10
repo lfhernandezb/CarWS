@@ -254,11 +254,11 @@ public class Usuario {
         return ret;        
     }
 
-    public static Usuario getById(Connection p_conn, String p_id) throws Exception {
+    public static Usuario getById(Connection p_conn, String p_id) throws SQLException {
         return getByParameter(p_conn, "id_usuario", p_id);
     }
     
-    public static ArrayList<Usuario> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<Usuario> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -281,7 +281,7 @@ public class Usuario {
                     array_clauses.add("us.id_comuna = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("us.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("us.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("us.borrado = 0");
@@ -290,7 +290,7 @@ public class Usuario {
                     array_clauses.add("us.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -338,7 +338,7 @@ public class Usuario {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -376,10 +376,10 @@ public class Usuario {
             "    UPDATE usuario" +
             "    SET" +
             "    nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    fecha_vencimiento_licencia = " + (_fechaVencimientoLicencia != null ? "STR_TO_DATE(" + _fechaVencimientoLicencia + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    hombre = " + (_hombre != null ? "b'" + _hombre : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    hombre = " + (_hombre != null ? "b'" + (_hombre ? 1 : 0) + "'" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    telefono = " + (_telefono != null ? "'" + _telefono + "'" : "null") + "," +
             "    correo = " + (_correo != null ? "'" + _correo + "'" : "null") + "," +
             "    fecha_nacimiento = " + (_fechaNacimiento != null ? "STR_TO_DATE(" + _fechaNacimiento + ", '%Y-%m-%d %H:%i:%s')" : "null") +
@@ -682,12 +682,12 @@ public class Usuario {
     public String toString() {
         return "Usuario [" +
 	           "    _nombre = " + (_nombre != null ? "'" + _nombre + "'" : "null") + "," +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _fecha_vencimiento_licencia = " + (_fechaVencimientoLicencia != null ? "STR_TO_DATE(" + _fechaVencimientoLicencia + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _id = " + (_id != null ? _id : "null") + "," +
 	           "    _hombre = " + (_hombre != null ? "b'" + _hombre : "null") + "," +
 	           "    _idComuna = " + (_idComuna != null ? _idComuna : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _telefono = " + (_telefono != null ? "'" + _telefono + "'" : "null") + "," +
 	           "    _correo = " + (_correo != null ? "'" + _correo + "'" : "null") + "," +
 	           "    _fecha_nacimiento = " + (_fechaNacimiento != null ? "STR_TO_DATE(" + _fechaNacimiento + ", '%Y-%m-%d %H:%i:%s')" : "null") +
@@ -703,7 +703,7 @@ public class Usuario {
 	           "    \"_id\" : " + (_id != null ? _id : "null") + "," +
 	           "    \"_hombre\" : " + (_hombre != null ? "b'" + _hombre : "null") + "," +
 	           "    \"_idComuna\" : " + (_idComuna != null ? _idComuna : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_telefono\" : " + (_telefono != null ? "\"" + _telefono + "\"" : "null") + "," +
 	           "    \"_correo\" : " + (_correo != null ? "\"" + _correo + "\"" : "null") + "," +
 	           "    \"_fecha_nacimiento\" : " + (_fechaNacimiento != null ? "\"" + _fechaNacimiento + "\"" : "null") +

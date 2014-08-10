@@ -11,6 +11,10 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 
 /**
  * @author petete-ntbk
@@ -21,6 +25,7 @@ public class MantencionUsuarioHecha {
     protected String _fecha;
     protected Long _idUsuario;
     protected Long _idMantencionUsuarioHecha;
+    protected Long _idVehiculo;
     protected Boolean _borrado;
     protected Long _idMantencionUsuario;
     protected Integer _costo;
@@ -32,6 +37,7 @@ public class MantencionUsuarioHecha {
         "    DATE_FORMAT(ma.fecha, '%Y-%m-%d %H:%i:%s') AS fecha," +
         "    ma.id_usuario AS id_usuario," +
         "    ma.id_mantencion_usuario_hecha AS id_mantencion_usuario_hecha," +
+        "    ma.id_vehiculo AS id_vehiculo," +
         "    0+ma.borrado AS borrado," +
         "    ma.id_mantencion_usuario AS id_mantencion_usuario," +
         "    ma.costo AS costo," +
@@ -43,6 +49,7 @@ public class MantencionUsuarioHecha {
         _fecha = null;
         _idUsuario = null;
         _idMantencionUsuarioHecha = null;
+        _idVehiculo = null;
         _borrado = null;
         _idMantencionUsuario = null;
         _costo = null;
@@ -62,6 +69,28 @@ public class MantencionUsuarioHecha {
         return _fecha;
     }
     /**
+     * @return the _fecha as seconds from January 1, 1970, 00:00:00 GMT
+     */
+    public long getFechaAsLong() throws ParseException {
+        Date d;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        d = formatter.parse(_fecha);
+
+        return (long)d.getTime() / 1000L;
+    }
+    /**
+     * @return the _fecha as Date
+     */
+    public Date getFechaAsDate() throws ParseException {
+        Date d;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        d = formatter.parse(_fecha);
+
+        return d;
+    }
+    /**
      * @return the _idUsuario
      */
     public Long getIdUsuario() {
@@ -72,6 +101,12 @@ public class MantencionUsuarioHecha {
      */
     public Long getIdMantencionUsuarioHecha() {
         return _idMantencionUsuarioHecha;
+    }
+    /**
+     * @return the _idVehiculo
+     */
+    public Long getIdVehiculo() {
+        return _idVehiculo;
     }
     /**
      * @return the _borrado
@@ -110,6 +145,26 @@ public class MantencionUsuarioHecha {
         this._fecha = _fecha;
     }
     /**
+    * @param _fecha the _fecha to set as seconds from January 1, 1970, 00:00:00 GMT
+    */
+   public void setFecha(long _timeStamp) {
+       Date d;
+       SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+       d = new Date((long)_timeStamp*1000);
+
+       this._fecha = formatter.format(d);
+   }
+   /**
+   * @param _fecha the _fecha to set as Date
+   */
+  public void setFecha(Date _fecha) {
+      
+      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+      this._fecha = formatter.format(_fecha);
+  }
+    /**
      * @param _idUsuario the _idUsuario to set
      */
     public void setIdUsuario(Long _idUsuario) {
@@ -120,6 +175,12 @@ public class MantencionUsuarioHecha {
      */
     public void setIdMantencionUsuarioHecha(Long _idMantencionUsuarioHecha) {
         this._idMantencionUsuarioHecha = _idMantencionUsuarioHecha;
+    }
+    /**
+     * @param _idVehiculo the _idVehiculo to set
+     */
+    public void setIdVehiculo(Long _idVehiculo) {
+        this._idVehiculo = _idVehiculo;
     }
     /**
      * @param _borrado the _borrado to set
@@ -153,6 +214,7 @@ public class MantencionUsuarioHecha {
         ret.setFecha(p_rs.getString("fecha"));
         ret.setIdUsuario(p_rs.getLong("id_usuario"));
         ret.setIdMantencionUsuarioHecha(p_rs.getLong("id_mantencion_usuario_hecha"));
+        ret.setIdVehiculo(p_rs.getLong("id_vehiculo"));
         ret.setBorrado(p_rs.getBoolean("borrado"));
         ret.setIdMantencionUsuario(p_rs.getLong("id_mantencion_usuario"));
         ret.setCosto(p_rs.getInt("costo"));
@@ -223,7 +285,7 @@ public class MantencionUsuarioHecha {
     }
 
     
-    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws Exception {
+    public static ArrayList<MantencionUsuarioHecha> seek(Connection p_conn, ArrayList<AbstractMap.SimpleEntry<String, String>> p_parameters, String p_order, String p_direction, int p_offset, int p_limit) throws UnsupportedParameter, SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         String str_sql;
@@ -248,11 +310,14 @@ public class MantencionUsuarioHecha {
                 else if (p.getKey().equals("id_usuario")) {
                     array_clauses.add("ma.id_usuario = " + p.getValue());
                 }
+                else if (p.getKey().equals("id_vehiculo")) {
+                    array_clauses.add("ma.id_vehiculo = " + p.getValue());
+                }
                 else if (p.getKey().equals("id_mantencion_usuario")) {
                     array_clauses.add("ma.id_mantencion_usuario = " + p.getValue());
                 }
                 else if (p.getKey().equals("mas reciente")) {
-                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE(" + p.getValue() + ", '%Y-%m-%d %H:%i:%s')");
+                    array_clauses.add("ma.fecha_modificacion > STR_TO_DATE('" + p.getValue() + "', '%Y-%m-%d %H:%i:%s')");
                 }
                 else if (p.getKey().equals("no borrado")) {
                     array_clauses.add("ma.borrado = 0");
@@ -261,7 +326,7 @@ public class MantencionUsuarioHecha {
                     array_clauses.add("ma.borrado = 1");
                 }
                 else {
-                    throw new Exception("Parametro no soportado: " + p.getKey());
+                    throw new UnsupportedParameter("Parametro no soportado: " + p.getKey());
                 }
             }
                                 
@@ -309,7 +374,7 @@ public class MantencionUsuarioHecha {
             
             throw ex;
         }
-        catch (Exception ex) {
+        catch (UnsupportedParameter ex) {
             throw ex;
         }
         finally {
@@ -346,9 +411,9 @@ public class MantencionUsuarioHecha {
         String str_sql =
             "    UPDATE mantencion_usuario_hecha" +
             "    SET" +
-            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-            "    borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+            "    fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
             "    costo = " + (_costo != null ? _costo : "null") + "," +
             "    km = " + (_km != null ? _km : "null") +
             "    WHERE" +
@@ -404,14 +469,16 @@ public class MantencionUsuarioHecha {
             "    fecha, " +
             "    id_usuario, " +
             "    id_mantencion_usuario_hecha, " +
+            "    id_vehiculo, " +
             "    id_mantencion_usuario, " +
             "    costo, " +
             "    km)" +
             "    VALUES" +
             "    (" +
-            "    " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+            "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
             "    " + (_idMantencionUsuarioHecha != null ? "'" + _idMantencionUsuarioHecha + "'" : "null") + "," +
+            "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_idMantencionUsuario != null ? "'" + _idMantencionUsuario + "'" : "null") + "," +
             "    " + (_costo != null ? "'" + _costo + "'" : "null") + "," +
             "    " + (_km != null ? "'" + _km + "'" : "null") +
@@ -531,6 +598,7 @@ public class MantencionUsuarioHecha {
 
                 _fechaModificacion = obj.getFechaModificacion();
                 _fecha = obj.getFecha();
+                _idVehiculo = obj.getIdVehiculo();
                 _borrado = obj.getBorrado();
                 _idMantencionUsuario = obj.getIdMantencionUsuario();
                 _costo = obj.getCosto();
@@ -646,11 +714,12 @@ public class MantencionUsuarioHecha {
     @Override
     public String toString() {
         return "MantencionUsuarioHecha [" +
-	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE(" + _fechaModificacion + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
-	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE(" + _fecha + ", '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha_modificacion = " + (_fechaModificacion != null ? "STR_TO_DATE('" + _fechaModificacion + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
+	           "    _fecha = " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
 	           "    _idUsuario = " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    _idMantencionUsuarioHecha = " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    _borrado = " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    _idVehiculo = " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
+	           "    _borrado = " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    _idMantencionUsuario = " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
 	           "    _costo = " + (_costo != null ? _costo : "null") + "," +
 	           "    _km = " + (_km != null ? _km : "null") +
@@ -664,7 +733,8 @@ public class MantencionUsuarioHecha {
 	           "    \"_fecha\" : " + (_fecha != null ? "\"" + _fecha + "\"" : "null") + "," +
 	           "    \"_idUsuario\" : " + (_idUsuario != null ? _idUsuario : "null") + "," +
 	           "    \"_idMantencionUsuarioHecha\" : " + (_idMantencionUsuarioHecha != null ? _idMantencionUsuarioHecha : "null") + "," +
-	           "    \"_borrado\" : " + (_borrado != null ? "b'" + _borrado : "null") + "," +
+	           "    \"_idVehiculo\" : " + (_idVehiculo != null ? _idVehiculo : "null") + "," +
+	           "    \"_borrado\" : " + (_borrado != null ? "b'" + (_borrado ? 1 : 0) + "'" : "null") + "," +
 	           "    \"_idMantencionUsuario\" : " + (_idMantencionUsuario != null ? _idMantencionUsuario : "null") + "," +
 	           "    \"_costo\" : " + (_costo != null ? _costo : "null") + "," +
 	           "    \"_km\" : " + (_km != null ? _km : "null") +
@@ -678,6 +748,7 @@ public class MantencionUsuarioHecha {
 	           "    <fecha" + (_fecha != null ? ">" + _fecha + "</fecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idUsuario" + (_idUsuario != null ? ">" + _idUsuario + "</idUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idMantencionUsuarioHecha" + (_idMantencionUsuarioHecha != null ? ">" + _idMantencionUsuarioHecha + "</idMantencionUsuarioHecha>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
+	           "    <idVehiculo" + (_idVehiculo != null ? ">" + _idVehiculo + "</idVehiculo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <borrado" + (_borrado != null ? ">" + _borrado + "</borrado>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <idMantencionUsuario" + (_idMantencionUsuario != null ? ">" + _idMantencionUsuario + "</idMantencionUsuario>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
 	           "    <costo" + (_costo != null ? ">" + _costo + "</costo>" : " xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>") +
@@ -695,6 +766,7 @@ public class MantencionUsuarioHecha {
         ret.setFecha(element.getElementsByTagName("fecha").item(0).getTextContent());
         ret.setIdUsuario(Long.decode(element.getElementsByTagName("id_usuario").item(0).getTextContent()));
         ret.setIdMantencionUsuarioHecha(Long.decode(element.getElementsByTagName("id_mantencion_usuario_hecha").item(0).getTextContent()));
+        ret.setIdVehiculo(Long.decode(element.getElementsByTagName("id_vehiculo").item(0).getTextContent()));
         ret.setBorrado(Boolean.valueOf(element.getElementsByTagName("borrado").item(0).getTextContent()));
         ret.setIdMantencionUsuario(Long.decode(element.getElementsByTagName("id_mantencion_usuario").item(0).getTextContent()));
         ret.setCosto(Integer.decode(element.getElementsByTagName("costo").item(0).getTextContent()));
