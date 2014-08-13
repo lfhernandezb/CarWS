@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="cl.dsoft.carws">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../opt/eclipse_java"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/asm-3.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/ini4j-0.5.2-SNAPSHOT.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-core-asl-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-jaxrs-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-mapper-asl-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-xc-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-client-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-core-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-json-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-server-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-servlet-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jettison-1.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/joda-convert-1.6.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/joda-time-2.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/mysql-connector-java-5.1.22-bin.jar"/>
+    </path>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="cl.dsoft.carws.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+        <pathelement location="WebContent/WEB-INF/lib/asm-3.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/ini4j-0.5.2-SNAPSHOT.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-core-asl-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-jaxrs-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-mapper-asl-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jackson-xc-1.9.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-client-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-core-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-json-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-server-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jersey-servlet-1.18.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jettison-1.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/mysql-connector-java-5.1.22-bin.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/joda-convert-1.6.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/joda-time-2.2.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="cl.dsoft.carws.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+</project>

@@ -52,8 +52,8 @@
   <target name="war" depends="compile">
     <war destfile="${dist.dir}\cl.dsoft.carws.war" webxml="WebContent/WEB-INF/web.xml" basedir="${build.dir}">
       <fileset dir="WebContent"/>
-      <!--lib dir="WebContent/WEB-INF/lib"/>
-      <classes dir="build/classes"/-->
+      <!--lib dir="WebContent/WEB-INF/lib"/-->
+      <classes dir="build/classes"/>
       <manifest>
         <attribute name="Main-Class" value="test.Main" />
       </manifest>
