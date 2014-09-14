@@ -2,6 +2,7 @@ package cl.dsoft.carws;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -23,7 +24,10 @@ import javax.xml.bind.JAXBElement;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
+import cl.dsoft.carws.server.db.Autenticacion;
+import cl.dsoft.carws.server.db.Usuario;
 import cl.dsoft.carws.server.model.CarData;
+import cl.dsoft.carws.server.model.Usuarios;
 
 @Path("/todo")
 public class CarResource {
@@ -61,7 +65,7 @@ public class CarResource {
 	@GET
 	@Path("/byIdUsuario/{idUsuario}/{fechaModificacion}")
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	public CarData getCarNews(
+	public CarData getCarNewsByIdUsuario(
 			@PathParam("idUsuario") Long idUsuario,
 		    @PathParam("fechaModificacion") String fechaModificacion) {
 		
@@ -85,9 +89,6 @@ public class CarResource {
         			ini.get("DB", "user"), ini.get("DB", "password"));
 			
 			carData = new CarData(conn, idUsuario, fechaModificacion);
-			
-			if(carData==null)
-			  throw new RuntimeException("Get: not found");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -118,9 +119,9 @@ public class CarResource {
 	@GET
 	@Path("/byIdRedSocial/{idRedSocial}/{token}")
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	public CarData getCarNews(
+	public CarData getCarNewsByIdRedSocial(
 			@PathParam("idRedSocial") Long idRedSocial,
-		    @PathParam("token") Long token) {
+		    @PathParam("token") String token) {
 		
 		CarData carData;
 		java.sql.Connection conn;
@@ -141,10 +142,7 @@ public class CarResource {
 			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
         			ini.get("DB", "user"), ini.get("DB", "password"));
 			
-			carData = new CarData(conn, idRedSocial, token);
-			
-			if(carData==null)
-			  throw new RuntimeException("Get: not found");
+			carData = new CarData(conn, idRedSocial, token, true);
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -172,6 +170,111 @@ public class CarResource {
     	return carData;
 	}
 	
+	// crea un nuevo usuario utilizando las credenciales de red social e idComuna
+	
+	@GET
+	@Path("/createUser/{idRedSocial}/{token}/{idComuna}")
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	public CarData getNewUser(
+			@PathParam("idRedSocial") Long idRedSocial,
+		    @PathParam("token") String token,
+		    @PathParam("idComuna") Long idComuna) {
+		
+		CarData carData;
+		java.sql.Connection conn;
+		Wini ini;
+		
+		carData = null;
+		conn = null;
+		
+    	try {
+    		// cargo archivo de configuracion
+            ini = new Wini();
+        	
+        	
+        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
+        	
+			// abro conexion a la BD
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
+        			ini.get("DB", "user"), ini.get("DB", "password"));
+			
+			// chequeos
+			
+			// quiza usuario existe....
+			
+			Usuario u = null;
+			
+			Usuarios us = new Usuarios(conn, idRedSocial, token, true);
+			
+			if (us.getUsuarios().isEmpty()) {
+				
+				conn.setAutoCommit(false);
+				
+				conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+				
+				u = new Usuario();
+				
+				u.setIdComuna(idComuna);
+				
+				u.insert(conn);
+				
+				Autenticacion a = new Autenticacion();
+				
+				a.setIdRedSocial(idRedSocial);
+				a.setToken(token);
+				a.setIdUsuario(u.getId());
+				
+				a.insert(conn);
+				
+				conn.commit();
+				
+				carData = new CarData(conn, idRedSocial, token, true);
+				
+			}			
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			conn = null;
+
+    	} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+    	
+    	return carData;
+	}
+
 	@PUT
 	@Path("/receive")
 	@Consumes(MediaType.APPLICATION_XML)
@@ -208,6 +311,14 @@ public class CarResource {
 			
 			conn.commit();
 			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			conn = null;
 		    //return "ok"; //putAndGetResponse(null);
 			
 			

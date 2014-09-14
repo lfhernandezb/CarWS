@@ -336,7 +336,20 @@ public class InfoSincro {
         try {
             stmt = p_conn.createStatement();
 
-            ret = stmt.executeUpdate(str_sql);
+            ret = stmt.executeUpdate(str_sql, Statement.RETURN_GENERATED_KEYS);
+
+            rs = stmt.getGeneratedKeys();
+
+            if (rs.next()) {
+                _id = rs.getInt(1);
+            } else {
+                // throw an exception from here
+                // throw new Exception("Error al obtener id");
+            }
+
+            rs.close();
+            rs = null;
+            //System.out.println("Key returned from getGeneratedKeys():" + _id.toString());
 
             load(p_conn);
 

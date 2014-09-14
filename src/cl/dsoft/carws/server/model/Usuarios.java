@@ -23,8 +23,8 @@ public class Usuarios {
 		seek(conn, idUsuario, fechaModificacion);
 	}
 
-    public Usuarios(java.sql.Connection conn, Long idRedSocial, Long token) {
-		seek(conn, idRedSocial, token);
+    public Usuarios(java.sql.Connection conn, Long idRedSocial, String token, Boolean byIdRedSocial) {
+		seek(conn, idRedSocial, token, byIdRedSocial);
 	}
 
     public List<cl.dsoft.carws.server.db.Usuario> getUsuarios() {
@@ -54,7 +54,7 @@ public class Usuarios {
     	
     }
 
-    private void seek(java.sql.Connection conn, Long idRedSocial, Long token) {
+    private void seek(java.sql.Connection conn, Long idRedSocial, String token, Boolean byIdRedSocial) {
     	
     	ArrayList<AbstractMap.SimpleEntry<String, String>> listParameters;
     	

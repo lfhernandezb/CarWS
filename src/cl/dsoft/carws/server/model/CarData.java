@@ -2,6 +2,7 @@ package cl.dsoft.carws.server.model;
 
 import java.sql.SQLException;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -20,16 +21,27 @@ import cl.dsoft.carws.server.db.Vehiculo;
 @XmlType(propOrder = { "paises", "regiones", "comunas", "usuarios", "vehiculos", "mantencionBaseHechas", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
 public class CarData {
 
+	//@XmlElement(nillable=true, required=false)
 	protected Paises paises;
+	//@XmlElement(nillable=true, required=false)
 	protected Regiones regiones;
+	//@XmlElement(nillable=true, required=false)
 	protected Comunas comunas;
+	//@XmlElement(nillable=true, required=false)
 	protected Usuarios usuarios;
+	//@XmlElement(nillable=true, required=false)
 	protected Vehiculos vehiculos;
+	//@XmlElement(nillable=true, required=false)
 	protected MantencionBaseHechas mantencionBaseHechas;
+	//@XmlElement(nillable=true, required=false)
 	protected MantencionUsuarios mantencionUsuarios;
+	//@XmlElement(nillable=true, required=false)
 	protected MantencionUsuarioHechas mantencionUsuarioHechas;
+	//@XmlElement(nillable=true, required=false)
 	protected Recordatorios recordatorios;
+	//@XmlElement(nillable=true, required=false)
 	protected CargaCombustibles cargaCombustibles;
+	//@XmlElement(nillable=true, required=false)
 	protected Reparaciones reparaciones;
 	
 	public CarData() {
@@ -62,9 +74,9 @@ public class CarData {
 		this.reparaciones = new Reparaciones(conn, idUsuario, fechaModificacion);
 	}
 
-	public CarData(java.sql.Connection conn, Long idRedSocial, Long token) {
+	public CarData(java.sql.Connection conn, Long idRedSocial, String token, Boolean byIdRedSocial) {
 
-		this.usuarios = new Usuarios(conn, idRedSocial, token);
+		this.usuarios = new Usuarios(conn, idRedSocial, token, byIdRedSocial);
 		
 		if (!this.usuarios.getUsuarios().isEmpty()) {
 			Usuario u = this.getUsuarios().getUsuarios().get(0);
@@ -80,6 +92,7 @@ public class CarData {
 			this.cargaCombustibles = new CargaCombustibles(conn, u.getId(), "1900-01-01");
 			this.reparaciones = new Reparaciones(conn, u.getId(), "1900-01-01");
 		}
+		/*
 		else {
 			
 			this.paises = new Paises();
@@ -93,7 +106,7 @@ public class CarData {
 			this.cargaCombustibles = new CargaCombustibles();
 			this.reparaciones = new Reparaciones();
 		}
-		
+		*/
 	}
 
 	/**
