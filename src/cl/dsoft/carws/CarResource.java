@@ -23,8 +23,12 @@ import javax.xml.bind.JAXBElement;
 
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 import cl.dsoft.carws.server.db.Autenticacion;
+import cl.dsoft.carws.server.db.InfoSincro;
 import cl.dsoft.carws.server.db.Usuario;
 import cl.dsoft.carws.server.model.CarData;
 import cl.dsoft.carws.server.model.Usuarios;
@@ -90,6 +94,26 @@ public class CarResource {
 			
 			carData = new CarData(conn, idUsuario, fechaModificacion);
 			
+			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
+				
+				InfoSincro is = new InfoSincro();
+				
+				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
+				is.setUsuarioIdUsuario(idUsuario);
+				is.setFecha(new Date());
+				
+				is.insert(conn);
+			}
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			conn = null;
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,7 +168,27 @@ public class CarResource {
 			
 			carData = new CarData(conn, idRedSocial, token, true);
 			
-		} catch (ClassNotFoundException e) {
+			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
+			
+				InfoSincro is = new InfoSincro();
+				
+				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
+				is.setUsuarioIdUsuario(carData.getUsuarios().getUsuarios().get(0).getId());
+				is.setFecha(new Date());
+				
+				is.insert(conn);
+			}
+			
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			conn = null;
+
+    	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -226,11 +270,19 @@ public class CarResource {
 				a.setIdUsuario(u.getId());
 				
 				a.insert(conn);
-				
-				conn.commit();
-				
+								
 				carData = new CarData(conn, idRedSocial, token, true);
+				/*
+				InfoSincro is = new InfoSincro();
 				
+				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
+				is.setUsuarioIdUsuario(u.getId());
+				is.setFecha(new Date());
+				
+				is.insert(conn);
+				*/
+				conn.commit();
+
 			}			
 			
 			try {
@@ -309,6 +361,17 @@ public class CarResource {
 
 			carData.save(conn);
 			
+			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
+				
+				InfoSincro is = new InfoSincro();
+				
+				is.setSentido((byte) InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode());
+				is.setUsuarioIdUsuario(carData.getUsuarios().getUsuarios().get(0).getId());
+				is.setFecha(new Date());
+				
+				is.insert(conn);
+			}
+						
 			conn.commit();
 			
 			try {
