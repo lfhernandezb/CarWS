@@ -1,0 +1,6 @@
+http://localhost:8080/manager/html
+http://localhost:8080/cl.dsoft.carws/rest/todo/byIdUsuario/1/1900-01-01
+http://localhost:8080/cl.dsoft.carws/rest/todo/byIdRedSocial/1/1
+http://localhost:8080/cl.dsoft.carws/rest/todo/CreateUser/1/3/1
+
+
