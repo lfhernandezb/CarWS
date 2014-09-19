@@ -13,12 +13,13 @@ import cl.dsoft.carws.server.db.Recordatorio;
 import cl.dsoft.carws.server.db.CargaCombustible;
 import cl.dsoft.carws.server.db.Reparacion;
 import cl.dsoft.carws.server.db.Usuario;
+import cl.dsoft.carws.server.db.Autenticacion;
 import cl.dsoft.carws.server.db.Vehiculo;
 
 @XmlRootElement(name = "CarData")
 //If you want you can define the order in which the fields are written
 //Optional
-@XmlType(propOrder = { "paises", "regiones", "comunas", "usuarios", "vehiculos", "mantencionBaseHechas", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
+@XmlType(propOrder = { "paises", "regiones", "comunas", "usuarios", "autenticaciones", "vehiculos", "mantencionBaseHechas", "mantencionUsuarios", "mantencionUsuarioHechas", "recordatorios", "cargaCombustibles", "reparaciones" })
 public class CarData {
 
 	//@XmlElement(nillable=true, required=false)
@@ -29,6 +30,8 @@ public class CarData {
 	protected Comunas comunas;
 	//@XmlElement(nillable=true, required=false)
 	protected Usuarios usuarios;
+	//@XmlElement(nillable=true, required=false)
+	protected Autenticaciones autenticaciones;
 	//@XmlElement(nillable=true, required=false)
 	protected Vehiculos vehiculos;
 	//@XmlElement(nillable=true, required=false)
@@ -50,6 +53,7 @@ public class CarData {
 		this.regiones = null;
 		this.comunas = null;
 		this.usuarios = null;
+		this.autenticaciones = null;
 		this.vehiculos = null;
 		this.mantencionBaseHechas = null;
 		this.mantencionUsuarios = null;
@@ -65,6 +69,7 @@ public class CarData {
 		this.regiones = new Regiones(conn, idUsuario, fechaModificacion);
 		this.comunas = new Comunas(conn, idUsuario, fechaModificacion);
 		this.usuarios = new Usuarios(conn, idUsuario, fechaModificacion);
+		this.autenticaciones = new Autenticaciones(conn, idUsuario, fechaModificacion);
 		this.vehiculos = new Vehiculos(conn, idUsuario, fechaModificacion);
 		this.mantencionBaseHechas = new MantencionBaseHechas(conn, idUsuario, fechaModificacion);
 		this.mantencionUsuarios = new MantencionUsuarios(conn, idUsuario, fechaModificacion);
@@ -82,6 +87,7 @@ public class CarData {
 			Usuario u = this.getUsuarios().getUsuarios().get(0);
 			
 			this.paises = new Paises(conn, u.getId(), "1900-01-01");
+			this.autenticaciones = new Autenticaciones(conn, u.getId(), "1900-01-01");
 			this.regiones = new Regiones(conn, u.getId(), "1900-01-01");
 			this.comunas = new Comunas(conn, u.getId(), "1900-01-01");
 			this.vehiculos = new Vehiculos(conn, u.getId(), "1900-01-01");
@@ -114,6 +120,20 @@ public class CarData {
 	 */
 	public Paises getPaises() {
 		return paises;
+	}
+
+	/**
+	 * @return the autenticaciones
+	 */
+	public Autenticaciones getAutenticaciones() {
+		return autenticaciones;
+	}
+
+	/**
+	 * @param autenticaciones the autenticaciones to set
+	 */
+	public void setAutenticaciones(Autenticaciones autenticaciones) {
+		this.autenticaciones = autenticaciones;
 	}
 
 	/**
@@ -270,6 +290,11 @@ public class CarData {
 		for (Usuario usuario : this.usuarios.getUsuarios()) {
 			
 			usuario.save(conn);
+		}
+
+		for (Autenticacion autenticacion : this.autenticaciones.getAutenticaciones()) {
+			
+			autenticacion.save(conn);
 		}
 
 		for (Vehiculo vehiculo : this.vehiculos.getVehiculos()) {
