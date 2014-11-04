@@ -7,12 +7,16 @@
   <property name="dist.dir" location="dist" />
   <property name="docs.dir" location="docs" />
   <property name="lib.dir" location="WebContent/WEB-INF/lib" />
+  <property name="server-lib.dir" location="/opt/tomcat/lib" />
 
   <!--
     Create a classpath container which can be later used in the ant task
   -->
   <path id="build.classpath">
     <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${server-lib.dir}">
       <include name="**/*.jar" />
     </fileset>
   </path>
@@ -43,7 +47,7 @@
 
   <!-- Compiles the java code (including the usage of library for JUnit -->
   <target name="compile" depends="clean, makedir,init">
-    <javac srcdir="${src.dir}" debuglevel="lines,vars,source" includeantruntime="false" destdir="${build.dir}/classes" classpathref="build.classpath" >
+    <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" includeantruntime="false" destdir="${build.dir}/classes" classpathref="build.classpath" >
     </javac>
 
   </target>

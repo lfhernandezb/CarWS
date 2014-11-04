@@ -11,6 +11,7 @@
     <property name="source" value="1.7"/>
     <path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/asm-3.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-dbcp2-2.0.1.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/ini4j-0.5.2-SNAPSHOT.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jackson-core-asl-1.9.2.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/jackson-jaxrs-1.9.2.jar"/>
@@ -28,26 +29,29 @@
         <pathelement location="WebContent/WEB-INF/lib/mysql-connector-java-5.1.22-bin.jar"/>
     </path>
     <path id="EAR Libraries.libraryclasspath"/>
+    <path id="Apache Tomcat v6.0 [Apache Tomcat v6.0].libraryclasspath">
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/catalina.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/catalina-tribes.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/el-api.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/jasper-el.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/tomcat-i18n-es.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/tomcat-coyote.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/jsp-api.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/tomcat-i18n-ja.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/annotations-api.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/tomcat-dbcp.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/tomcat-i18n-fr.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/catalina-ha.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/ecj-4.3.1.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/servlet-api.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/jasper.jar"/>
+        <pathelement location="../../../../../opt/apache-tomcat-6.0.39/lib/catalina-ant.jar"/>
+    </path>
     <path id="cl.dsoft.carws.classpath">
         <pathelement location="build/classes"/>
         <path refid="Web App Libraries.libraryclasspath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
-        <pathelement location="WebContent/WEB-INF/lib/asm-3.1.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/ini4j-0.5.2-SNAPSHOT.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jackson-core-asl-1.9.2.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jackson-jaxrs-1.9.2.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jackson-mapper-asl-1.9.2.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jackson-xc-1.9.2.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jersey-client-1.18.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jersey-core-1.18.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jersey-json-1.18.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jersey-server-1.18.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jersey-servlet-1.18.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jettison-1.1.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/mysql-connector-java-5.1.22-bin.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/joda-convert-1.6.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/joda-time-2.2.jar"/>
+        <path refid="Apache Tomcat v6.0 [Apache Tomcat v6.0].libraryclasspath"/>
     </path>
     <target name="init">
         <mkdir dir="build/classes"/>

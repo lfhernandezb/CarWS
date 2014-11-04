@@ -6,6 +6,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,6 +33,8 @@ import org.joda.time.DateTime;
 
 import java.util.Date;
 
+import javax.annotation.Resource;
+
 import cl.dsoft.carws.server.db.Autenticacion;
 import cl.dsoft.carws.server.db.InfoSincro;
 import cl.dsoft.carws.server.db.Usuario;
@@ -35,10 +43,21 @@ import cl.dsoft.carws.server.model.Usuarios;
 
 @Path("/todo")
 public class CarResource {
+	/**
+	 * 
+	 */
+
 	@Context
 	UriInfo uriInfo;
 	@Context
 	Request request;
+	
+	
+	@javax.ws.rs.core.Context 
+	ServletContext context;	
+	
+	DataSource ds;
+	
 	/*
 	Long idRedSocial;
 	Long token;
@@ -65,6 +84,22 @@ public class CarResource {
 	    this.fechaModificacion = fechaModificacion;
 	}
 	*/
+	public CarResource() throws ServletException {
+		
+	    try {
+	    	/*
+	    	 //Create a datasource for pooled connections.
+	    	 datasource = (DataSource) context.getAttribute("DBCPool");
+			*/
+	    	  //Register the driver for non-pooled connections.
+	    	  Class.forName("com.mysql.jdbc.Driver").
+	    	      newInstance();
+	    	    }
+	    	    catch (Exception e) {
+	    	      throw new ServletException(e.getMessage());
+	    	    }	
+	}
+
 	//Application integration     
 	@GET
 	@Path("/byIdUsuario/{idUsuario}/{fechaModificacion}")
@@ -75,22 +110,12 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
-		Wini ini;
 		
 		carData = null;
 		conn = null;
 		
     	try {
-    		// cargo archivo de configuracion
-            ini = new Wini();
-        	
-        	
-        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
-        	
-			// abro conexion a la BD
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
-        			ini.get("DB", "user"), ini.get("DB", "password"));
+    		conn = getConnection(true);
 			
 			carData = new CarData(conn, idUsuario, fechaModificacion);
 			
@@ -114,9 +139,6 @@ public class CarResource {
 
 			conn = null;
 			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,6 +148,12 @@ public class CarResource {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		} finally {
 			if (conn != null) {
 				try {
@@ -149,22 +177,12 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
-		Wini ini;
 		
 		carData = null;
 		conn = null;
 		
     	try {
-    		// cargo archivo de configuracion
-            ini = new Wini();
-        	
-        	
-        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
-        	
-			// abro conexion a la BD
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
-        			ini.get("DB", "user"), ini.get("DB", "password"));
+    		conn = getConnection(true);
 			
 			carData = new CarData(conn, idRedSocial, token, true);
 			
@@ -200,6 +218,9 @@ public class CarResource {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		} finally {
 			if (conn != null) {
 				try {
@@ -226,22 +247,12 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
-		Wini ini;
 		
 		carData = null;
 		conn = null;
 		
     	try {
-    		// cargo archivo de configuracion
-            ini = new Wini();
-        	
-        	
-        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
-        	
-			// abro conexion a la BD
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
-        			ini.get("DB", "user"), ini.get("DB", "password"));
+    		conn = getConnection(true);
 			
 			// chequeos
 			
@@ -306,6 +317,9 @@ public class CarResource {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		} finally {
 			if (conn != null) {
 				try {
@@ -336,22 +350,13 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
-		Wini ini;
 		
 		carData = null;
 		conn = null;
 		
     	try {
     		// cargo archivo de configuracion
-            ini = new Wini();
-        	
-        	
-        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
-        	
-			// abro conexion a la BD
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
-        			ini.get("DB", "user"), ini.get("DB", "password"));
+    		conn = getConnection(true);
 			
 			carData = todo.getValue();
 			
@@ -397,6 +402,9 @@ public class CarResource {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		} finally {
 			if (conn != null) {
 				
@@ -436,6 +444,40 @@ public class CarResource {
 	    
 	    return res;
 	    
+	}
+	
+	private synchronized Connection getConnection(boolean pooledConnection) throws SQLException, IOException, InvalidFileFormatException, ClassNotFoundException, NamingException {
+		if (pooledConnection) {
+		     //pooledCount++;
+	    	 //Create a datasource for pooled connections.
+			//Context initContext = new InitialContext();
+			// Context envContext  = (Context) initContext.lookup("java:/comp/env");
+			//context.("java:/comp/env");
+			//DataSource ds = (DataSource) envContext.lookup("jdbc/CarDB");
+			ds = (DataSource) context.getAttribute("DBCPool");
+			
+			System.out.println("Context: " + context);
+			System.out.println("DataSource: " + ds);
+		
+		    // Allocate and use a connection from the pool
+		    return ds.getConnection();
+		}
+		else {
+			Wini ini;
+			
+		    //nonPooledCount++;
+    		// cargo archivo de configuracion
+            ini = new Wini();
+        	
+        	
+        	ini.load(CarResource.class.getResourceAsStream("/etc/config.ini")); 
+        	
+			// abro conexion a la BD
+			Class.forName("com.mysql.jdbc.Driver");
+			return DriverManager.getConnection("jdbc:mysql://" + ini.get("DB", "host") + ":3306/" + ini.get("DB", "database"), 
+        			ini.get("DB", "user"), ini.get("DB", "password"));
+		  
+		}
 	}
 	
 }
