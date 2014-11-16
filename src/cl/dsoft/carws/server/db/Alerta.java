@@ -405,7 +405,6 @@ public class Alerta {
             "    (" +
             "    fecha, " +
             "    id_usuario, " +
-            "    id_alerta, " +
             "    id_mantencion_base, " +
             "    id_vehiculo, " +
             "    km)" +
@@ -413,7 +412,6 @@ public class Alerta {
             "    (" +
             "    " + (_fecha != null ? "STR_TO_DATE('" + _fecha + "', '%Y-%m-%d %H:%i:%s')" : "null") + "," +
             "    " + (_idUsuario != null ? "'" + _idUsuario + "'" : "null") + "," +
-            "    " + (_idAlerta != null ? "'" + _idAlerta + "'" : "null") + "," +
             "    " + (_idMantencionBase != null ? "'" + _idMantencionBase + "'" : "null") + "," +
             "    " + (_idVehiculo != null ? "'" + _idVehiculo + "'" : "null") + "," +
             "    " + (_km != null ? "'" + _km + "'" : "null") +

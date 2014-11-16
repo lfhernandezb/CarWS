@@ -35,11 +35,11 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
-import cl.dsoft.carws.server.db.Autenticacion;
-import cl.dsoft.carws.server.db.InfoSincro;
-import cl.dsoft.carws.server.db.Usuario;
-import cl.dsoft.carws.server.model.CarData;
-import cl.dsoft.carws.server.model.Usuarios;
+import cl.dsoft.car.server.db.Autenticacion;
+import cl.dsoft.car.server.db.InfoSincro;
+import cl.dsoft.car.server.db.Usuario;
+import cl.dsoft.car.server.model.CarData;
+import cl.dsoft.car.server.model.Usuarios;
 
 @Path("/todo")
 public class CarResource {
