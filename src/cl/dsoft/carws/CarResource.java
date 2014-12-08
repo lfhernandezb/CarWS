@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import org.apache.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 import org.joda.time.DateTime;
@@ -57,6 +58,8 @@ public class CarResource {
 	ServletContext context;	
 	
 	DataSource ds;
+	
+	static Logger log = Logger.getLogger(CarResource.class);
 	
 	/*
 	Long idRedSocial;
@@ -91,13 +94,12 @@ public class CarResource {
 	    	 //Create a datasource for pooled connections.
 	    	 datasource = (DataSource) context.getAttribute("DBCPool");
 			*/
-	    	  //Register the driver for non-pooled connections.
-	    	  Class.forName("com.mysql.jdbc.Driver").
-	    	      newInstance();
-	    	    }
-	    	    catch (Exception e) {
-	    	      throw new ServletException(e.getMessage());
-	    	    }	
+	    	//Register the driver for non-pooled connections.
+	    	Class.forName("com.mysql.jdbc.Driver").newInstance();
+	    }
+	    catch (Exception e) {
+	        throw new ServletException(e.getMessage());
+	    }	
 	}
 
 	//Application integration     
@@ -115,6 +117,7 @@ public class CarResource {
 		conn = null;
 		
     	try {
+    		log.info("byIdUsuario input: " + String.valueOf(idUsuario) + "/" + fechaModificacion);
     		conn = getConnection(true);
 			
 			carData = new CarData(conn, idUsuario, fechaModificacion);
@@ -138,6 +141,8 @@ public class CarResource {
 			}
 
 			conn = null;
+			
+			log.info("byIdUsuario output: " + carData.toString());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -182,6 +187,7 @@ public class CarResource {
 		conn = null;
 		
     	try {
+    		log.info("byIdRedSocial input: " + String.valueOf(idRedSocial) + "/" + token);
     		conn = getConnection(true);
 			
 			carData = new CarData(conn, idRedSocial, token, true);
@@ -252,6 +258,7 @@ public class CarResource {
 		conn = null;
 		
     	try {
+    		log.info("createUser input: " + String.valueOf(idRedSocial) + "/" + token);
     		conn = getConnection(true);
 			
 			// chequeos
