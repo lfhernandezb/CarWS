@@ -2,6 +2,7 @@ package cl.dsoft.carws;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,7 +26,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
@@ -95,7 +99,7 @@ public class CarResource {
 	    	 datasource = (DataSource) context.getAttribute("DBCPool");
 			*/
 	    	//Register the driver for non-pooled connections.
-	    	Class.forName("com.mysql.jdbc.Driver").newInstance();
+	    	//Class.forName("com.mysql.jdbc.Driver").newInstance();
 	    }
 	    catch (Exception e) {
 	        throw new ServletException(e.getMessage());
@@ -143,6 +147,7 @@ public class CarResource {
 			conn = null;
 			
 			log.info("byIdUsuario output: " + carData.toString());
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -211,6 +216,8 @@ public class CarResource {
 			}
 
 			conn = null;
+
+			log.info("byIdRedSocial output: " + carData.toString());
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -311,6 +318,8 @@ public class CarResource {
 			}
 
 			conn = null;
+			
+			log.info("createUser output: " + carData.toString());
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -366,6 +375,9 @@ public class CarResource {
     		conn = getConnection(true);
 			
 			carData = todo.getValue();
+			
+			log.info("receive input: " + carData.toString());
+			
 			
 			System.out.println(todo);
 			
