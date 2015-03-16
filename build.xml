@@ -64,7 +64,7 @@
 
   <!--Creates the deployable jar file  -->
   <target name="war" depends="compile">
-    <war destfile="${dist.dir}\cl.dsoft.carws.war" webxml="WebContent/WEB-INF/web.xml" basedir="${build.dir}">
+    <war destfile="${dist.dir}\cl.dsoft.carws2.war" webxml="WebContent/WEB-INF/web.xml" basedir="${build.dir}">
       <fileset dir="WebContent"/>
       <!--lib dir="WebContent/WEB-INF/lib"/-->
       <classes dir="build/classes"/>
