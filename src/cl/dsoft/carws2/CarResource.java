@@ -1,6 +1,7 @@
 package cl.dsoft.carws2;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -42,6 +43,8 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.codec.binary.Base64;
+
 import cl.dsoft.car.server.db.Autenticacion;
 import cl.dsoft.car.server.db.Comuna;
 import cl.dsoft.car.server.db.ConsultaProveedor;
@@ -51,7 +54,9 @@ import cl.dsoft.car.server.db.RespuestaProveedor;
 import cl.dsoft.car.server.db.Usuario;
 import cl.dsoft.car.server.model.CarData;
 import cl.dsoft.car.server.model.RespuestaProveedorData;
+import cl.dsoft.car.server.model.ImageData;
 import cl.dsoft.car.server.model.Usuarios;
+import cl.dsoft.car.server.model.Vigencia;
 
 @Path("/")
 public class CarResource {
@@ -460,6 +465,88 @@ public class CarResource {
 		}
     	
     	return rpData;
+	}
+
+	@GET
+	@Path("/getPromocion")
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	public ImageData getPromocion() {
+		
+		ImageData imData;
+		java.sql.Connection conn;
+		ArrayList<AbstractMap.SimpleEntry<String, String>> listParameters;
+		
+		imData = null;
+		conn = null;
+		
+    	try {
+    		log.info("getPromocion");
+    		
+    		imData = new ImageData();
+    		
+    		conn = getConnection(true);
+    		
+    		File file = new File("/home/lfhernandez/Pictures/mecanicos_a_domicilio.png");
+    		
+            // Reading a Image file from file system
+            FileInputStream imageInFile = new FileInputStream(file);
+            byte imageData[] = new byte[(int) file.length()];
+            imageInFile.read(imageData);
+ 
+            // Converting Image byte array into Base64 String
+            imData.setData(Base64.encodeBase64URLSafeString(imageData));
+            
+            imData.setId(1);
+            
+            Vigencia v = new Vigencia();
+            v.setInicio("2015-04-01");
+            v.setFin("2015-04-30");
+            
+            imData.setVigencia(v);
+    		
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+    		log.info("getPromocion output: " + imData.toString());
+
+    	} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+    	
+    	return imData;
 	}
 
 	@PUT

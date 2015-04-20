@@ -7,6 +7,6 @@ reloadable="true" crossContext="true">
    maxIdle="30" maxWait="10000" username="car2"
    password="car2"
    driverClassName="com.mysql.jdbc.Driver"
-   url="jdbc:mysql://localhost:3306/car2"/>
+   url="jdbc:mysql://www.dsoft.cl/car2"/>
 
 </Context>
