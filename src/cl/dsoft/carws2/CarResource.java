@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 //import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -121,7 +123,7 @@ public class CarResource {
 	//Application integration     
 	@GET
 	@Path("/byIdUsuario/{idUsuario}/{fechaModificacion}")
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_XML + "; charset=ISO-8859-1", MediaType.APPLICATION_JSON})
 	public CarData getCarNewsByIdUsuario(
 			@PathParam("idUsuario") Long idUsuario,
 		    @PathParam("fechaModificacion") String fechaModificacion) {
@@ -135,8 +137,20 @@ public class CarResource {
     	try {
     		log.info("byIdUsuario input: " + String.valueOf(idUsuario) + "/" + fechaModificacion);
     		conn = getConnection(true);
-			
-			carData = new CarData(conn, idUsuario, fechaModificacion);
+			/*
+    		Statement stmt = conn.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SHOW VARIABLES LIKE 'c%'");
+            
+            while (rs.next()) {
+                System.out.println(rs.getString(1) + " " + rs.getString(2));
+            }
+            
+            rs.close();
+            
+            stmt.close();
+			*/
+            carData = new CarData(conn, idUsuario, fechaModificacion);
 			
 			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
 				
