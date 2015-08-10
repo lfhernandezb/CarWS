@@ -1,0 +1,85 @@
+<?xml version = '1.0' encoding = 'windows-1252'?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <description>Admin: Status del contenedor</description>
+
+  <context-param>
+    <param-name>SmtpaltServer</param-name>
+    <param-value>smtpalt</param-value>
+    <description>El nombre del Servidor de Alertas</description>
+  </context-param>
+  <context-param>
+    <param-name>SmtpaltPort</param-name>
+    <param-value>9019</param-value>
+    <description>El puerto del Servidor de Alertas</description>
+  </context-param>
+  <context-param>
+    <param-name>SmtpaltFrom</param-name>
+    <param-value></param-value>
+    <description>El remitente de los mensajes de alertas (def. user@host donde ejecuta)</description>
+  </context-param>
+  <context-param>
+    <param-name>SmtpaltTo</param-name>
+    <param-value>carsepulveda@falabella.cl</param-value>
+    <description> El destinatario de los mensajes de alertas</description>
+  </context-param>
+  <context-param>
+    <param-name>MaxPorcMemory</param-name>
+    <param-value>95</param-value>
+    <description>El porcentaje de la memoria sobre el máxion (parametro -Xmx) a alertar.</description>
+  </context-param>  
+  <context-param>
+    <param-name>MaxThreadAlert</param-name>
+    <param-value>150</param-value>
+    <description>El numero de threads en el cual se genera alerta</description>
+  </context-param>
+  <context-param>
+    <param-name>SleepSeconds</param-name>
+    <param-value>300</param-value>
+    <description>El numero de segundos a dormir entre muestra y muestra</description>
+  </context-param>
+  
+  <!-- WebTail fcclogs excel -->
+  <servlet>
+    <servlet-name>WebTail Tomcat Logs</servlet-name>
+    <servlet-class>cl.falabella.admweb.WebTailServlet</servlet-class>
+    <init-param>
+      <param-name>directory</param-name>
+      <param-value>/opt/tomcat/logs</param-value>
+      <description>
+        Directorio donde estan los archivos
+        , si no comienza con slash se le
+        agrega el directorio de la aplicacion.
+      </description>
+    </init-param>
+    <init-param>
+      <param-name>filepattern</param-name>
+      <param-value>.*</param-value>
+      <description>
+        Expresion regular que se aplica sobre los archivos para
+        verificar si se deben mostrar
+      </description>      
+    </init-param>
+  </servlet>
+  
+  <!-- WebTail fcclogs branchlog -->
+  <servlet-mapping>
+    <servlet-name>WebTail Tomcat Logs</servlet-name>
+    <url-pattern>/tomcatlogs/*</url-pattern>
+  </servlet-mapping>
+  
+  <session-config>
+    <session-timeout>35</session-timeout>
+  </session-config>
+  <mime-mapping>
+    <extension>html</extension>
+    <mime-type>text/html</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>txt</extension>
+    <mime-type>text/plain</mime-type>
+  </mime-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>

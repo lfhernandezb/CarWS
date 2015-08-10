@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -35,6 +36,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
+//import org.apache.tomcat.util.ExceptionUtils;
+//import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 import org.joda.time.DateTime;
@@ -47,6 +50,8 @@ import javax.annotation.Resource;
 
 import org.apache.commons.codec.binary.Base64;
 
+import cl.dsoft.car.misc.UnsupportedParameterException;
+//import cl.dsoft.car.server.model.MantencionBaseHechaModelo;
 import cl.dsoft.car.server.db.Autenticacion;
 import cl.dsoft.car.server.db.Comuna;
 import cl.dsoft.car.server.db.ConsultaProveedor;
@@ -130,13 +135,21 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
+		String fm;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> listParameters;
+    	ArrayList<InfoSincro> lstInfoSincro;
 		
 		carData = null;
 		conn = null;
 		
     	try {
-    		log.info("byIdUsuario input: " + String.valueOf(idUsuario) + "/" + fechaModificacion);
+    		
+    		fm = URLDecoder.decode(fechaModificacion, "UTF-8");
+    		
+    		log.info("byIdUsuario input: " + String.valueOf(idUsuario) + "/" + fm);
     		conn = getConnection(true);
+    		
+    		listParameters = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
 			/*
     		Statement stmt = conn.createStatement();
             
@@ -150,24 +163,62 @@ public class CarResource {
             
             stmt.close();
 			*/
-            carData = new CarData(conn, idUsuario, fechaModificacion);
+    		
+    		Usuario u = Usuario.getById(conn, String.valueOf(idUsuario));
+    		
+    		if (!fm.equals("1900-01-01")) {
+    			// busco la sincro mas reciente de este tipo
+    			// 2015-06-29 se ignora la fecha/hora enviada desde la app movil, ya que puede estar desincronizada con el servidor
+				
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(u.getId())));
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("sentido", String.valueOf(InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode())));
+				
+				lstInfoSincro = InfoSincro.seek(conn, listParameters, "fecha", "DESC", 0, 1);
+				
+				if (!lstInfoSincro.isEmpty()) {
+					InfoSincro is = lstInfoSincro.get(0);
+					
+					fm = is.getFecha();
+				}
+				else {
+					fm = "1900-01-01";
+				}
+    				
+    		}
+    		
+            carData = new CarData(conn, u.getId(), fm);
 			
-			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
+			if (carData.hasData()) {
+				// 2015-06-29 solamente actualizo
+				listParameters.clear();
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(u.getId())));
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("sentido", String.valueOf(InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode())));
 				
-				InfoSincro is = new InfoSincro();
+				lstInfoSincro = InfoSincro.seek(conn, listParameters, "fecha", "DESC", 0, 1);
 				
-				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
-				is.setUsuarioIdUsuario(idUsuario);
-				is.setFecha(new Date());
-				
-				is.insert(conn);
+				if (!lstInfoSincro.isEmpty()) {
+					InfoSincro is = lstInfoSincro.get(0);
+					
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.update(conn);
+				}
+				else {
+					InfoSincro is = new InfoSincro();
+					
+					is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
+					is.setUsuarioIdUsuario(u.getId());
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.insert(conn);
+				}
 			}
 			
 			try {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
 			conn = null;
@@ -177,26 +228,29 @@ public class CarResource {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (UnsupportedParameterException e) {
+			// TODO Auto-generated catch block
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
@@ -213,6 +267,8 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> listParameters;
+    	ArrayList<InfoSincro> lstInfoSincro;
 		
 		carData = null;
 		conn = null;
@@ -220,53 +276,76 @@ public class CarResource {
     	try {
     		log.info("byIdRedSocial input: " + String.valueOf(idRedSocial) + "/" + token);
     		conn = getConnection(true);
+    		
+    		listParameters = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
 			
 			carData = new CarData(conn, idRedSocial, token, true);
 			
 			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
-			
-				InfoSincro is = new InfoSincro();
+				// 2015-06-29 solamente actualizo
 				
-				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
-				is.setUsuarioIdUsuario(carData.getUsuarios().getUsuarios().get(0).getId());
-				is.setFecha(new Date());
+				Usuario u = carData.getUsuarios().getUsuarios().get(0);
 				
-				is.insert(conn);
+				listParameters.clear();
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(u.getId())));
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("sentido", String.valueOf(InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode())));
+				
+				lstInfoSincro = InfoSincro.seek(conn, listParameters, "fecha", "DESC", 0, 1);
+				
+				if (!lstInfoSincro.isEmpty()) {
+					InfoSincro is = lstInfoSincro.get(0);
+					
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.update(conn);
+				}
+				else {
+					InfoSincro is = new InfoSincro();
+					
+					is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
+					is.setUsuarioIdUsuario(u.getId());
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.insert(conn);
+				}
 			}
 			
 			try {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
 			conn = null;
 
-			//log.info("byIdRedSocial output: " + carData.toString());
+			log.info("byIdRedSocial output: " + carData.toString());
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} finally {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (UnsupportedParameterException e) {
+			// TODO Auto-generated catch block
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		}finally {
 			if (conn != null) {
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
@@ -323,15 +402,15 @@ public class CarResource {
 				a.insert(conn);
 								
 				carData = new CarData(conn, idRedSocial, token, true);
-				/*
+				
 				InfoSincro is = new InfoSincro();
 				
 				is.setSentido((byte) InfoSincro.tipoSincro.SERVER_TO_PHONE.getCode());
 				is.setUsuarioIdUsuario(u.getId());
-				is.setFecha(new Date());
+				is.setFecha(InfoSincro.getTimeFromServer(conn));
 				
 				is.insert(conn);
-				*/
+				
 				conn.commit();
 
 			}			
@@ -340,42 +419,42 @@ public class CarResource {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
 			conn = null;
 			
-			//log.info("getProveedores output: " + carData.toString());
+			log.info("createUser output: " + carData.toString());
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (conn != null) {
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
@@ -402,10 +481,9 @@ public class CarResource {
 		
     	try {
     		log.info("getProveedores input: " + String.valueOf(idUsuario) + "/" + String.valueOf(idVehiculo)+ "/" + String.valueOf(idMantencionBase)+ "/" + String.valueOf(latitud)+ "/" + String.valueOf(longitud));
+    		conn = getConnection(true);
     		
     		RespuestaProveedor rp;
-    		
-    		conn = getConnection(true);
     		
     		conn.setAutoCommit(false);
 
@@ -438,7 +516,7 @@ public class CarResource {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
 			conn = null;
@@ -447,33 +525,33 @@ public class CarResource {
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (conn != null) {
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
@@ -495,10 +573,10 @@ public class CarResource {
 		
     	try {
     		log.info("getPromocion");
+    		conn = getConnection(true);
     		
     		imData = new ImageData();
     		
-    		conn = getConnection(true);
     		
     		File file = new File("/home/lfhernandez/Pictures/mecanicos_a_domicilio.png");
     		
@@ -522,40 +600,40 @@ public class CarResource {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
     		log.info("getPromocion output: " + imData.toString());
 
     	} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (conn != null) {
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
@@ -572,18 +650,20 @@ public class CarResource {
 		
 		CarData carData;
 		java.sql.Connection conn;
+    	ArrayList<AbstractMap.SimpleEntry<String, String>> listParameters;
+    	ArrayList<InfoSincro> lstInfoSincro;
 		
 		carData = null;
 		conn = null;
 		
     	try {
-    		// cargo archivo de configuracion
-    		conn = getConnection(true);
-			
+    		
 			carData = todo.getValue();
 			
 			log.info("receive input: " + carData.toString());
+			conn = getConnection(true);
 			
+			listParameters = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
 			
 			System.out.println(todo);
 			
@@ -591,15 +671,66 @@ public class CarResource {
 
 			carData.save(conn);
 			
-			if (!carData.getUsuarios().getUsuarios().isEmpty()) {
+			if (carData.hasData()) {
+				/*
+				InfoSincro is = null;
 				
-				InfoSincro is = new InfoSincro();
+	    		listParameters = new ArrayList<AbstractMap.SimpleEntry<String, String>>();
+
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(idUsuario)));
+				listParameters.add(new AbstractMap.SimpleEntry<String, String>("sentido", String.valueOf(InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode())));
 				
-				is.setSentido((byte) InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode());
-				is.setUsuarioIdUsuario(carData.getUsuarios().getUsuarios().get(0).getId());
-				is.setFecha(new Date());
+				lstInfoSincro = InfoSincro.seek(conn, listParameters, "fecha", "DESC", 0, 1);
 				
-				is.insert(conn);
+				if (!lstInfoSincro.isEmpty()) {
+					InfoSincro is = lstInfoSincro.get(0);
+					
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.update(conn);
+				}
+				else {
+					InfoSincro is = new InfoSincro();
+					
+					is.setSentido((byte) InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode());
+					is.setUsuarioIdUsuario(idUsuario);
+					is.setFecha(InfoSincro.getTimeFromServer(conn));
+					
+					is.insert(conn);
+				}
+				*/
+				// 2015-06-29 solamente actualizo
+				
+				Long idUsuario = carData.getIdUsuario();
+				
+				if (idUsuario != null) {
+				
+					Usuario u = Usuario.getById(conn, String.valueOf(idUsuario));
+					
+					listParameters.clear();
+					listParameters.add(new AbstractMap.SimpleEntry<String, String>("id_usuario", String.valueOf(u.getId())));
+					listParameters.add(new AbstractMap.SimpleEntry<String, String>("sentido", String.valueOf(InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode())));
+					
+					lstInfoSincro = InfoSincro.seek(conn, listParameters, "fecha", "DESC", 0, 1);
+					
+					if (!lstInfoSincro.isEmpty()) {
+						InfoSincro is = lstInfoSincro.get(0);
+						
+						is.setFecha(InfoSincro.getTimeFromServer(conn));
+						
+						is.update(conn);
+					}
+					else {
+						InfoSincro is = new InfoSincro();
+						
+						is.setSentido((byte) InfoSincro.tipoSincro.PHONE_TO_SERVER.getCode());
+						is.setUsuarioIdUsuario(u.getId());
+						is.setFecha(InfoSincro.getTimeFromServer(conn));
+						
+						is.insert(conn);
+					}
+				}
+				
 			}
 						
 			conn.commit();
@@ -608,7 +739,7 @@ public class CarResource {
 				conn.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 			}
 
 			conn = null;
@@ -617,34 +748,37 @@ public class CarResource {
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NamingException e1) {
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (NamingException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
+		} catch (UnsupportedParameterException e) {
+			// TODO Auto-generated catch block
+			log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 		} finally {
 			if (conn != null) {
 				
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 				
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(org.apache.commons.lang.exception.ExceptionUtils.getStackTrace(e));
 				}
 			}
 		}
